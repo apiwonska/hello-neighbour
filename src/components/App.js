@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
+import Layout from '../layout/Layout';
 import Header from './elements/Header';
 import Footer from './elements/Footer';
 import LandingPage from './pages/LandingPage';
@@ -16,15 +17,17 @@ class App extends React.Component{
     return (
       <div className="">
         <BrowserRouter>
-          <Header/>
-          {/* <Route path='/' exact component={ LandingPage } /> */}
-          <Route path='/' exact component={ MainPage } />
-          <Route path='/register' exact component={ Registration } />
-          <Route path='/auth' exact component={ Login } />
-          <Route path='/category/:categoryId' exact component={ ThreadsList } />
-          <Route path='/category/:categoryId/thread/:threadId' exact component={ Thread } />
-          <Route path='/profile' exact component={ Profile } />
-          <Footer/>
+          <Layout>
+            <Header/>
+            {/* <Route path='/' exact component={ LandingPage } /> */}
+            <Route path='/' exact component={ MainPage } />
+            <Route path='/register' exact component={ Registration } />
+            <Route path='/auth' exact component={ Login } />
+            <Route path='/category/:categoryId' exact component={ ThreadsList } />
+            <Route path='/category/:categoryId/thread/:threadId' exact component={ Thread } />
+            <Route path='/profile' exact component={ Profile } />
+            <Footer/>
+          </Layout>          
         </BrowserRouter>
       </div>      
     )
