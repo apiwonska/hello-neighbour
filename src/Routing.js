@@ -20,8 +20,8 @@ const Routing = (props) => {
       <Route path='/' exact component={ props.isSignedIn ? MainPage : LandingPage } />
       <Route path='/register' exact component={ Registration } />
       <Route path='/auth' exact component={ Login } />
-      <Route path='/category/:categoryId' exact component={ ThreadsList } />
-      <Route path='/category/:categoryId/thread/:threadId' exact component={ Thread } />
+      <Route path='/categories/:categoryId' exact component={ ThreadsList } />
+      <Route path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
       <Route path='/profile' exact component={ Profile } />
       <Footer/>
     </BrowserRouter>
