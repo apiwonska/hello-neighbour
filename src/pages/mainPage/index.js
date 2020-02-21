@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { fetchCategories } from '../../redux/actions';
 import { 
   ContainerDiv,
-  CategoryContainer
+  CategoryContainer,
+  CategoryLink
 } from './style';
 
 class MainPage extends React.Component {
@@ -16,7 +17,9 @@ class MainPage extends React.Component {
     const categoryList = this.props.categories.map(category => {
       return (
         <CategoryContainer key={category.id}>
-          {category.name}
+          <CategoryLink to={`/categories/${category.id}`}>
+            {category.name}
+          </CategoryLink>          
         </CategoryContainer>
       )      
     })

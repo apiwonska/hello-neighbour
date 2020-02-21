@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import theme from '../../layout/utils/theme';
 
@@ -19,4 +20,13 @@ export const CategoryContainer = styled.div`
   border-radius: ${theme.radius.bg};
   box-shadow: 0 0 4px ${theme.colors.neutralMidLight};
   text-transform: capitalize;
+`;
+
+export const CategoryLink = styled(Link)`
+  color: ${theme.colors.black};
+  text-decoration: none;
+
+  &:hover {
+    color: black;
+  }
 `;
