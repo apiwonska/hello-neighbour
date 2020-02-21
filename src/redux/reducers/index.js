@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 
+import categoryReducer from './categoryReducer';
+
 const reducers = combineReducers({
   isSignedIn: () => true,
-  test: () => 'test'
+  categories: categoryReducer
 });
 
 export default reducers;

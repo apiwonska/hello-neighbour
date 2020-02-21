@@ -1,30 +1,41 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
+import { fetchCategories } from '../../redux/actions';
 import { 
   ContainerDiv,
   CategoryContainer
 } from './style';
 
-const categories = [
-  {id:1, name:'announcment'}, 
-  {id:2, name:'general'}, 
-  {id:3, name:'other topics'}
-];
+class MainPage extends React.Component {
+  componentDidMount() {
+    this.props.fetchCategories();
+  }
 
-const categoryList = categories.map(category => {
-  return (
-    <CategoryContainer key={category.id}>
-      {category.name}
-    </CategoryContainer>
-  )
-})
+  renderCategoryList() {
+    const categoryList = this.props.categories.map(category => {
+      return (
+        <CategoryContainer key={category.id}>
+          {category.name}
+        </CategoryContainer>
+      )      
+    })
+    return categoryList;
+  }
 
-const MainPage = () => {
-  return (
-    <ContainerDiv>
-      {categoryList}
-    </ContainerDiv>
-  )
+  render() {
+    return (
+      <ContainerDiv>
+        {this.renderCategoryList()}
+      </ContainerDiv>
+    )
+  }  
 }
 
-export default MainPage;
+const mapStateToProps = state => {
+  return {
+    categories: state.categories
+  }
+}
+
+export default connect(mapStateToProps, {fetchCategories})(MainPage);
