@@ -1,12 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimes, faBars, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 import theme from './utils/theme';
-
-// Add favicons that will be used in the project
-library.add(faTimes, faBars, faArrowLeft);
 
 const GlobalStyle = createGlobalStyle`
   html {

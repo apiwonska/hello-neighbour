@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faTimes,
+  faBars
+} from '@fortawesome/free-solid-svg-icons'
 
 import { 
   NavSection,
@@ -35,7 +39,7 @@ class Header extends React.Component {
           </BrandDiv>
           <NavToggleButton onClick={this.toggleMenu}>
             <FontAwesomeIcon 
-              icon={!this.state.menuIsOpen? "bars" : "times"}
+              icon={!this.state.menuIsOpen? faBars : faTimes}
             />
           </NavToggleButton>
           <Nav>            
