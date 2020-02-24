@@ -1,10 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 
 import { fetchCategory } from '../../redux/actions';
 import { 
-
+  CategoryHeader,
+  ThreadWrapper,
+  TitleRowWrapper,
+  ThreadLink,
+  ThreadLengthSpan,
+  DateWrapper,
+  SecondaryText
 } from './style.js';
+import { ContainerDiv } from '../../components/common/styledDivs';
+import { LinkButtonBig } from '../../components/common/styledButtons';
 
 class ThreadsList extends React.Component {
   componentDidMount() {
@@ -14,12 +24,18 @@ class ThreadsList extends React.Component {
   renderThreadsList() {
     const threadsList = this.props.category.threads.map(thread => {
       return (
-        <div key={thread.id}>
-          <h5>{ thread.title }</h5>
-          <span>mesg: 10</span>
-          <span>Added: { thread.created }</span>
-          <span>Last post: { thread.updated }</span>
-        </div>
+        <ThreadWrapper key={thread.id}>
+          <TitleRowWrapper>
+            <ThreadLink to={`/categories/${this.props.match.params.categoryId}/threads/${thread.id}`}>{ thread.title }</ThreadLink>
+            <ThreadLengthSpan><FontAwesomeIcon 
+              icon={faCommentAlt}
+            /> 10</ThreadLengthSpan>
+          </TitleRowWrapper>          
+          <DateWrapper>
+            <SecondaryText>Added: { thread.created }</SecondaryText>
+            <SecondaryText>Last post: { thread.updated }</SecondaryText>
+          </DateWrapper>          
+        </ThreadWrapper>
       )
     })
     return threadsList;
@@ -31,13 +47,13 @@ class ThreadsList extends React.Component {
     }
 
     return (
-    <div>
-      <h2>{this.props.category.name}</h2>
-      <button>Add Thread</button>
+    <ContainerDiv>
+      <CategoryHeader>{this.props.category.name}</CategoryHeader>
+      <LinkButtonBig color="green">Add Thread</LinkButtonBig>
       <div>
         { this.renderThreadsList() }
       </div>      
-    </div>
+    </ContainerDiv>
   )
   }  
 }
