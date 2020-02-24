@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import { fetchCategories } from '../../redux/actions';
 import { 
-  ContainerDiv,
   CategoryContainer,
   CategoryLink
 } from './style';
+import { ContainerDiv } from '../../components/common/styledDivs';
 
 class MainPage extends React.Component {
   componentDidMount() {
