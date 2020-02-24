@@ -30,7 +30,7 @@ export const PostWrapper = styled.div`
 
 export const AddPostForm = styled.div``;
 
-export const UserName = styled(Link)`
+export const UserLink = styled(Link)`
   margin: 5px 0 10px;
   font-weight: 600;
   color: ${theme.colors.black};

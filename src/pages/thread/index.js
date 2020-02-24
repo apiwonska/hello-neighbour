@@ -9,7 +9,7 @@ import {
   FirstPostWrapper,  
   PostWrapper,
   AddPostForm,
-  UserName,
+  UserLink,
   ThreadTitle,
   Content,
   Footer,
@@ -27,9 +27,9 @@ class Thread extends React.Component {
     const postsList = this.props.thread.posts.map(post => {
       return (
         <PostWrapper key={ post.id }>
-          <UserName>
+          <UserLink to={`/profile/${ post.userId }`}>
             <FontAwesomeIcon icon={ faUser}/>{ post.userName }
-          </UserName>
+          </UserLink>
           <ThreadTitle>{ post.title }</ThreadTitle>
           <Content>{ post.content }</Content>
           <Footer>
@@ -42,9 +42,12 @@ class Thread extends React.Component {
   }
 
   render() {
+    const { thread } = this.props;
+
     if(!Object.keys(this.props.thread).length) {
       return <div>Loading...</div>
     }
+
     return (
       <ContainerDiv>
         <LinkWrapper>
@@ -53,14 +56,14 @@ class Thread extends React.Component {
         </LinkWrapper>
 
         <FirstPostWrapper>
-          <UserName>
-            <FontAwesomeIcon icon={ faUser}/>{ this.props.thread.userName }
-          </UserName>
-          <ThreadTitle>{ this.props.thread.title }</ThreadTitle>
-          <Content>{ this.props.thread.content }</Content>
+          <UserLink to={`/profile/${ thread.userId }`}>
+            <FontAwesomeIcon icon={ faUser}/>{ thread.userName }
+          </UserLink>
+          <ThreadTitle>{ thread.title }</ThreadTitle>
+          <Content>{ thread.content }</Content>
           <Footer>
             <DateSpan>
-              { this.props.thread.updated || this.props.thread.created }
+              { thread.updated || thread.created }
             </DateSpan>
           </Footer>
         </FirstPostWrapper>

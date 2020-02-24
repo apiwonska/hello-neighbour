@@ -22,7 +22,7 @@ const Routing = (props) => {
       <Route path='/auth' exact component={ Login } />
       <Route path='/categories/:categoryId' exact component={ ThreadsList } />
       <Route path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
-      <Route path='/profile' exact component={ Profile } />
+      <Route path='/profile/:userId' exact component={ Profile } />
       <Footer/>
     </BrowserRouter>
   )
