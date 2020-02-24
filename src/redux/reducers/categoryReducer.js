@@ -4,7 +4,7 @@ import {
 
 const reducers = (state={}, action) => {
   switch (action.type) {
-    case FETCH_CATEGORY:
+    case FETCH_CATEGORY:      
       return action.payload;
     default:
       return state;

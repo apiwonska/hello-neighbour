@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 import categoriesReducer from './categoriesReducer';
 import categoryReducer from './categoryReducer';
 import threadReducer from './threadReducer';
 
 const reducers = combineReducers({
-  isSignedIn: () => true,
+  form: formReducer,  
   categories: categoriesReducer,
   category: categoryReducer,
-  thread: threadReducer
+  thread: threadReducer,
+  isSignedIn: () => true,
 });
 
 export default reducers;

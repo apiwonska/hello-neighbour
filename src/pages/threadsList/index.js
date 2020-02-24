@@ -49,7 +49,7 @@ class ThreadsList extends React.Component {
     return (
     <ContainerDiv>
       <CategoryHeader>{this.props.category.name}</CategoryHeader>
-      <LinkButtonBig color="green">Add Thread</LinkButtonBig>
+      <LinkButtonBig to="/" color="green">Add Thread</LinkButtonBig>
       <div>
         { this.renderThreadsList() }
       </div>      

@@ -1,22 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Field, reduxForm } from 'redux-form';
 
-import { fetchThread } from '../../redux/actions'
+import { fetchThread, createPost } from '../../redux/actions';
 import { ContainerDiv } from '../../components/common/styledDivs';
 import {
   LinkWrapper,
   NavLink,
   FirstPostWrapper,  
-  PostWrapper,
-  AddPostForm,
+  PostWrapper,  
   UserLink,
   ThreadTitle,
   Content,
   Footer,
   DateSpan,
+  StyledTextArea,
+  SubmitButton
 } from './style'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons'
+
 
 class Thread extends React.Component {
   componentDidMount() {
@@ -41,7 +44,29 @@ class Thread extends React.Component {
     return postsList;
   }
 
-  render() {
+  renderTextArea = ({ input }) => {
+    return (
+      <StyledTextArea {...input} rows="3" placeholder="Add your comment.." maxLength="2000"></StyledTextArea> 
+    )
+  }
+
+  // Submit button will is rendered only when the input is valid (when it's not empty)
+  renderSubmitButton = () => { 
+    if (      
+      this.props.postForm.hasOwnProperty("postCreate") && 
+      !this.props.postForm.postCreate.hasOwnProperty("syncErrors")
+    ) {
+      return <SubmitButton type="submit" value="Submit Post" color="greenOutline"/>
+    }
+  }
+  
+  onSubmit = (formValues) => {
+    console.log(formValues);
+    // USER ID HERE IS ALWAYS 1. TO BE CHANGED
+    // createPost(formValues, this.props.match.params.threadId, 1);
+  }
+
+  render() {    
     const { thread } = this.props;
 
     if(!Object.keys(this.props.thread).length) {
@@ -63,26 +88,44 @@ class Thread extends React.Component {
           <Content>{ thread.content }</Content>
           <Footer>
             <DateSpan>
-              { thread.updated || thread.created }
+              { thread.created }
             </DateSpan>
           </Footer>
         </FirstPostWrapper>
 
         {this.renderPosts()}       
 
-        <AddPostForm>
-        </AddPostForm>
+        <PostWrapper>
+          <form action={`threads/${ thread.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.onSubmit)}>
+            <Field name="content" component={ this.renderTextArea }/>
+            { this.renderSubmitButton()}            
+          </form>
+        </PostWrapper>
+        
       </ContainerDiv>
     )
   }  
+}
+
+const validate = formValues => {
+  const errors = {};
+  if(!formValues.content) {
+    errors.content = 'You must enter text';
+  }
+  return errors;
 }
 
 const mapStateToProps = state => {
   return (
     { 
       thread: state.thread,
+      postForm: state.form
     }
   )
 }
 
-export default connect(mapStateToProps, {fetchThread})(Thread);
+const ThreadWithForm = reduxForm({
+  form: 'postCreate',
+  validate
+})(Thread);
+export default connect(mapStateToProps, {fetchThread})(ThreadWithForm);
