@@ -16,7 +16,7 @@ import {
   NavLi,
   NavLink,
   NavToggleButton,
-} from './styled.js';
+} from './style';
 import LogoImgSrc from '../../img/logo.png'
 
 class Header extends React.Component {
