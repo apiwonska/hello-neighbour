@@ -6,6 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import { fetchThread, createPost } from '../../redux/actions';
 import { ContainerDiv } from '../../components/common/styledDivs';
+import Spinner from '../../components/common/spinner';
 import {
   LinkWrapper,
   NavLink,
@@ -70,7 +71,7 @@ class Thread extends React.Component {
     const { thread } = this.props;
 
     if(!Object.keys(this.props.thread).length) {
-      return <div>Loading...</div>
+      return <Spinner/>;
     }
 
     return (

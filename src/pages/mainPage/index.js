@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { fetchCategories } from '../../redux/actions';
+import Spinner from '../../components/common/spinner';
 import { 
   CategoryContainer,
   CategoryLink
@@ -27,6 +28,10 @@ class MainPage extends React.Component {
   }
 
   render() {
+    if ( !this.props.categories.length ) {
+      return <Spinner/>;
+    }
+
     return (
       <ContainerDiv>
         {this.renderCategoryList()}

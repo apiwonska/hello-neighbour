@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 
 import { fetchCategory } from '../../redux/actions';
+import Spinner from '../../components/common/spinner';
 import { 
   CategoryHeader,
   ThreadWrapper,
@@ -43,7 +44,7 @@ class ThreadsList extends React.Component {
 
   render() {
     if(!Object.keys(this.props.category).length) {
-      return <div>Loading...</div>
+      return <Spinner/>;
     }
 
     return (
