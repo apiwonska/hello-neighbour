@@ -1,0 +1,81 @@
+{
+  "categories": [
+    {
+      "name": "Announcement",
+      "id": 1,
+      "threads": [
+        {"id":1, "title":"Rent rise", "created": "2019-02-02", "updated": "2019-02-02"},
+        {"id":2, "title":"New meeting", "created": "2019-02-02", "updated": "2019-02-02"},
+        {"id":3, "title":"Noise on the 5th floor", "created": "2019-02-02", "updated": "2019-02-02"}
+      ]
+    },
+    {
+      "name": "General",
+      "id": 2,
+      "threads": [] 
+    },
+    {
+      "name": "Other Topics",
+      "id": 3,
+      "threads": [] 
+    },
+    {
+      "name": "Residents meettings",
+      "id": 4,
+      "threads": [] 
+    }
+  ],
+  "threads": [
+    {
+      "title": "Rents in 2019",
+      "id": 1,
+      "userId": 1,
+      "userName": "Katie Hay",
+      "categoryId": 1,
+      "content": "Did you get the notification about augmentation of rental fees?",
+      "created": "2019-02-30 10:23",
+      "updated": "2019-02-30 10:23",
+      "posts": [
+        {
+          "id": 1,
+          "userId": 2,
+          "userName": "Dan Brown",
+          "content": "No, I'm very surprised!",
+          "created": "2019-02-30 10:23",
+          "updated": "2019-02-31 10:24"
+        },
+        {
+          "id": 2,
+          "userId": 3,
+          "userName": "Sherlock Holmes",
+          "content": "What a nonsens",
+          "created": "2019-02-30 11:23",
+          "updated": "2019-02-30 11:23"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "New meeting",      
+      "userId": 2,
+      "userName": "Dan Brown",
+      "categoryId": 1,
+      "content": "I just want to say hi!",
+      "created": "2019-02-02 10:23",
+      "updated": "",
+      "posts": [ ]
+    },
+    {
+      "id":3, 
+      "title":"Noise on the 5th floor",
+      "userId": 2,
+      "userName": "Dan Brown",
+      "categoryId": 1,
+      "content": "I have enough!",
+      "created": "2019-02-02", 
+      "updated": "2019-02-02",
+      "posts": [ ]
+    }
+
+  ]
+}
