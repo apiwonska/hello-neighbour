@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users.apps.UsersConfig',
+    'forum.apps.ForumConfig',
 ]
 
 MIDDLEWARE = [
