@@ -3,9 +3,9 @@ A basic forum model with corresponding category, thread, post models.
 """
 
 from django.db import models
-from django.db.models.signals import post_save, post_delete
 
 from users.models import CustomUser as User
+# from . import signals
 
 class Category(models.Model):
     """Model definition for Category."""
@@ -76,56 +76,4 @@ class Post(models.Model):
     def __str__(self):
         """Unicode representation of Post."""
         return str(self.id)
-   
-    # pylint: disable=arguments-differ
-    def delete(self, *args, **kwargs):
-        """Updates fileds posts in related thread and category objects."""
-        thread = self.thread
-        thread.posts = thread.post_set.count()
-        thread.save()
 
-        category = self.thread.category
-        category.posts = category.get_number_of_posts()
-        category.save()
-
-        super().delete(*args, **kwargs)
-
-
-def update_threads_number(sender, instance, **kwargs):
-    """
-    Update thread number in ralated category.
-    """
-    thread = instance
-    category = thread.category
-    category.threads = category.thread_set.count()
-    category.save()    
-
-post_save.connect(update_threads_number, sender=Thread)
-
-def update_category_posts_and_threads(sender, instance, **kwargs):
-    """
-    Updates threads and posts numbers for category in case of deleting the thread.
-    """
-    thread = instance
-    category = thread.category
-    category.posts = category.get_number_of_posts()
-    category.threads = category.thread_set.count()
-
-post_delete.connect(update_category_posts_and_threads, sender=Thread)
-
-def update_posts_number(sender, instance, **kwargs):
-    """
-    Update posts number in ralated thread and category.
-    """
-    post=instance
-    thread = post.thread
-    thread.posts = thread.post_set.count()
-    thread.save()
-
-    category = thread.category
-    category.posts = category.get_number_of_posts()
-    category.save()
-
-post_save.connect(update_posts_number, sender=Post)
-
-post_delete.connect(update_posts_number, sender=Post)
