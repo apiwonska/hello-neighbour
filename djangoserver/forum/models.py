@@ -3,15 +3,16 @@ A basic forum model with corresponding category, thread, post models.
 """
 
 from django.db import models
+from django.core.validators import MinLengthValidator
 
 from users.models import CustomUser as User
-# from . import signals
+
 
 class Category(models.Model):
     """Model definition for Category."""
 
-    name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(max_length=100)
+    name = models.CharField(max_length=50, unique=True, validators=[MinLengthValidator(1)])
+    description = models.TextField(max_length=500)
     ordering = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='display order')
     threads = models.IntegerField(default=0, editable=False)
     posts = models.IntegerField(default=0, editable=False)
@@ -37,14 +38,14 @@ class Category(models.Model):
 class Thread(models.Model):
     """Model definition for Thread."""
     
-    title = models.CharField(max_length=200)
-    subject = models.TextField(max_length=2000)
+    title = models.CharField(max_length=100, validators=[MinLengthValidator(1)])
+    subject = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sticky = models.BooleanField(blank=True, default=False)
     closed = models.BooleanField(blank=True, default=False)
     posts = models.IntegerField(default=0, editable=False)
-    latest_post_time = models.DateTimeField(null=True, blank=True)
+    latest_post_time = models.DateTimeField(null=True, blank=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -61,7 +62,7 @@ class Thread(models.Model):
 class Post(models.Model):
     """Model definition for Post."""
 
-    content = models.TextField(max_length=2000)
+    content = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     views = models.IntegerField(default=0, editable=False)
@@ -75,5 +76,5 @@ class Post(models.Model):
 
     def __str__(self):
         """Unicode representation of Post."""
-        return str(self.id)
+        return 'Post ID:' + str(self.id)
 
