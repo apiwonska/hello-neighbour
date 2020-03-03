@@ -15,9 +15,9 @@ class CategoryAdmin(admin.ModelAdmin):
 class ThreadAdmin(admin.ModelAdmin):
     '''Admin View for Thread'''
 
-    list_display = ('__str__', 'user', 'category', 'posts', 'created')
+    list_display = ('__str__', 'user', 'category', 'created', 'posts', 'latest_post_time', 'id')
     list_filter = ('sticky', 'closed')
-    readonly_fields = ('created', 'updated', 'posts')
+    readonly_fields = ('id', 'posts', 'latest_post_time', 'created', 'updated', )
     search_fields = ('title', 'subject', 'category')
 
 
@@ -26,5 +26,5 @@ class PostAdmin(admin.ModelAdmin):
     '''Admin View for Post'''
 
     list_display = ('__str__', 'user', 'thread', 'created')
-    readonly_fields = ('created', 'updated')
+    readonly_fields = ('id', 'created', 'updated')
     search_fields = ('content', 'user', 'thread')
