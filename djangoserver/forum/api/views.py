@@ -1,7 +1,6 @@
 from rest_framework import filters, status, viewsets
 from rest_framework.response import Response
-# from rest_framework.authentication import TokenAuthentication
-# from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
 
 from forum.models import Category, Thread, Post
 from users.models import CustomUser
@@ -21,8 +20,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    # http_method_names = ['get', 'head', 'options']
-    # authentication_classes = [TokenAuthentication]
+    http_method_names = ['get', 'head', 'options']
+    authentication_classes = [TokenAuthentication]
 
 
 class ThreadViewSet(viewsets.ModelViewSet):
@@ -46,7 +45,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'subject']
     ordering_fields = ['created', 'latest_post_time']
     ordering=('-created',)
-    # authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         """Custom get_queryset method. If 'category' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
@@ -77,13 +76,15 @@ class ThreadViewSet(viewsets.ModelViewSet):
         """Custom partial_update method allowes to modify only title and subject properies.
         """
         thread = self.get_object()
-        data = request.data
-        thread.title = data.get('title', thread.title)
-        thread.subject = data.get('subject', thread.subject)
-        thread.save()
-        serializer = ThreadSerializer(thread)
-        return Response(serializer.data)
-
+        if request.user == thread.user:
+            data = request.data
+            thread.title = data.get('title', thread.title)
+            thread.subject = data.get('subject', thread.subject)
+            thread.save()
+            serializer = ThreadSerializer(thread)
+            return Response(serializer.data)
+        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
+    
 
 class PostViewSet(viewsets.ModelViewSet):
     """A class based view with custom create and patch methods. 
@@ -108,8 +109,7 @@ class PostViewSet(viewsets.ModelViewSet):
     search_fields = ['content']
     ordering_fields = ['created']
     ordering=('created',)
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [AllowAny]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         """Custom get_queryset method. If 'user' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
@@ -130,4 +130,3 @@ class PostViewSet(viewsets.ModelViewSet):
         post.save()
         serializer = PostSerializer(post)
         return Response(serializer.data)
-
