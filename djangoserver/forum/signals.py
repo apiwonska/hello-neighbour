@@ -22,14 +22,14 @@ def update_category_posts_and_threads(sender, instance, **kwargs):
     category = thread.category
     category.posts = category.get_number_of_posts()
     category.threads = category.thread_set.count()
+    category.save()
 
 @receiver([post_save, post_delete], sender=Post)
 def update_posts_number(sender, instance, **kwargs):
     """
     Update posts number in ralated thread and category.
-    """
-    # If the post exists and is saved due to update, 
-    # related models won't be updated
+    If the post is saved due to update (post exists), related models won't be updated.
+    """ 
     if not kwargs.get('created', True):
         return
 
