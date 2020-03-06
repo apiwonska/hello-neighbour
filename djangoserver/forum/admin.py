@@ -16,9 +16,10 @@ class ThreadAdmin(admin.ModelAdmin):
     '''Admin View for Thread'''
 
     list_display = ('__str__', 'user', 'category', 'created', 'posts', 'latest_post_time', 'id')
-    list_filter = ('sticky', 'closed')
+    list_filter = ('category', 'sticky', 'closed')
     readonly_fields = ('id', 'posts', 'latest_post_time', 'created', 'updated', )
     search_fields = ('title', 'subject', 'category')
+    save_on_top = True
 
 
 @admin.register(Post)
@@ -28,3 +29,4 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'user', 'thread', 'created')
     readonly_fields = ('id', 'created', 'updated')
     search_fields = ('content', 'user', 'thread')
+    save_on_top = True

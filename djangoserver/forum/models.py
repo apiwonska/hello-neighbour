@@ -4,9 +4,12 @@ A basic forum model with corresponding category, thread, post models.
 
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.contrib.auth.models import AnonymousUser
 
 from users.models import CustomUser as User
 
+def get_dummy_user():
+    return User.objects.get_or_create(username='user_deleted')[0]
 
 class Category(models.Model):
     """Model definition for Category."""
@@ -40,7 +43,7 @@ class Thread(models.Model):
     
     title = models.CharField(max_length=100, validators=[MinLengthValidator(1)])
     subject = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sticky = models.BooleanField(blank=True, default=False)
     closed = models.BooleanField(blank=True, default=False)
@@ -63,9 +66,8 @@ class Post(models.Model):
     """Model definition for Post."""
 
     content = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    views = models.IntegerField(default=0, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
