@@ -27,6 +27,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class ThreadViewSet(viewsets.ModelViewSet):
     """A class based view with custom create and patch methods. 
     Allowed http methods: get, post, patch, head, options. Delete http method is not allowed.
+    User can update only threads, that belong to them.
 
     Routes:
     GET /threads
@@ -58,15 +59,21 @@ class ThreadViewSet(viewsets.ModelViewSet):
         return queryset
     
     def create(self, request, *args, **kwargs):
-        """Custom create method, that will save only title, subject, user and category properties.
+        """Custom create method automatically saves authenticated user in user field. 
+        The method will save only "title", "subject", "user" and "category" properties. It makes impossible to save other properties ("closed", "sticky"), that are meant to be changed only by admin by admin panel.
         """
         data = request.data
+        try:
+            category = Category.objects.get(id=data['category'])
+        except Category.DoesNotExist:
+            return Response({"category": f"Category object id \"{data['category']}\" does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
         thread = Thread.objects.create(
             title=data['title'],
             subject=data['subject'],
-            user = CustomUser.objects.get(id=data['user']),
-            category = Category.objects.get(id=data['category'])
-        )        
+            user = request.user,
+            category = category
+        )
         thread.save()
         serializer = ThreadSerializer(thread)
         headers = self.get_success_headers(serializer.data)
@@ -74,6 +81,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
     
     def partial_update(self, request, *args, **kwargs):
         """Custom partial_update method allowes to modify only title and subject properies.
+        User can only update threads, that belong to them.
         """
         thread = self.get_object()
         if request.user == thread.user:
@@ -84,11 +92,12 @@ class ThreadViewSet(viewsets.ModelViewSet):
             serializer = ThreadSerializer(thread)
             return Response(serializer.data)
         return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
-    
+
 
 class PostViewSet(viewsets.ModelViewSet):
     """A class based view with custom create and patch methods. 
     Allowed http methods: get, post, patch, delete, head, options.
+    User can update and delete only posts, that belong to them.
 
     Routes:
     GET /posts
@@ -121,12 +130,41 @@ class PostViewSet(viewsets.ModelViewSet):
             queryset = Post.objects.all()
         return queryset
     
+    def create(self, request, *args, **kwargs):
+        """Custom create method automatically saves authenticated user in user field. 
+        """
+        data = request.data
+        try:
+            thread = Thread.objects.get(id=data['thread'])
+        except Thread.DoesNotExist:
+            return Response({"thread": f"Thread object id \"{data['thread']}\" does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        post = Post.objects.create(
+            content=data['content'],
+            user = request.user,
+            thread = thread
+        )
+        post.save()
+        serializer = PostSerializer(post)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
     def partial_update(self, request, *args, **kwargs):
         """Custom partial_update method allows to modify only content property. The purpose of this custom method is to prevent changing user and thread fields.
         """
         post = self.get_object()
-        data = request.data
-        post.content = data.get('content', post.content)
-        post.save()
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+        if request.user == post.user:
+            data = request.data
+            post.content = data.get('content', post.content)
+            post.save()
+            serializer = PostSerializer(post)
+            return Response(serializer.data)
+        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    def destroy(self, request, *args, **kwargs):
+        """Custom delete method allows user to delete their own posts only."""
+        post = self.get_object()
+        if request.user == post.user:
+            post.delete()
+            return Response({"detail": "Object deleted"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
