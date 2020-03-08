@@ -29,4 +29,3 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'user', 'thread', 'created')
     readonly_fields = ('id', 'created', 'updated')
     search_fields = ('content', 'user', 'thread')
-    save_on_top = True
