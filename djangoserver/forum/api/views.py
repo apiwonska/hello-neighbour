@@ -20,7 +20,6 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    http_method_names = ['get', 'head', 'options']
     authentication_classes = [TokenAuthentication]
 
 
