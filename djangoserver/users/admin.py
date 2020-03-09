@@ -10,5 +10,20 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = CustomUser
     list_display = ['username', 'email']
+    save_on_top = True
+    fieldsets = (
+        *UserAdmin.fieldsets,
+        (
+            'Custom User Fields',
+            {
+                'fields': (
+                    'status',
+                    'description',
+                    'avatar'
+                ),
+            },
+        ),
+    )
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
