@@ -9,7 +9,7 @@ from forum.api.views import (
     ThreadViewSet,
     PostViewSet,    
 )
-from users.api.views import UserViewSet
+from users.api.views import (UserViewSet, RegistrationViewSet)
 
 
 # Regiter REST FRAMEWORK routers
@@ -18,10 +18,11 @@ router.register('categories', CategoryViewSet, basename='category')
 router.register('threads', ThreadViewSet, basename='thread')
 router.register('posts', PostViewSet, basename='post')
 router.register('users', UserViewSet, basename='user')
+router.register('registration', RegistrationViewSet, basename='registration')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api-token-auth/', obtain_auth_token),
+    path('api/token-auth/', obtain_auth_token),
     path('admin/', admin.site.urls),
 ]
 

@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ['username', 'id', 'email']
+    list_display = ['username', 'id', 'email', 'is_staff', 'is_active']
     save_on_top = True
     fieldsets = (
         *UserAdmin.fieldsets,

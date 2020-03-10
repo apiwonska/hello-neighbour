@@ -1,24 +1,34 @@
 from rest_framework.response import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from users.models import CustomUser
-from .serializers import UserPublicSerializer, UserPrivateSerializer
+from .serializers import UserPublicSerializer, UserPrivateSerializer, RegistrationSerializer
 from .permissions import IsOwnerOrReadOnly
 
+class RegistrationViewSet(viewsets.ModelViewSet):
+    """Allowed http methods: post. For registering a user, the data have to contain `username`, `email`, `password` and `password2` fields.
+
+    Routes:
+    POST /registration/
+    """
+    serializer_class = RegistrationSerializer
+    http_method_names = ['post']
+    permission_classes = [AllowAny]
+
+
 class UserViewSet(viewsets.ModelViewSet):
-    """A class based view. 
-    Allowed http methods: get, patch, head, options.
+    """Allowed http methods: get, patch, head, options.
     Some user data are accessible only for profile owner and hidden from other users.
     User can update only their own profile data.
 
     Routes:
-    GET /users
+    GET /users/
     GET /users/?search=some_name
-    GET /users/1
-    POST /users
-    PATCH /users/1
+    GET /users/1/
+    POST /users/
+    PATCH /users/1/
 
     Ordering is alphabetical. 
     """

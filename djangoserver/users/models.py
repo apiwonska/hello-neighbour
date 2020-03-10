@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
     Old media files for avatar field are deleted thanks to django_cleanup app.
     """
 
-    email = models.EmailField('email address', blank=False)
+    email = models.EmailField('email address', blank=False, unique=True)
     status = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     avatar = ProcessedImageField(
