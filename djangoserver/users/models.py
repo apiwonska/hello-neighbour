@@ -13,6 +13,7 @@ class CustomUser(AbstractUser):
     """
     Custom user makes possible to add custom fields to django user model.
     Authentication token is generated for every user when the user is created. The logic is in signals.
+    Old media files for avatar field are deleted thanks to django_cleanup app.
     """
 
     status = models.CharField(max_length=50, null=True, blank=True)

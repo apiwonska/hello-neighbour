@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from users.models import CustomUser
 from .serializers import UserPublicSerializer, UserPrivateSerializer
-
+from .permissions import IsOwnerOrReadOnly
 
 class UserViewSet(viewsets.ModelViewSet):
     """A class based view. 
@@ -27,6 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):
         """Custom retrieve method use UserPrivateSerializer if the user object is requested by it's owner.
@@ -42,13 +44,10 @@ class UserViewSet(viewsets.ModelViewSet):
         """Custom partial_update method allows to modify only selected fields.
         """
         user = self.get_object()
-        if request.user == user:
-            data = request.data
-            user.status = data.get('status', user.status)
-            user.description = data.get('description', user.description)
-            user.email = data.get('email', user.email)
-            user.save()
-            serializer = UserPrivateSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
-
+        data = request.data
+        user.status = data.get('status', user.status)
+        user.description = data.get('description', user.description)
+        user.email = data.get('email', user.email)
+        user.save()
+        serializer = UserPrivateSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
