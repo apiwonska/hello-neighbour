@@ -16,11 +16,12 @@ class CustomUser(AbstractUser):
     Old media files for avatar field are deleted thanks to django_cleanup app.
     """
 
+    email = models.EmailField('email address', blank=False)
     status = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     avatar = ProcessedImageField(
         upload_to='img/users/avatars',
-        processors=[ResizeToFill(250, 250)],
+        processors=[ResizeToFill(200, 200)],
         format='JPEG',
         options={'quality': 60},
         null=True,

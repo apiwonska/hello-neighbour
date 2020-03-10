@@ -33,21 +33,30 @@ class UserViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         """Custom retrieve method use UserPrivateSerializer if the user object is requested by it's owner.
         """
-        user = self.get_object()
-        if request.user == user:
-            serializer = UserPrivateSerializer(user)
+        instance = self.get_object()
+        if request.user == instance:
+            serializer = UserPrivateSerializer(instance)
         else:
-            serializer = UserPublicSerializer(user)
+            serializer = UserPublicSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, *args, **kwargs):
         """Custom partial_update method allows to modify only selected fields.
         """
-        user = self.get_object()
-        data = request.data
-        user.status = data.get('status', user.status)
-        user.description = data.get('description', user.description)
-        user.email = data.get('email', user.email)
-        user.save()
-        serializer = UserPrivateSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        instance = self.get_object()
+        data ={}
+        data['status'] = request.data.get('status', instance.status)
+        data['description'] = request.data.get('description', instance.description)
+        data['email'] = request.data.get('email', instance.email)
+        
+        serializer = UserPrivateSerializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
