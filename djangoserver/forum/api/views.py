@@ -1,4 +1,5 @@
 from rest_framework import filters, status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 
@@ -9,7 +10,7 @@ from .serializers import (
     ThreadSerializer,
     PostSerializer,
 )
-
+from .permissions import IsOwnerOrReadOnly
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """Allowed methods: get, head, options.
@@ -46,6 +47,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created', 'latest_post_time']
     ordering=('-created',)
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         """Custom get_queryset method. If 'category' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
@@ -56,41 +58,45 @@ class ThreadViewSet(viewsets.ModelViewSet):
         else:
             queryset = Thread.objects.all()
         return queryset
-    
+
     def create(self, request, *args, **kwargs):
         """Custom create method automatically saves authenticated user in user field. 
         The method will save only "title", "subject", "user" and "category" properties. It makes impossible to save other properties ("closed", "sticky"), that are meant to be changed only by admin by admin panel.
         """
-        data = request.data
         try:
-            category = Category.objects.get(id=data['category'])
+            Category.objects.get(id=request.data['category'])
         except Category.DoesNotExist:
-            return Response({"category": f"Category object id \"{data['category']}\" does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"category": [f"Category object id \"{request.data['category']}\" does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
+        data = {}
+        data['title'] = request.data['title']
+        data['subject'] = request.data['subject']
+        data['user'] = request.user.id
+        data['category'] = request.data['category']
 
-        thread = Thread.objects.create(
-            title=data['title'],
-            subject=data['subject'],
-            user = request.user,
-            category = category
-        )
-        thread.save()
-        serializer = ThreadSerializer(thread)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)        
+        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
     def partial_update(self, request, *args, **kwargs):
         """Custom partial_update method allowes to modify only title and subject properies.
         User can only update threads, that belong to them.
-        """
-        thread = self.get_object()
-        if request.user == thread.user:
-            data = request.data
-            thread.title = data.get('title', thread.title)
-            thread.subject = data.get('subject', thread.subject)
-            thread.save()
-            serializer = ThreadSerializer(thread)
-            return Response(serializer.data)
-        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
+        """        
+        instance = self.get_object()
+        data = {}
+        data['title'] = request.data.get('title', instance.title)
+        data['subject'] = request.data.get('subject', instance.subject)
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -118,6 +124,7 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created']
     ordering=('created',)
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         """Custom get_queryset method. If 'user' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
@@ -132,38 +139,40 @@ class PostViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         """Custom create method automatically saves authenticated user in user field. 
         """
-        data = request.data
         try:
-            thread = Thread.objects.get(id=data['thread'])
+            Thread.objects.get(id=request.data['thread'])
         except Thread.DoesNotExist:
-            return Response({"thread": f"Thread object id \"{data['thread']}\" does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"thread": [f"Thread object id \"{request.data['thread']}\" does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
+        data = {}
+        data['content'] = request.data['content']
+        data['user'] = request.user.id
+        data['thread'] = request.data['thread']
 
-        post = Post.objects.create(
-            content=data['content'],
-            user = request.user,
-            thread = thread
-        )
-        post.save()
-        serializer = PostSerializer(post)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)        
+        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def partial_update(self, request, *args, **kwargs):
         """Custom partial_update method allows to modify only content property. The purpose of this custom method is to prevent changing user and thread fields.
         """
-        post = self.get_object()
-        if request.user == post.user:
-            data = request.data
-            post.content = data.get('content', post.content)
-            post.save()
-            serializer = PostSerializer(post)
-            return Response(serializer.data)
-        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
-    
+        instance = self.get_object()
+        data = {}
+        data['content'] = request.data.get('content', instance.content)
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
+
     def destroy(self, request, *args, **kwargs):
         """Custom delete method allows user to delete their own posts only."""
         post = self.get_object()
-        if request.user == post.user:
-            post.delete()
-            return Response({"detail": "Object deleted"}, status=status.HTTP_204_NO_CONTENT)
-        return Response({"detail": "Action not permitted"}, status=status.HTTP_401_UNAUTHORIZED)
+        post.delete()
+        return Response({"detail": "Object deleted"}, status=status.HTTP_204_NO_CONTENT)
