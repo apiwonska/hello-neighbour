@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework.authtoken.views import obtain_auth_token
 
 from forum.api.views import (
     CategoryViewSet,
@@ -12,7 +11,6 @@ from forum.api.views import (
 from users.api.views import (
     UserViewSet, 
     RegistrationViewSet,
-    ChangePasswordView
     )
 
 
@@ -26,9 +24,8 @@ router.register('registration', RegistrationViewSet, basename='registration')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/token-auth/', obtain_auth_token),
-    path('api/change-password/', ChangePasswordView.as_view()),
-    path('admin/', admin.site.urls),
+    path('api/', include('users.api.urls')),
+    path('admin/', admin.site.urls)
 ]
 
 if settings.DEBUG:
