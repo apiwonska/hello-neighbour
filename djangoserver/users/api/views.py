@@ -1,21 +1,16 @@
 from rest_framework.response import Response
-from rest_framework import filters, status, viewsets
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters, status, viewsets, generics
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from users.models import CustomUser
-from .serializers import UserPublicSerializer, UserPrivateSerializer, RegistrationSerializer
+from .serializers import (
+    UserPublicSerializer, 
+    UserPrivateSerializer, 
+    RegistrationSerializer,
+    ChangePasswordSerializer
+    )
 from .permissions import IsOwnerOrReadOnly
-
-class RegistrationViewSet(viewsets.ModelViewSet):
-    """Allowed http methods: post. For registering a user, the data have to contain `username`, `email`, `password` and `password2` fields.
-
-    Routes:
-    POST /registration/
-    """
-    serializer_class = RegistrationSerializer
-    http_method_names = ['post']
-    permission_classes = [AllowAny]
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -37,7 +32,6 @@ class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'patch', 'head', 'options']
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):
@@ -70,3 +64,36 @@ class UserViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+
+class RegistrationViewSet(viewsets.ModelViewSet):
+    """Allowed http methods: post. For registering a user, the data have to contain `username`, `email`, `password` and `password2` fields.
+
+    Routes:
+    POST /registration/
+    """
+    serializer_class = RegistrationSerializer
+    http_method_names = ['post']
+    permission_classes = [AllowAny]
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """An endpoint for changing password.
+    Data has to contain `old_password`, `password`, `password2`.
+    After changing the password new authentication token is created and send in response.
+
+    Routes:
+    PUT/PATCH /change-password/
+    """
+    serializer_class = ChangePasswordSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = request.user
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        # Change the authentication token
+        if hasattr(instance, 'auth_token'):
+            instance.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=instance)
+        return Response({ 'token': token.key, 'message': 'Your password was changed.'}, status=status.HTTP_200_OK)

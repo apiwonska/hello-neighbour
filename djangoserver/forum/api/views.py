@@ -66,7 +66,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
         try:
             Category.objects.get(id=request.data['category'])
         except Category.DoesNotExist:
-            return Response({"category": [f"Category object id \"{request.data['category']}\" does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'category': [f"Category object id \'{request.data['category']}\' does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
         data = {}
         data['title'] = request.data['title']
         data['subject'] = request.data['subject']
@@ -142,7 +142,7 @@ class PostViewSet(viewsets.ModelViewSet):
         try:
             Thread.objects.get(id=request.data['thread'])
         except Thread.DoesNotExist:
-            return Response({"thread": [f"Thread object id \"{request.data['thread']}\" does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'thread': [f"Thread object id \'{request.data['thread']}\' does not exist"]}, status=status.HTTP_400_BAD_REQUEST)
         data = {}
         data['content'] = request.data['content']
         data['user'] = request.user.id
@@ -175,4 +175,4 @@ class PostViewSet(viewsets.ModelViewSet):
         """Custom delete method allows user to delete their own posts only."""
         post = self.get_object()
         post.delete()
-        return Response({"detail": "Object deleted"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'Object deleted'}, status=status.HTTP_204_NO_CONTENT)

@@ -1,8 +1,25 @@
 from django.core import exceptions
-from django.contrib.auth import password_validation as validators
+from django.contrib.auth import password_validation
 from rest_framework import serializers
 
 from users.models import CustomUser
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    """Serialize user data that is meant to be visible to other users.
+    """
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'date_joined', 'status', 'description']
+
+
+class UserPrivateSerializer(serializers.ModelSerializer):
+    """Serialize user data that is meant to be visible only to a profile owner.
+    """
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'status', 'description']
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     """Serializer for registering a new users.
@@ -28,7 +45,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = data.get('password')
         errors = {} 
         try:
-            validators.validate_password(password=password, user=user)
+            password_validation.validate_password(password=password, user=user)
         except exceptions.ValidationError as e:
             errors['password'] = list(e.messages)
         if errors:
@@ -39,7 +56,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
         if  password != password2:
-            raise serializers.ValidationError({"password": "Passwords must match."})
+            raise serializers.ValidationError({'password': 'Passwords must match.'})
         else:
             user = CustomUser(
                 username = self.validated_data['username'],
@@ -50,34 +67,32 @@ class RegistrationSerializer(serializers.ModelSerializer):
             return user
 
 
-class UserPublicSerializer(serializers.ModelSerializer):
-    """Serialize user data that is meant to be visible to other users.
+class ChangePasswordSerializer(serializers.Serializer):
+    """Serializer for changing the password.
+    Checks if the `old_password` match with old user password.
+    Checks if the new password meets security criteria.
+    Checks if `password2` matches with `password`.
     """
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'date_joined', 'status', 'description']
-
-class UserPrivateSerializer(serializers.ModelSerializer):
-    """Serialize user data that is meant to be visible only to a profile owner.
-    """
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'status', 'description']
+    model = CustomUser
+    old_password = serializers.CharField(style={'input_type': 'password'}, write_only=True, required=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, required=True)
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True, required=True)
     
-    def validate(self, data):
-        # here data has all the fields which have validated values
-        # so we can create a User instance out of it
-        user = CustomUser(
-            username=data['username'],
-            email=data['email'],
-            password=data['password']
-            )
-        password = data.get('password')
-        errors = {} 
-        try:
-            validators.validate_password(password=password, user=user)
-        except exceptions.ValidationError as e:
-            errors['password'] = list(e.messages)
-        if errors:
-            raise serializers.ValidationError(errors)
-        return super().validate(data)
+    def validate_password(self, value):
+        password_validation.validate_password(value, self.instance)
+        return value
+    
+    def validate_old_password(self, value):
+        if not self.instance.check_password(value):
+            raise serializers.ValidationError({'old_password': ['Wrong password.']})
+        return value
+
+    def save(self):
+        password = self.validated_data['password']
+        password2 = self.validated_data['password2']
+        if  password != password2:
+            raise serializers.ValidationError({'password': ['Passwords must match.']})
+        else:
+            self.instance.set_password(password)
+            self.instance.save()
+            return self.instance

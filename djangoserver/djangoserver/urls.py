@@ -7,9 +7,13 @@ from rest_framework.authtoken.views import obtain_auth_token
 from forum.api.views import (
     CategoryViewSet,
     ThreadViewSet,
-    PostViewSet,    
-)
-from users.api.views import (UserViewSet, RegistrationViewSet)
+    PostViewSet
+    )
+from users.api.views import (
+    UserViewSet, 
+    RegistrationViewSet,
+    ChangePasswordView
+    )
 
 
 # Regiter REST FRAMEWORK routers
@@ -23,6 +27,7 @@ router.register('registration', RegistrationViewSet, basename='registration')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/token-auth/', obtain_auth_token),
+    path('api/change-password/', ChangePasswordView.as_view()),
     path('admin/', admin.site.urls),
 ]
 
