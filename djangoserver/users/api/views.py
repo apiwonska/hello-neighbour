@@ -53,7 +53,8 @@ class UserViewSet(viewsets.ModelViewSet):
         data['status'] = request.data.get('status', instance.status)
         data['description'] = request.data.get('description', instance.description)
         data['email'] = request.data.get('email', instance.email)
-        
+        data['avatar'] = request.data.get('avatar', instance.avatar)
+
         serializer = UserPrivateSerializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

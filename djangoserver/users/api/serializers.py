@@ -8,9 +8,12 @@ from users.models import CustomUser
 class UserPublicSerializer(serializers.ModelSerializer):
     """Serialize user data that is meant to be visible to other users.
     """
+    
+    avatar_thumbnail = serializers.ImageField(read_only=True)
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'date_joined', 'status', 'description']
+        fields = ['id', 'username', 'date_joined', 'status', 'description', 'avatar_thumbnail']
 
 
 class UserPrivateSerializer(serializers.ModelSerializer):
@@ -18,7 +21,7 @@ class UserPrivateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'date_joined', 'status', 'description']
+        fields = ['id', 'username', 'email', 'date_joined', 'status', 'description', 'avatar']
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

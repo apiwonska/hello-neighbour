@@ -20,7 +20,7 @@ class CustomUser(AbstractUser):
     status = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     avatar = ProcessedImageField(
-        upload_to='img/users/avatars',
+        upload_to='users/',
         processors=[ResizeToFill(200, 200)],
         format='JPEG',
         options={'quality': 60},
