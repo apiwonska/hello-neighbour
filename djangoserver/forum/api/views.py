@@ -22,6 +22,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     authentication_classes = [TokenAuthentication]
+    pagination_class = None
 
 
 class ThreadViewSet(viewsets.ModelViewSet):
