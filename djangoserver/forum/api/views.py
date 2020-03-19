@@ -26,7 +26,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ThreadViewSet(viewsets.ModelViewSet):
     """A class based view with custom create and patch methods. 
-    Allowed http methods: get, post, patch, head, options. Delete http method is not allowed.
+    Allowed http methods: get, post, put, patch, head, options. Delete http method is not allowed.
     User can update only threads, that belong to them.
 
     Routes:
@@ -36,12 +36,12 @@ class ThreadViewSet(viewsets.ModelViewSet):
     GET /threads/?ordering=created
     GET /threads/1
     POST /threads
-    PATCH /threads/1
+    PUT/PATCH /threads/1
 
     Ordering is possible by 'created' or 'latest_post_time'. Default ordering is from the latest posts. 
     """
     serializer_class = ThreadSerializer
-    http_method_names = ['get', 'post', 'patch', 'head', 'options']
+    http_method_names = ['get', 'post', 'put', 'patch', 'head', 'options']
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'subject']
     ordering_fields = ['created', 'latest_post_time']
@@ -79,10 +79,11 @@ class ThreadViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def partial_update(self, request, *args, **kwargs):
-        """Custom partial_update method allowes to modify only title and subject properies.
+    def update(self, request, *args, **kwargs):
+        """Custom update method allowes to modify only title and subject properies.
         User can only update threads, that belong to them.
-        """        
+        """
+        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = {}
         data['title'] = request.data.get('title', instance.title)
@@ -101,7 +102,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
 
 class PostViewSet(viewsets.ModelViewSet):
     """A class based view with custom create and patch methods. 
-    Allowed http methods: get, post, patch, delete, head, options.
+    Allowed http methods: get, post, put, patch, delete, head, options.
     User can update and delete only posts, that belong to them.
 
     Routes:
@@ -111,14 +112,14 @@ class PostViewSet(viewsets.ModelViewSet):
     GET /posts/?ordering=created
     GET /posts/1
     POST /posts
-    PATCH /posts/1
+    PUT/PATCH /posts/1
     DELETE /posts/1
 
     Ordering is possible by 'created' field. Default ordering is from the oldest posts. 
     
     """
     serializer_class = PostSerializer
-    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options']
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['content']
     ordering_fields = ['created']
@@ -154,9 +155,10 @@ class PostViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
-    def partial_update(self, request, *args, **kwargs):
-        """Custom partial_update method allows to modify only content property. The purpose of this custom method is to prevent changing user and thread fields.
+    def update(self, request, *args, **kwargs):
+        """Custom update method allows to modify only content property. The purpose of this custom method is to prevent changing user and thread fields.
         """
+        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = {}
         data['content'] = request.data.get('content', instance.content)
