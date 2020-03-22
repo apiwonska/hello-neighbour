@@ -1,12 +1,9 @@
-from django.urls import path, include
-from rest_framework.authtoken.views import obtain_auth_token
+from django.urls import include, path
+from rest_framework.authtoken import views
 
-from users.api.views import (
-    ChangePasswordView,
-    )
-
+from users.api.views import ChangePasswordView
 
 urlpatterns = [
-    path('token-auth/', obtain_auth_token),
+    path('token-auth/', views.obtain_auth_token),
     path('change-password/', ChangePasswordView.as_view()),
 ]
