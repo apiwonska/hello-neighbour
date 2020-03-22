@@ -1,5 +1,5 @@
-from django.core import exceptions
 from django.contrib.auth import password_validation
+from django.core import exceptions
 from rest_framework import serializers
 
 from users.models import CustomUser
@@ -36,6 +36,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+    
+    def validate_username(self, value):
+        if len(value) < 3:
+            raise serializers.ValidationError('Username must be at least 3 characters length.')
+        return value
     
     def validate(self, data):
         # here data has all the fields which have validated values
@@ -87,14 +92,14 @@ class ChangePasswordSerializer(serializers.Serializer):
     
     def validate_old_password(self, value):
         if not self.instance.check_password(value):
-            raise serializers.ValidationError({'old_password': ['Wrong password.']})
+            raise serializers.ValidationError('Wrong password.')
         return value
 
     def save(self):
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
         if  password != password2:
-            raise serializers.ValidationError({'password': ['Passwords must match.']})
+            raise serializers.ValidationError('Passwords must match.')
         else:
             self.instance.set_password(password)
             self.instance.save()
