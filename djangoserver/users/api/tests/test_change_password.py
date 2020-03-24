@@ -1,3 +1,4 @@
+from django.urls import reverse
 from rest_framework import status, test
 from rest_framework.authtoken.models import Token
 
@@ -6,11 +7,12 @@ from users.models import CustomUser
 
 class ChangePasswordTestCase(test.APITestCase):
 
+    url = reverse('change-password')
+
     def setUp(self):
         self.user = CustomUser.objects.create_user(username='testUser', email='test@user.com', password='p@ssword123')
         self.token = Token.objects.get(user=self.user)
-        self.url = '/api/change-password/'
-    
+
     def api_authenticate(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
