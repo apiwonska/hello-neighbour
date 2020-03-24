@@ -1,20 +1,17 @@
-from rest_framework.response import Response
-from rest_framework import filters, status, viewsets, generics
+from rest_framework import filters, generics, status, viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from users.models import CustomUser
-from .serializers import (
-    UserPublicSerializer, 
-    UserPrivateSerializer, 
-    RegistrationSerializer,
-    ChangePasswordSerializer
-    )
+
 from .permissions import IsOwnerOrReadOnly
+from .serializers import (ChangePasswordSerializer, RegistrationSerializer,
+                          UserPrivateSerializer, UserPublicSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """Allowed http methods: get, patch, head, options.
+    """Allowed http methods: get, patch, put, head, options.
     Some user data are accessible only for profile owner and hidden from other users.
     User can update only their own profile data.
 
@@ -22,14 +19,13 @@ class UserViewSet(viewsets.ModelViewSet):
     GET /users/
     GET /users/?search=some_name
     GET /users/1/
-    POST /users/
-    PATCH /users/1/
+    PATCH/PUT /users/1/
 
     Ordering is alphabetical. 
     """
     queryset = CustomUser.objects.exclude(username='user_deleted')
     serializer_class = UserPublicSerializer
-    http_method_names = ['get', 'patch', 'head', 'options']
+    http_method_names = ['get', 'patch', 'put', 'head', 'options']
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -44,16 +40,17 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = UserPublicSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def partial_update(self, request, *args, **kwargs):
-        """Custom partial_update method allows to modify only selected fields.
+    def update(self, request, *args, **kwargs):
+        """Custom update method allows to modify only selected fields.
         """
-
+        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data ={}
         data['status'] = request.data.get('status', instance.status)
         data['description'] = request.data.get('description', instance.description)
         data['email'] = request.data.get('email', instance.email)
-        data['avatar'] = request.data.get('avatar', instance.avatar)
+        if request.data.get('avatar'):
+            data['avatar'] = request.data.get('avatar')
 
         serializer = UserPrivateSerializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -63,7 +60,6 @@ class UserViewSet(viewsets.ModelViewSet):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
         return Response(serializer.data)
 
 
