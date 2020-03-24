@@ -1,3 +1,4 @@
+from django.urls import reverse
 from rest_framework import status, test
 
 from users.models import CustomUser
@@ -5,8 +6,7 @@ from users.models import CustomUser
 
 class RegistrationTestCase(test.APITestCase):
 
-    def setUp(self):
-        self.url = '/api/registration/'
+    url = reverse('registration-list')
 
     def test_registration_with_correct_data(self):
         """
