@@ -85,7 +85,7 @@ class RegistrationTestCase(test.APITestCase):
 
     def test_registration_with_invalid_password(self):
         """
-        Ensure we can't create a new account if the passwords are not matching.
+        Ensure we can't create a new account if the passwords is not va;lid.
         """
         data = {
             'username': 'testUser',

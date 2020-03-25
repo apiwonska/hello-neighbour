@@ -45,8 +45,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        # here data has all the fields which have validated values
-        # so we can create a User instance out of it
+        """
+        Password validations: auth password validation and verification of password confirmation.
+        """
+        # Password with auth password validation
         user = CustomUser(
             username=data['username'],
             email=data['email'],
@@ -60,21 +62,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
             errors['password'] = list(e.messages)
         if errors:
             raise serializers.ValidationError(errors)
-        return super().validate(data)
+        # Passwords match validation
+        password = data['password']
+        password2 = data['password2']
+        if  password != password2:
+            raise serializers.ValidationError({'password': 'Passwords must match.'})
+        return data
 
     def save(self):
         password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if  password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match.'})
-        else:
-            user = CustomUser(
-                username = self.validated_data['username'],
-                email = self.validated_data['email']
-            )
-            user.set_password(password)
-            user.save()
-            return user
+        user = CustomUser(
+            username = self.validated_data['username'],
+            email = self.validated_data['email']
+        )
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -96,13 +99,16 @@ class ChangePasswordSerializer(serializers.Serializer):
         if not self.instance.check_password(value):
             raise serializers.ValidationError('Wrong password.')
         return value
+    
+    def validate(self, data):
+        password = data['password']
+        password2 = data['password2']
+        if  password != password2:
+            raise serializers.ValidationError('Passwords must match.')
+        return data
 
     def save(self):
         password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if  password != password2:
-            raise serializers.ValidationError('Passwords must match.')
-        else:
-            self.instance.set_password(password)
-            self.instance.save()
-            return self.instance
+        self.instance.set_password(password)
+        self.instance.save()
+        return self.instance
