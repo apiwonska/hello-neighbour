@@ -12,6 +12,17 @@ from users.models import CustomUser
 
 
 class UserViewSetTestCase(test.APITestCase):
+    temp_dir = None
+
+    @classmethod
+    def setUpClass(cls):
+        cls.temp_dir = tempfile.TemporaryDirectory()
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temp_dir = None
+        super().tearDownClass()
 
     list_url = reverse('user-list')
 
@@ -121,19 +132,20 @@ class UserViewSetTestCase(test.APITestCase):
         Ensure that the user can update avatar in his own profile. 
         Request is made with PATH method.
         """
-        image = Image.new('RGB', (100, 100))
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
-        image.save(tmp_file)
-        img_path = tmp_file.name
-        img_name = f'test_avatar_{int(time.time())}.jpg'
-        img = SimpleUploadedFile(name=img_name, content=open(img_path, 'rb').read(), content_type='image/jpg')
+        with self.settings(MEDIA_ROOT=self.temp_dir.name):
+            image = Image.new('RGB', (100, 100))
+            tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+            image.save(tmp_file)
+            img_path = tmp_file.name
+            img_name = f'test_avatar_{int(time.time())}.jpg'
+            img = SimpleUploadedFile(name=img_name, content=open(img_path, 'rb').read(), content_type='image/jpg')
 
-        url = reverse('user-detail', kwargs={ "pk": self.user.id})
-        data = { 'avatar': img }
-        response = self.client.patch(url, data, format='multipart')
+            url = reverse('user-detail', kwargs={ "pk": self.user.id})
+            data = { 'avatar': img }
+            response = self.client.patch(url, data, format='multipart')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['avatar'], f'/media/users/{img_name}')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data['avatar'], f'/media/users/{img_name}')
 
     def test_update_other_user_profile_not_allowed(self):
         pass

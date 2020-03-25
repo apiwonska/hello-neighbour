@@ -104,7 +104,8 @@ DATABASES = {
     }
 }
 
-if 'test' in sys.argv:
+TESTING_MODE = 'test' in sys.argv
+if TESTING_MODE:
     DATABASES['default']['HOST'] = 'localhost'
 
 
