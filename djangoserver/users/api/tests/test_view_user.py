@@ -56,7 +56,7 @@ class UserViewSetTestCase(test.APITestCase):
 
     def test_retrive_users_own_profile(self):
         """
-        If user is trying to access his own profile, he should get his email along with other profile information.
+        Fields that should be retrieved: id, username, email, date_joined, status, description, avatar.
         """
         url = reverse('user-detail', kwargs={ "pk": self.user.id})
         response = self.client.get(url)
@@ -64,7 +64,8 @@ class UserViewSetTestCase(test.APITestCase):
         self.assertEqual(set(response.data.keys()), set(['id', 'username', 'email', 'date_joined', 'status', 'description', 'avatar']))
 
     def test_retrive_other_users_profile(self):
-        """        
+        """ 
+        Fields that should be retrieved: id, username, date_joined, status, description, avatar.
         User should not get other users email information.
         """
         url = reverse('user-detail', kwargs={ "pk": self.user2.id})
@@ -76,7 +77,8 @@ class UserViewSetTestCase(test.APITestCase):
         """
         User is not allowed to create new user object.
         """
-        response = self.client.post(self.list_url)
+        data = {}
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_update_user_own_profile_data_using_patch(self):
@@ -127,10 +129,10 @@ class UserViewSetTestCase(test.APITestCase):
         self.assertNotEqual(response.data['username'], 'updateUsername')
         self.assertNotEqual(response.data['date_joined'], datetime(2020,2,1))
     
-    def test_update_user_own_profile_img_using_patch(self):
+    def test_update_user_own_profile_img(self):
         """
         Ensure that the user can update avatar in his own profile. 
-        Request is made with PATH method.
+        Request is made with PUT method.
         """
         with self.settings(MEDIA_ROOT=self.temp_dir.name):
             image = Image.new('RGB', (100, 100))
@@ -142,10 +144,28 @@ class UserViewSetTestCase(test.APITestCase):
 
             url = reverse('user-detail', kwargs={ "pk": self.user.id})
             data = { 'avatar': img }
-            response = self.client.patch(url, data, format='multipart')
+            response = self.client.put(url, data, format='multipart')
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data['avatar'], f'/media/users/{img_name}')
 
     def test_update_other_user_profile_not_allowed(self):
-        pass
+        """
+        Ensure that user can't change the data of the other user.
+        """
+        url = reverse('user-detail', kwargs={ "pk": self.user2.id})
+        data = {
+            'status': 'status', 
+            'description': 'description'
+        }
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_delete_user_not_allowed(self):
+        """
+        Ensure that it's not possible to delete user.
+        """
+        url = reverse('user-detail', kwargs={ "pk": self.user2.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
