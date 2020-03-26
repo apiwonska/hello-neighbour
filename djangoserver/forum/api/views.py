@@ -1,16 +1,14 @@
 from rest_framework import filters, status, viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
 
-from forum.models import Category, Thread, Post
+from forum.models import Category, Post, Thread
 from users.models import CustomUser
-from .serializers import (
-    CategorySerializer,
-    ThreadSerializer,
-    PostSerializer,
-)
+
 from .permissions import IsOwnerOrReadOnly
+from .serializers import CategorySerializer, PostSerializer, ThreadSerializer
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """Allowed methods: get, head, options.

@@ -1,6 +1,7 @@
-from django.core import exceptions
 from django.contrib.auth import password_validation
+from django.core import exceptions
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from users.models import CustomUser
 
@@ -8,17 +9,17 @@ from users.models import CustomUser
 class UserPublicSerializer(serializers.ModelSerializer):
     """Serialize user data that is meant to be visible to other users.
     """
-    
-    avatar_thumbnail = serializers.ImageField(read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'date_joined', 'status', 'description', 'avatar_thumbnail']
+        fields = ['id', 'username', 'date_joined', 'status', 'description', 'avatar']
 
 
 class UserPrivateSerializer(serializers.ModelSerializer):
     """Serialize user data that is meant to be visible only to a profile owner.
     """
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
+
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'date_joined', 'status', 'description', 'avatar']
@@ -27,6 +28,7 @@ class UserPrivateSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     """Serializer for registering a new users.
     """
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta:
@@ -37,9 +39,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
     
+    def validate_username(self, value):
+        if len(value) < 3:
+            raise serializers.ValidationError('Username must be at least 3 characters length.')
+        return value
+
     def validate(self, data):
-        # here data has all the fields which have validated values
-        # so we can create a User instance out of it
+        """
+        Password validations: auth password validation and verification of password confirmation.
+        """
+        # Password with auth password validation
         user = CustomUser(
             username=data['username'],
             email=data['email'],
@@ -53,21 +62,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
             errors['password'] = list(e.messages)
         if errors:
             raise serializers.ValidationError(errors)
-        return super().validate(data)
+        # Passwords match validation
+        password = data['password']
+        password2 = data['password2']
+        if  password != password2:
+            raise serializers.ValidationError({'password2': 'Passwords must match.'})
+        return data
 
     def save(self):
         password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if  password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match.'})
-        else:
-            user = CustomUser(
-                username = self.validated_data['username'],
-                email = self.validated_data['email']
-            )
-            user.set_password(password)
-            user.save()
-            return user
+        user = CustomUser(
+            username = self.validated_data['username'],
+            email = self.validated_data['email']
+        )
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -87,15 +97,18 @@ class ChangePasswordSerializer(serializers.Serializer):
     
     def validate_old_password(self, value):
         if not self.instance.check_password(value):
-            raise serializers.ValidationError({'old_password': ['Wrong password.']})
+            raise serializers.ValidationError('Wrong password.')
         return value
+    
+    def validate(self, data):
+        password = data['password']
+        password2 = data['password2']
+        if  password != password2:
+            raise serializers.ValidationError({'password2': 'Passwords must match.'})
+        return data
 
     def save(self):
         password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if  password != password2:
-            raise serializers.ValidationError({'password': ['Passwords must match.']})
-        else:
-            self.instance.set_password(password)
-            self.instance.save()
-            return self.instance
+        self.instance.set_password(password)
+        self.instance.save()
+        return self.instance

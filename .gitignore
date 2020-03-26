@@ -4,7 +4,11 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
+
+djangoserver/**/media/*
+!djangoserver/**/media/users/
+djangoserver/**/media/users/*
+!djangoserver/**/media/users/blank-profile-picture.svg
 
 # Backup files # 
 *.bak 
