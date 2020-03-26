@@ -66,7 +66,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = data['password']
         password2 = data['password2']
         if  password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match.'})
+            raise serializers.ValidationError({'password2': 'Passwords must match.'})
         return data
 
     def save(self):
@@ -104,7 +104,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         password = data['password']
         password2 = data['password2']
         if  password != password2:
-            raise serializers.ValidationError('Passwords must match.')
+            raise serializers.ValidationError({'password2': 'Passwords must match.'})
         return data
 
     def save(self):
