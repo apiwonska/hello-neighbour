@@ -53,7 +53,7 @@ class Thread(models.Model):
     """
     
     title = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
-    subject = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
+    subject = models.TextField(max_length=2000, validators=[MinLengthValidator(10)])
     user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sticky = models.BooleanField(blank=True, default=False)
@@ -94,7 +94,7 @@ class Post(models.Model):
     When a post is created or deleted, Thread and Category posts and latest_post_time fields are updated. The logic is in signals.
     """
 
-    content = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
+    content = models.TextField(max_length=2000)
     user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -107,4 +107,4 @@ class Post(models.Model):
 
     def __str__(self):
         """Unicode representation of Post."""
-        return 'Post ID:' + str(self.id)
+        return 'Post ID: ' + str(self.id)

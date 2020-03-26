@@ -1,6 +1,5 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
 
 from forum.models import Category, Post, Thread
 from users.models import CustomUser
@@ -33,6 +32,14 @@ class ThreadModelTestCase(TestCase):
         """
         subject = self.thread1._meta.get_field('subject')
         self.assertEqual(subject.max_length, 2000)
+    
+    def test_subject_is_min_10_length(self):
+        """
+        Ensure that for subject less than 10 characters long ValidationError is raised.
+        """
+        self.thread1.subject = 'q'
+        self.assertRaises(ValidationError, self.thread1.full_clean)
+        self.assertRaisesMessage(ValidationError, 'Ensure this value has at least 10 characters (it has 1).', self.thread1.full_clean)
     
     def test_on_delete_user_is_set_to_obj_user_deleted(self):
         """
