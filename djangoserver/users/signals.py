@@ -18,4 +18,4 @@ def add_default_picture(sender, instance, **kwargs):
     """
     user = instance
     if user.avatar == '':
-        user.avatar = 'users/blank-profile-picture.svg'
+        user.avatar = 'users/blank-profile-picture.jpeg'
