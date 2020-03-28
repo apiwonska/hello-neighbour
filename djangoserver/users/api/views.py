@@ -33,35 +33,40 @@ class UserViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         """Custom retrieve method use UserPrivateSerializer if the user object is requested by it's owner.
         """
+        super().retrieve(request, *args, **kwargs)
         instance = self.get_object()
         if request.user == instance:
-            serializer = UserPrivateSerializer(instance)
+            serializer = UserPrivateSerializer(instance, context={'request': request})
         else:
-            serializer = UserPublicSerializer(instance)
+            serializer = UserPublicSerializer(instance, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """Custom update method allows to modify only selected fields.
+        User is allowed to modify only their own profile. 
+        UserPrivateSerializer is used instead of default serializer.
         """
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        data ={}
-        data['status'] = request.data.get('status', instance.status)
-        data['description'] = request.data.get('description', instance.description)
-        data['email'] = request.data.get('email', instance.email)
-        if request.data.get('avatar'):
-            data['avatar'] = request.data.get('avatar')
 
-        serializer = UserPrivateSerializer(instance, data=data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        if request.user == instance:
+            data ={}
+            data['status'] = request.data.get('status', instance.status)
+            data['description'] = request.data.get('description', instance.description)
+            data['email'] = request.data.get('email', instance.email)
+            if request.data.get('avatar'):
+                data['avatar'] = request.data.get('avatar')
 
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-        return Response(serializer.data)
+            serializer = UserPrivateSerializer(instance, data=data, partial=True, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
 
+            if getattr(instance, '_prefetched_objects_cache', None):
+                # If 'prefetch_related' has been applied to a queryset, we need to
+                # forcibly invalidate the prefetch cache on the instance.
+                instance._prefetched_objects_cache = {}
+            return Response(serializer.data)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 class RegistrationViewSet(viewsets.ModelViewSet):
     """Allowed http methods: post. For registering a user, the data have to contain `username`, `email`, `password` and `password2` fields.
