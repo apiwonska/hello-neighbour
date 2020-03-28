@@ -7,7 +7,7 @@ from users.api.serializers import (ChangePasswordSerializer,
 from users.models import CustomUser
 
 
-class UserTestCase(test.APITestCase):
+class BaseSerializerTestCase(test.APITestCase):
     
     @classmethod
     def setUpClass(cls):
@@ -21,7 +21,7 @@ class UserTestCase(test.APITestCase):
         }
         cls.user = CustomUser.objects.create_user(**cls.user_attrs)
 
-class UserPublicSerializerTestCase(UserTestCase):
+class UserPublicSerializerTestCase(BaseSerializerTestCase):
 
     def test_contains_expected_fields(self):
         """Ensure that all expected fields are contained in data"""
@@ -30,7 +30,7 @@ class UserPublicSerializerTestCase(UserTestCase):
         fields = ['id', 'username', 'date_joined', 'status', 'description', 'avatar']
         self.assertCountEqual(data.keys(), fields)
 
-class UserPrivateSerializerTestCase(UserTestCase):
+class UserPrivateSerializerTestCase(BaseSerializerTestCase):
 
     def test_contains_expected_fields(self):
         """Ensure that all expected fields are contained in data"""
@@ -39,7 +39,7 @@ class UserPrivateSerializerTestCase(UserTestCase):
         fields = ['id', 'username', 'email', 'date_joined', 'status', 'description', 'avatar']
         self.assertCountEqual(data.keys(), fields)
 
-class RegistrationSerializerTestCase(UserTestCase):
+class RegistrationSerializerTestCase(BaseSerializerTestCase):
 
     def setUp(self):
         self.correct_data = {
@@ -127,7 +127,7 @@ class RegistrationSerializerTestCase(UserTestCase):
         self.assertFalse(is_valid)
         self.assertEqual(str(serializer.errors['password'][0]), 'This password is too common.')
 
-class ChangePasswordSerializerTestCase(UserTestCase):
+class ChangePasswordSerializerTestCase(BaseSerializerTestCase):
 
     def setUp(self):
         self.correct_data = {
