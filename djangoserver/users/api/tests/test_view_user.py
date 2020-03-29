@@ -101,7 +101,6 @@ class UserViewSetTestCase(test.APITestCase):
         """
         url = reverse('user-list')
         response = self.client.get(url)
-        import pdb; pdb.set_trace()
         avatar_url = response.data['results'][0]['avatar']
         self.assertTrue(self.is_absolute(avatar_url))
     

@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'avatar_thumbnail']
-        extra_kwargs = {            
+        extra_kwargs = {
             'username': {'read_only': True}
         }
 
@@ -23,29 +23,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
 
     class Meta:
         model = Thread
         fields = ['id', 'title', 'subject', 'user', 'category', 'sticky', 'closed', 'posts', 'latest_post_time', 'created', 'updated']
 
-    def to_representation(self, instance):
-        """
-        Object instance -> Dict of primitive datatypes.
-        """
-        representation = super().to_representation(instance)
-        representation['user'] = UserSerializer(instance.user, context=self.context).data
-        return representation
 
 class PostSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
 
     class Meta:
         model = Post
         fields = ['id', 'content', 'user', 'thread', 'created', 'updated']
-    
-    def to_representation(self, instance):
-        """
-        Object instance -> Dict of primitive datatypes.
-        """
-        representation = super().to_representation(instance)
-        representation['user'] = UserSerializer(instance.user, context=self.context).data
-        return representation
