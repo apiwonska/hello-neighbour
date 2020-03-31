@@ -75,13 +75,12 @@ class ThreadSerializerTestCase(BaseSerializerTestCase):
         fields = ['id', 'title', 'subject', 'user', 'category', 'sticky', 'closed', 'posts', 'latest_post_time', 'created', 'updated']
         self.assertCountEqual(serializer.data, fields)
 
-    def test_user_field_is_serializer(self):
+    def test_user_representation(self):
         """
-        Ensure user field is serializer.
+        Ensure that user field is represented with serialized user object.
         """
         serializer = ThreadSerializer(instance=self.thread)
-        field = serializer._declared_fields['user']
-        self.assertIsInstance(field, UserSerializer)
+        self.assertEqual(serializer.data['user'], UserSerializer(instance=self.user).data)
 
 
 class PostSerializerTestCase(BaseSerializerTestCase):
@@ -94,10 +93,9 @@ class PostSerializerTestCase(BaseSerializerTestCase):
         fields = ['id', 'content', 'user', 'thread', 'created', 'updated']
         self.assertCountEqual(serializer.data, fields)
 
-    def test_user_field_is_serializer(self):
+    def test_user_representation(self):
         """
-        Ensure user field is serializer.
+        Ensure that user field is represented with serialized user object.
         """
-        serializer = ThreadSerializer(instance=self.thread)
-        field = serializer._declared_fields['user']
-        self.assertIsInstance(field, UserSerializer)
+        serializer = PostSerializer(instance=self.post)
+        self.assertEqual(serializer.data['user'], UserSerializer(instance=self.user).data)
