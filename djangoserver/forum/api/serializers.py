@@ -23,16 +23,33 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
 
     class Meta:
         model = Thread
         fields = ['id', 'title', 'subject', 'user', 'category', 'sticky', 'closed', 'posts', 'latest_post_time', 'created', 'updated']
 
+    # Used instead of nested serializer because user has to be read only. Same for PostSerializer.
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        User field is represented with serialized user object.
+        """
+        representation = super().to_representation(instance)
+        representation['user'] = UserSerializer(instance.user).data
+        return representation
+
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
 
     class Meta:
         model = Post
         fields = ['id', 'content', 'user', 'thread', 'created', 'updated']
+
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        User field is represented with serialized user object.
+        """
+        representation = super().to_representation(instance)
+        representation['user'] = UserSerializer(instance.user).data
+        return representation
