@@ -23,7 +23,6 @@ class CustomUser(AbstractUser):
         processors=[ResizeToFill(200, 200)],
         format='JPEG',
         options={'quality': 60},
-        default='users/blank-profile-picture.svg',
         blank=True
         )
     avatar_thumbnail = ImageSpecField(

@@ -8,7 +8,7 @@ db.sqlite3
 djangoserver/**/media/*
 !djangoserver/**/media/users/
 djangoserver/**/media/users/*
-!djangoserver/**/media/users/blank-profile-picture.svg
+!djangoserver/**/media/users/blank-profile-picture.jpeg
 
 # Backup files # 
 *.bak 

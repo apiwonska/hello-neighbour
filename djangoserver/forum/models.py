@@ -4,11 +4,12 @@ A basic forum model with corresponding category, thread, post models.
 The logic for updates of related models on save or delete of the instance is in signals.
 """
 
-from django.db import models
-from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import AnonymousUser
+from django.core.validators import MinLengthValidator
+from django.db import models
 
 from users.models import CustomUser as User
+
 
 def get_dummy_user():
     return User.objects.get_or_create(username='user_deleted')[0]
@@ -19,8 +20,8 @@ class Category(models.Model):
     Threads and posts field are automatically updated on thread/post save or delete.
     """
 
-    name = models.CharField(max_length=50, unique=True, validators=[MinLengthValidator(1)])
-    description = models.TextField(max_length=500)
+    name = models.CharField(max_length=50, unique=True, validators=[MinLengthValidator(3)])
+    description = models.TextField(max_length=500, null=True, blank=True)
     ordering = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='display order')
     threads = models.IntegerField(default=0, editable=False)
     posts = models.IntegerField(default=0, editable=False)
@@ -51,8 +52,8 @@ class Thread(models.Model):
     When a thread is created or deleted, Category thread and post fields are updated. The logic is in signals.
     """
     
-    title = models.CharField(max_length=100, validators=[MinLengthValidator(1)])
-    subject = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
+    title = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
+    subject = models.TextField(max_length=2000, validators=[MinLengthValidator(10)])
     user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sticky = models.BooleanField(blank=True, default=False)
@@ -93,7 +94,7 @@ class Post(models.Model):
     When a post is created or deleted, Thread and Category posts and latest_post_time fields are updated. The logic is in signals.
     """
 
-    content = models.TextField(max_length=2000, validators=[MinLengthValidator(1)])
+    content = models.TextField(max_length=2000)
     user = models.ForeignKey(User, on_delete=models.SET(get_dummy_user))
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -106,5 +107,4 @@ class Post(models.Model):
 
     def __str__(self):
         """Unicode representation of Post."""
-        return 'Post ID:' + str(self.id)
-    
+        return 'Post ID: ' + str(self.id)
