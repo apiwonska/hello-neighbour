@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'imagekit',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_rest_passwordreset',
     'corsheaders',
     # Local apps
     'users',
@@ -153,6 +154,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -163,3 +165,23 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'djangoserver.pagination.StandrdResultsSetPagination',
     'PAGE_SIZE': 20
 }
+
+# Change later to front!
+if DEBUG:
+    URL_FRONT = 'http://localhost:8000'
+else:
+    pass
+
+# Emails
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+else:
+    # Email configuration for produccion
+    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # EMAIL_HOST_USER = ''
+    # EMAIL_HOST = 'smtp.gmail.com'
+    # EMAIL_PORT = 587
+    # EMAIL_USE_TLS = True
+    # EMAIL_HOST_PASSWORD = ''
+    pass
