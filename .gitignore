@@ -10,6 +10,8 @@ djangoserver/**/media/*
 djangoserver/**/media/users/*
 !djangoserver/**/media/users/blank-profile-picture.jpeg
 
+sent_emails/
+
 # Backup files # 
 *.bak 
 

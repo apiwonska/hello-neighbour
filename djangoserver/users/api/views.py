@@ -94,8 +94,6 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        # Change the authentication token
-        if hasattr(instance, 'auth_token'):
-            instance.auth_token.delete()
+        # Auth token is changed when password is changed (handled by signals)
         token, created = Token.objects.get_or_create(user=instance)
         return Response({ 'token': token.key, 'message': 'Your password was changed.'}, status=status.HTTP_200_OK)
