@@ -185,3 +185,7 @@ else:
     # EMAIL_USE_TLS = True
     # EMAIL_HOST_PASSWORD = ''
     pass
+
+if TESTING_MODE:
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")

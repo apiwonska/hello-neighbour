@@ -37,12 +37,12 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     email_plaintext_message = render_to_string('email/user_reset_password.txt', context)
 
     send_mail(
-        # title:
-        "Password Reset for {title}".format(title="Forum"),
+        # subject:
+        'Password Reset for Forum',
         # message:
         email_plaintext_message,
         # from:
-        "noreply@somehost.local",
+        'noreply@somehost.local',
         # to:
         [reset_password_token.user.email],
     )
