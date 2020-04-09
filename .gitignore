@@ -5,10 +5,10 @@
 __pycache__
 db.sqlite3
 
-djangoserver/**/media/*
-!djangoserver/**/media/users/
-djangoserver/**/media/users/*
-!djangoserver/**/media/users/blank-profile-picture.jpeg
+forumproject/**/media/*
+!forumproject/**/media/users/
+forumproject/**/media/users/*
+!forumproject/**/media/users/blank-profile-picture.jpeg
 
 sent_emails/
 
