@@ -6,11 +6,12 @@ import categoryReducer from './categoryReducer';
 import threadReducer from './threadReducer';
 
 const reducers = combineReducers({
-  form: formReducer,  
+  isSignedIn: () => true,
+  token: () => '3df1f99d17fac0685dd37ec04bf2b14a012de3d7',
   categories: categoriesReducer,
   category: categoryReducer,
   thread: threadReducer,
-  isSignedIn: () => true,
+  form: formReducer,
 });
 
 export default reducers;
