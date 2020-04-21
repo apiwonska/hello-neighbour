@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 
-import { fetchCategory } from '../../redux/actions';
+import { fetchCategories, fetchCategoryThreads } from '../../redux/actions';
 import Spinner from '../../components/common/spinner';
 import { 
   CategoryHeader,
@@ -18,12 +18,16 @@ import { ContainerDiv } from '../../components/common/styledDivs';
 import { LinkButtonBig } from '../../components/common/styledButtons';
 
 class ThreadsList extends React.Component {
-  componentDidMount() {
-    this.props.fetchCategory(this.props.match.params.categoryId)
+  componentDidMount() { 
+    if (this.props.categories.length === 0) {
+      this.props.fetchCategories();
+    }
+    this.props.fetchCategoryThreads(this.props.match.params.categoryId);
   }
 
   renderThreadsList() {
-    const threadsList = this.props.category.threads.map(thread => {
+    if (Object.keys(this.props.categoryThreads).length) {
+      const threadsList = this.props.categoryThreads.results.map(thread => {
       return (
         <ThreadWrapper key={thread.id}>
           <TitleRowWrapper>
@@ -40,29 +44,38 @@ class ThreadsList extends React.Component {
       )
     })
     return threadsList;
+    }
   }
 
   render() {
-    if(!Object.keys(this.props.category).length) {
-      return <Spinner/>;
-    }
+    const categoryId = this.props.match.params.categoryId;
+    const category = this.props.categories.find(obj => String(obj.id) === categoryId);
 
-    return (
-    <ContainerDiv>
-      <CategoryHeader>{this.props.category.name}</CategoryHeader>
-      <LinkButtonBig to="/" color="green">Add Thread</LinkButtonBig>
-      <div>
-        { this.renderThreadsList() }
-      </div>      
-    </ContainerDiv>
-  )
-  }  
+    if (Object.keys(this.props.categories).length === 0) {
+      return <Spinner/>;
+    } else if (category) {
+      return (
+        <ContainerDiv>
+          <CategoryHeader>{ category.name }</CategoryHeader>
+          <LinkButtonBig to="/" color="green">Add Thread</LinkButtonBig>
+          <div>
+            { this.renderThreadsList() }
+          </div>
+        </ContainerDiv>
+      );
+    } else {
+      return (
+        <h2>Page not found</h2>
+      )
+    }
+  }
 }
 
 const mapStateToProps = state => {  
   return {
-    category: state.category
+    categories: state.categories,
+    categoryThreads: state.categoryThreads,
   }
 }
 
-export default connect(mapStateToProps, {fetchCategory})(ThreadsList);
+export default connect(mapStateToProps, { fetchCategories, fetchCategoryThreads })(ThreadsList);
