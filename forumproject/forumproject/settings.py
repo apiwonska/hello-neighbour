@@ -167,6 +167,12 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 }
 
+# Used for creating reset password url
+# Change later to front!
+if DEBUG:
+    URL_FRONT = 'http://localhost:8000'
+else:
+    pass
 
 # Emails
 if DEBUG:
