@@ -1,10 +1,8 @@
-import {
-  FETCH_CATEGORY
-} from '../actions/types'
+import { FETCH_CATEGORY_THREADS } from '../actions/types'
 
 const reducers = (state={}, action) => {
   switch (action.type) {
-    case FETCH_CATEGORY:      
+    case FETCH_CATEGORY_THREADS:      
       return action.payload;
     default:
       return state;
