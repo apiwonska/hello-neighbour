@@ -2,18 +2,18 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
 import categoriesReducer from './categoriesReducer';
-import categoryThreadsReducer from './categoryThreadsReducer';
-import threadPostsReducer from './threadPostsReducer';
+import threadsByCategoryReducer from './threadsByCategoryReducer';
 import threadReducer from './threadReducer';
+import postsByThreadReducer from './postsByThreadReducer';
 
 
 const reducers = combineReducers({
   isSignedIn: () => true,
   token: () => '3df1f99d17fac0685dd37ec04bf2b14a012de3d7',
   categories: categoriesReducer,
-  categoryThreads: categoryThreadsReducer,
+  threadsByCategory: threadsByCategoryReducer,
   thread: threadReducer,
-  threadPosts: threadPostsReducer,
+  postsByThread: postsByThreadReducer,
   form: formReducer,
 });
 
