@@ -8,36 +8,50 @@ import {
   CategoryLink
 } from './style';
 import { ContainerDiv } from '../../components/common/styledDivs';
+import { DefaultError } from '../../components/common/errors';
 
 class MainPage extends React.Component {
   componentDidMount() {
-    this.props.fetchCategories();
+    const { categories } = this.props;
+    if (!categories.fetched) {
+      this.props.fetchCategories();
+    }
   }
 
   renderCategoryList() {
-    const categoryList = this.props.categories.map(category => {
+    const { categories } = this.props
+    const categoryList = categories.data.map(category => {
       return (
         <CategoryContainer key={category.id}>
           <CategoryLink to={`/categories/${category.id}`}>
             {category.name}
-          </CategoryLink>          
+          </CategoryLink>
         </CategoryContainer>
-      )      
+      )
     })
     return categoryList;
   }
 
   render() {
-    if ( !this.props.categories.length ) {
+    const { categories } = this.props;
+
+    if (categories.fetching) {
       return <Spinner/>;
     }
 
-    return (
-      <ContainerDiv>
-        {this.renderCategoryList()}
-      </ContainerDiv>
-    )
-  }  
+    if (categories.errors) {
+      return <DefaultError />;
+    }
+
+    if (categories.fetched) {
+      return (
+        <ContainerDiv>
+          {this.renderCategoryList()}
+        </ContainerDiv>
+      );
+    }
+    return null;
+  }
 }
 
 const mapStateToProps = state => {

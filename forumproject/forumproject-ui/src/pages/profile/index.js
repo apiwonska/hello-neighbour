@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ContainerDiv } from '../../components/common/styledDivs';
-import { LinkButtonSmall as Button } from '../../components/common/styledButtons';
+// import { LinkButtonSmall as Button } from '../../components/common/styledButtons';
 import {
   ImageWrapper,
   ProfileImg,
