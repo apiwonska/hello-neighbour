@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 
-import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
-import Spinner from '../../components/common/spinner';
-import { 
+import {
   CategoryHeader,
   ThreadWrapper,
   TitleRowWrapper,
@@ -14,9 +12,12 @@ import {
   DateWrapper,
   SecondaryText
 } from './style.js';
+import { PageNotFound, DefaultError } from '../../components/common/errors';
+import Spinner from '../../components/common/spinner';
 import { ContainerDiv } from '../../components/common/styledDivs';
 import { LinkButtonBig } from '../../components/common/styledButtons';
-import { PageNotFound, DefaultError, renderPageError } from '../../components/common/errors';
+import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
+
 
 class ThreadsList extends React.Component {
 
@@ -44,9 +45,9 @@ class ThreadsList extends React.Component {
           <ThreadWrapper key={thread.id}>
             <TitleRowWrapper>
               <ThreadLink to={`/categories/${categoryId}/threads/${thread.id}`}>{ thread.title }</ThreadLink>
-              <ThreadLengthSpan><FontAwesomeIcon 
-                icon={faCommentAlt}
-              /> 10</ThreadLengthSpan>
+              <ThreadLengthSpan>
+                <FontAwesomeIcon icon={faCommentAlt}/> &nbsp;{ thread.posts }
+              </ThreadLengthSpan>
             </TitleRowWrapper>
             <DateWrapper>
               <SecondaryText>Added: { thread.created }</SecondaryText>
