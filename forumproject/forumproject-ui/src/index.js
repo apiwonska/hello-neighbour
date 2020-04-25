@@ -9,11 +9,11 @@ import Routing from './Routing';
 class App extends React.Component{
   render() {
     return (
-      <Provider store={store}>        
+      <Provider store={store}>
         <Layout>
           <Routing/> 
         </Layout>
-      </Provider>      
+      </Provider>
     )
   }
 }

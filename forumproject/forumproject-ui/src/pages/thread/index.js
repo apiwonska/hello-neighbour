@@ -1,17 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Field, reduxForm } from 'redux-form';
 
-import { fetchThread, fetchPostsByThread } from '../../redux/actions';
-import { ContainerDiv } from '../../components/common/styledDivs';
-import Spinner from '../../components/common/spinner';
 import {
   LinkWrapper,
   NavLink,
-  FirstPostWrapper,  
-  PostWrapper,  
+  FirstPostWrapper,
+  PostWrapper,
   UserLink,
   ThreadTitle,
   Content,
@@ -19,8 +16,13 @@ import {
   DateSpan,
   StyledTextArea,
   SubmitButton
-} from './style'
+} from './style';
 import { renderPageError } from '../../components/common/errors';
+import Spinner from '../../components/common/spinner';
+import { ContainerDiv } from '../../components/common/styledDivs';
+import { AvatarThumbnail } from '../../components/common/styledImages';
+import { fetchThread, fetchPostsByThread } from '../../redux/actions';
+
 
 class Thread extends React.Component {
 
@@ -40,7 +42,7 @@ class Thread extends React.Component {
       return (
         <PostWrapper key={ post.id }>
           <UserLink to={`/profile/${ post.user.id }`}>
-            <FontAwesomeIcon icon={ faUser}/>{ post.user.username }
+            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>{ post.user.username }
           </UserLink>
           <ThreadTitle>{ post.title }</ThreadTitle>
           <Content>{ post.content }</Content>
@@ -97,7 +99,8 @@ class Thread extends React.Component {
 
           <FirstPostWrapper>
             <UserLink to={`/profile/${ thread.data.user.id }`}>
-              <FontAwesomeIcon icon={ faUser}/>{ thread.data.user.username }
+              <AvatarThumbnail src={thread.data.user.avatar_thumbnail} alt="Avatar thumbnail"/>
+              { thread.data.user.username }
             </UserLink>
             <ThreadTitle>{ thread.data.title }</ThreadTitle>
             <Content>{ thread.data.subject }</Content>
