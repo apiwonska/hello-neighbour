@@ -1,5 +1,6 @@
 from rest_framework import filters, generics, status, viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -97,3 +98,20 @@ class ChangePasswordView(generics.UpdateAPIView):
         # Auth token is changed when password is changed (handled by signals)
         token, created = Token.objects.get_or_create(user=instance)
         return Response({ 'token': token.key, 'message': 'Your password was changed.'}, status=status.HTTP_200_OK)
+
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    """Add user id and username to the response.
+    Response sets the authentication cookie.
+    """
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        user_data = {'id': user.id, 'username': user.username}
+        token, created = Token.objects.get_or_create(user=user)
+        response = Response({'token': token.key, 'user': user_data})
+        response.set_cookie('Authorization', token.key)
+        return response

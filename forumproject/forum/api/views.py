@@ -20,6 +20,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     pagination_class = None
 
 
@@ -49,7 +50,9 @@ class ThreadViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        """Custom get_queryset method. If 'category' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
+        """Custom get_queryset method. 
+        If 'category' key is passed in request params, the method returns thread objects related to the category.
+        By default the method returns all thread objects.
         """
         category_id = self.request.query_params.get('category', None)
         if category_id:
@@ -60,7 +63,8 @@ class ThreadViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """Custom create method automatically saves authenticated user in user field. 
-        The method will save only "title", "subject", "user" and "category" properties. It makes impossible to save other properties ("closed", "sticky"), that are meant to be changed only by admin by admin panel.
+        The method will save only "title", "subject", "user" and "category" properties. 
+        It makes impossible to save other properties ("closed", "sticky"), that are meant to be changed only by admin by admin panel.
         """
         try:
             Category.objects.get(id=request.data['category'])
@@ -107,6 +111,7 @@ class PostViewSet(viewsets.ModelViewSet):
     Routes:
     GET /posts
     GET /posts/?user=1
+    GET /posts/?thread=1
     GET /posts/?search=xyz
     GET /posts/?ordering=created
     GET /posts/1
@@ -127,11 +132,17 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        """Custom get_queryset method. If 'user' key is passed in request params, the method returns thread objects related to the category. By default the method returns all thread objects.
+        """Custom get_queryset method. 
+        If 'user' key is passed in request params, the method returns post objects related to the user. 
+        If 'thread' key is passed in request params, the method returns post objects related to the thread. 
+        By default the method returns all post objects.
         """
         user_id = self.request.query_params.get('user', None)
+        thread_id = self.request.query_params.get('thread', None)
         if user_id:
             queryset = Post.objects.filter(user__id=user_id)
+        elif thread_id:
+            queryset = Post.objects.filter(thread__id=thread_id)
         else:
             queryset = Post.objects.all()
         return queryset
@@ -155,7 +166,8 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def update(self, request, *args, **kwargs):
-        """Custom update method allows to modify only content property. The purpose of this custom method is to prevent changing user and thread fields.
+        """Custom update method allows to modify only content property. 
+        The purpose of this custom method is to prevent changing user and thread fields.
         """
         partial = kwargs.pop('partial', False)
         instance = self.get_object()

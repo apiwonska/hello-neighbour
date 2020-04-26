@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -166,6 +167,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 }
 
+# Used for creating reset password url
 # Change later to front!
 if DEBUG:
     URL_FRONT = 'http://localhost:8000'
@@ -189,3 +191,7 @@ else:
 if TESTING_MODE:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
     EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+]

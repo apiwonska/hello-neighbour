@@ -6,9 +6,9 @@ export const ImageWrapper = styled.div`
   
 `;
 
-export const ProfileImg = styled.img`
+export const Avatar = styled.img`
   display: block;
-  width: 120px;
+  width: 200px;
   border-radius: 50%;
   margin: 0 auto 20px;
 `;

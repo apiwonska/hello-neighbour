@@ -1,7 +1,7 @@
 import {
-  FETCH_THREAD_PENDING,
-  FETCH_THREAD_FULFILLED,
-  FETCH_THREAD_ERRORS,
+  FETCH_USER_PENDING,
+  FETCH_USER_FULFILLED,
+  FETCH_USER_ERRORS,
 } from '../actions/types';
 
 
@@ -14,11 +14,11 @@ const initialState = {
 
 const reducer = (state=initialState, action) => {  
   switch (action.type) {
-    case FETCH_THREAD_PENDING:
+    case FETCH_USER_PENDING:
       return {...initialState, fetching: true};
-    case FETCH_THREAD_FULFILLED:
+    case FETCH_USER_FULFILLED:
       return {...initialState, fetched: true, data: action.payload};
-    case FETCH_THREAD_ERRORS:
+    case FETCH_USER_ERRORS:
       return {...initialState, errors: action.payload};
     default:
       return state;

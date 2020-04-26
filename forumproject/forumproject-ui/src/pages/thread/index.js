@@ -1,17 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Field, reduxForm } from 'redux-form';
 
-import { fetchThread, createPost } from '../../redux/actions';
-import { ContainerDiv } from '../../components/common/styledDivs';
-import Spinner from '../../components/common/spinner';
 import {
   LinkWrapper,
   NavLink,
-  FirstPostWrapper,  
-  PostWrapper,  
+  FirstPostWrapper,
+  PostWrapper,
   UserLink,
   ThreadTitle,
   Content,
@@ -19,29 +16,42 @@ import {
   DateSpan,
   StyledTextArea,
   SubmitButton
-} from './style'
+} from './style';
+import { renderPageError } from '../../components/common/errors';
+import Spinner from '../../components/common/spinner';
+import { ContainerDiv } from '../../components/common/styledDivs';
+import { AvatarThumbnail } from '../../components/common/styledImages';
+import { fetchThread, fetchPostsByThread } from '../../redux/actions';
 
 
 class Thread extends React.Component {
+
   componentDidMount() {
-    this.props.fetchThread(this.props.match.params.threadId);
+    const { thread } = this.props;
+    const threadId = this.props.match.params.threadId;
+
+    if (!thread.fetched || String(thread.data.id) !== threadId) {
+      this.props.fetchThread(threadId);
+    }
+    this.props.fetchPostsByThread(threadId);
   }
 
   renderPosts() {
-    const postsList = this.props.thread.posts.map(post => {
+    const { posts } = this.props;
+    const postsList = posts.data.results.map(post => {
       return (
         <PostWrapper key={ post.id }>
-          <UserLink to={`/profile/${ post.userId }`}>
-            <FontAwesomeIcon icon={ faUser}/>{ post.userName }
+          <UserLink to={`/profile/${ post.user.id }`}>
+            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>{ post.user.username }
           </UserLink>
           <ThreadTitle>{ post.title }</ThreadTitle>
           <Content>{ post.content }</Content>
           <Footer>
-            <DateSpan>{ post.updated || post.created}</DateSpan>
+            <DateSpan>{ post.created}</DateSpan>
           </Footer>
         </PostWrapper>
       )
-    })    
+    })
     return postsList;
   }
 
@@ -68,44 +78,52 @@ class Thread extends React.Component {
   }
 
   render() {    
-    const { thread } = this.props;
+    const { thread, posts } = this.props;
+    const categoryId = this.props.match.params.categoryId;
 
-    if(!Object.keys(this.props.thread).length) {
+    if (thread.fetching || posts.fetching) {
       return <Spinner/>;
     }
 
-    return (
-      <ContainerDiv>
-        <LinkWrapper>
-          <FontAwesomeIcon icon={faArrowLeft}/>&nbsp;
-          <NavLink to={`/categories/${this.props.match.params.categoryId}`}>Back to all threads</NavLink>
-        </LinkWrapper>
+    if (thread.errors || posts.errors) {
+      return renderPageError(thread.errors) || renderPageError(posts.errors);
+    };
+    
+    if (thread.fetched && posts.fetched) {
+      return (
+        <ContainerDiv>
+          <LinkWrapper>
+            <FontAwesomeIcon icon={faArrowLeft}/>&nbsp;
+            <NavLink to={`/categories/${categoryId}`}>Back to all threads</NavLink>
+          </LinkWrapper>
 
-        <FirstPostWrapper>
-          <UserLink to={`/profile/${ thread.userId }`}>
-            <FontAwesomeIcon icon={ faUser}/>{ thread.userName }
-          </UserLink>
-          <ThreadTitle>{ thread.title }</ThreadTitle>
-          <Content>{ thread.content }</Content>
-          <Footer>
-            <DateSpan>
-              { thread.created }
-            </DateSpan>
-          </Footer>
-        </FirstPostWrapper>
+          <FirstPostWrapper>
+            <UserLink to={`/profile/${ thread.data.user.id }`}>
+              <AvatarThumbnail src={thread.data.user.avatar_thumbnail} alt="Avatar thumbnail"/>
+              { thread.data.user.username }
+            </UserLink>
+            <ThreadTitle>{ thread.data.title }</ThreadTitle>
+            <Content>{ thread.data.subject }</Content>
+            <Footer>
+              <DateSpan>
+                { thread.data.created }
+              </DateSpan>
+            </Footer>
+          </FirstPostWrapper>
 
-        {this.renderPosts()}       
+          {this.renderPosts()}
 
-        <PostWrapper>
-          <form action={`threads/${ thread.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.onSubmit)}>
-            <Field name="content" component={ this.renderTextArea }/>
-            { this.renderSubmitButton()}            
-          </form>
-        </PostWrapper>
-        
-      </ContainerDiv>
-    )
-  }  
+          <PostWrapper>
+            <form action={`threads/${ thread.data.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.onSubmit)}>
+              <Field name="content" component={ this.renderTextArea }/>
+              { this.renderSubmitButton()}
+            </form>
+          </PostWrapper>
+        </ContainerDiv>
+      );
+    }
+    return null;
+  }
 }
 
 const validate = formValues => {
@@ -120,13 +138,11 @@ const mapStateToProps = state => {
   return (
     { 
       thread: state.thread,
-      postForm: state.form
+      posts: state.postsByThread,
+      postForm: state.form,
     }
   )
 }
 
-const ThreadWithForm = reduxForm({
-  form: 'postCreate',
-  validate
-})(Thread);
-export default connect(mapStateToProps, {fetchThread})(ThreadWithForm);
+const ThreadWithForm = reduxForm({ form: 'postCreate', validate })(Thread);
+export default connect(mapStateToProps, {fetchThread, fetchPostsByThread})(ThreadWithForm);

@@ -1,63 +1,122 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { ContainerDiv } from '../../components/common/styledDivs';
 import { LinkButtonSmall as Button } from '../../components/common/styledButtons';
 import {
   ImageWrapper,
-  ProfileImg,
+  Avatar,
   DataGroup,
   Label,
   Data,
   DataWrapper
 } from './style';
-import ProfileImgSrc from '../../img/user.jpg'
+import { renderPageError } from '../../components/common/errors';
+import Spinner from '../../components/common/spinner';
+import { fetchUser } from '../../redux/actions';
 
-const user = {
-  "name": "Jane Doe",
-  "username": "jane.doe",
-  "email": "jane.doe@gmail.com",
-  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-};
-
-const fields = [
-  ["Name", "name"],
-  ["Username", "username"],
-  ["Email", "email"],
-  ["About me", "description"]
-];
 
 class Profile extends React.Component {
+
+  state = {
+    isOwner: false
+  }
+
+  componentDidMount() {    
+    this.checkIsOwner();
+    const userId = this.props.match.params.userId;
+
+    if (this.checkNeedFetchUser) {
+      this.props.fetchUser(userId);
+    };
+  }
+
+  checkIsOwner() {
+    const { owner } = this.props;
+    const userId = this.props.match.params.userId;
+    if (owner) {
+      this.setState({isOwner: String(owner.id) === userId});
+    }
+  }
+
+  checkNeedFetchUser() {
+    const userId = this.props.match.params.userId;
+    const { user } = this.props;
+    return !user.fetched || String(user.data.id) !== userId;
+  }
+
+  renderField(label, objKey, defaultText) {
+    return (
+      <DataGroup>
+        <Label> { label } </Label>
+        <Data> { this.props.user.data[objKey] || defaultText } </Data>
+      </DataGroup>
+    );
+  }
+
   renderUserData() {
-    const userData = fields.map((field, ind) => {    
-      return (
-        <DataGroup key={ ind }>
-          <Label>
-            { field[0] }:
-          </Label>
-          <Data>
-            { user[field[1]] }
-          </Data>
+    const { user } = this.props;
+    const defaultDescription = 'This user doesn\'t have a description yet';
+    return (
+      <DataWrapper>
+        <DataGroup>
+          <Label> Username: </Label>
+          <Data> { user.data['username'] } </Data>
         </DataGroup>
-      )
-    })
-    return userData 
+        { this.state.isOwner &&
+          <DataGroup>
+            <Label> Email: </Label>
+            <Data> { user.data['email'] } </Data>
+          </DataGroup>
+        }
+        <DataGroup>
+          <Label> Description: </Label>
+          <Data> { user.data['description'] || defaultDescription } </Data>
+        </DataGroup>
+      </DataWrapper>
+    )
   }
 
   render() {
-    return (
-      <ContainerDiv>
-        <ImageWrapper>
-          <ProfileImg src={ProfileImgSrc}/>
-        </ImageWrapper>
-        <DataWrapper>
+    const { user } = this.props;
+
+    if (this.checkNeedFetchUser()) { return null }
+
+    if (user.fetching) { return <Spinner/>; };
+
+    if (user.errors) { return renderPageError(); };
+
+    if (user.fetched) {
+      const postsBtnText = this.state.isOwner 
+                              ? "Your posts"
+                              : "User's posts"
+
+      return (
+        <ContainerDiv>
+          <ImageWrapper>
+            <Avatar src={ user.data.avatar} alt="User avatar"/>
+          </ImageWrapper>
           { this.renderUserData() }
-        </DataWrapper>
-        {/* <Button to='/' color="greenOutline">Edit Profile</Button>
-        <Button to='/' color="greenOutline">Your Posts</Button> */}
-      </ContainerDiv>
-    )
-  }  
+          { this.state.isOwner &&
+            <>
+              <Button to='/' color="greenOutline">Edit Profile</Button>
+              <Button to='/' color="greenOutline">Change Password</Button>
+            </>
+          }
+          <Button to='/' color="greenOutline">{ postsBtnText }</Button>
+        </ContainerDiv>
+      )
+    };
+  }
 }
 
+const mapStateToProps = (state) => {
+  return (
+    {
+      owner: state.owner,
+      user: state.user
+    }
+  )
+}
 
-export default Profile;
+export default connect(mapStateToProps, {fetchUser})(Profile);

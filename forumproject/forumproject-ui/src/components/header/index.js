@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -31,6 +32,8 @@ class Header extends React.Component {
   }
 
   render() {
+    const ownerId = this.props.owner['id'];
+
     return(
       <NavSection>
         <NavContainerDiv>
@@ -48,7 +51,7 @@ class Header extends React.Component {
                 <NavLink to='/'>Main</NavLink>
               </NavLi>
               <NavLi>
-                <NavLink to='/profile'>Profile</NavLink>
+                <NavLink to={`/profile/${ownerId}`}>Profile</NavLink>
               </NavLi>
               <NavLi>
                 <NavLink to='/'>Logout</NavLink>
@@ -61,5 +64,13 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+const mapStateToProps = state => {
+  return (
+    {
+      owner: state.owner
+    }
+  )
+}
+
+export default connect(mapStateToProps)(Header);
 
