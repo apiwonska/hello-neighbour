@@ -113,7 +113,7 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => {
   return (
     {
-      owner: state.owner,
+      owner: state.auth.user,
       user: state.user
     }
   )

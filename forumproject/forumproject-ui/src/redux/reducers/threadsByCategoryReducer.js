@@ -5,21 +5,21 @@ import {
 } from '../actions/types';
 
 
-const initialState = {
+const INITIAL_STATE = {
   fetching: false,
   fetched: false,
   data: [],
   errors: null,
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_THREADS_BY_CATEGORY_PENDING:
-      return {...initialState, fetching: true};
+      return {...INITIAL_STATE, fetching: true};
     case FETCH_THREADS_BY_CATEGORY_FULFILLED:
-      return {...initialState, fetched: true, data: action.payload};
+      return {...INITIAL_STATE, fetched: true, data: action.payload};
     case FETCH_THREADS_BY_CATEGORY_ERRORS:
-      return {...initialState, errors: action.payload};
+      return {...INITIAL_STATE, errors: action.payload};
     default:
       return state;
   }

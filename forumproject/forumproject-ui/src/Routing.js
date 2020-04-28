@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Header from './components/header';
 import Footer from './components/footer';
 import LandingPage from './pages/landingPage';
-import Login from './pages/login';
+import LogIn from './pages/login';
 import MainPage from './pages/mainPage';
 import Profile from './pages/profile';
 import Registration from './pages/registration';
@@ -17,9 +17,9 @@ const Routing = (props) => {
   return (
     <BrowserRouter>
       <Header/>            
-      <Route path='/' exact component={ props.isSignedIn ? MainPage : LandingPage } />
+      <Route path='/' exact component={ props.authenticated ? MainPage : LandingPage } />
       <Route path='/register' exact component={ Registration } />
-      <Route path='/auth' exact component={ Login } />
+      <Route path='/auth' exact component={ LogIn } />
       <Route path='/categories/:categoryId' exact component={ ThreadsList } />
       <Route path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
       <Route path='/profile/:userId' exact component={ Profile } />
@@ -30,7 +30,7 @@ const Routing = (props) => {
 
 const mapStateToProps = state => {
   return {
-    isSignedIn: state.isSignedIn
+    authenticated: state.auth.authenticated
   }
 }
 
