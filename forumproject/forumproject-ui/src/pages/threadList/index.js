@@ -19,7 +19,7 @@ import { LinkButtonBig } from '../../components/common/styledButtons';
 import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
 
 
-class ThreadsList extends React.Component {
+class ThreadList extends React.Component {
 
   componentDidMount() {
     const { categories } = this.props;
@@ -31,7 +31,7 @@ class ThreadsList extends React.Component {
     this.props.fetchThreadsByCategory(categoryId);
   }
 
-  renderThreadsList() {
+  renderThreadList() {
     const { threads } = this.props;
     const categoryId = this.props.match.params.categoryId;
 
@@ -84,7 +84,7 @@ class ThreadsList extends React.Component {
           <CategoryHeader>{ category.name }</CategoryHeader>
           <LinkButtonBig to="/" color="green">Add Thread</LinkButtonBig>
           <div>
-            { this.renderThreadsList() }
+            { this.renderThreadList() }
           </div>
         </ContainerDiv>
       );
@@ -100,4 +100,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { fetchCategories, fetchThreadsByCategory })(ThreadsList);
+export default connect(mapStateToProps, { fetchCategories, fetchThreadsByCategory })(ThreadList);

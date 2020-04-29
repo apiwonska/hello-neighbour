@@ -10,7 +10,7 @@ import {
 import { ContainerDiv } from '../../components/common/styledDivs';
 import { DefaultError } from '../../components/common/errors';
 
-class MainPage extends React.Component {
+class CategoryList extends React.Component {
   componentDidMount() {
     const { categories } = this.props;
     if (!categories.fetched) {
@@ -60,4 +60,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {fetchCategories})(MainPage);
+export default connect(mapStateToProps, {fetchCategories})(CategoryList);

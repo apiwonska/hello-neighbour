@@ -74,7 +74,6 @@ export const fetchCategories = () => async dispatch => {
 export const fetchThreadsByCategory = (categoryId) => async dispatch => {
   dispatch({ type: FETCH_THREADS_BY_CATEGORY_PENDING })
   try {
-    console.log('threads by category', instance().defaults.headers.common)
     const response = await instance().get(`/api/threads/?category=${categoryId}`);
     dispatch({ type: FETCH_THREADS_BY_CATEGORY_FULFILLED, payload: response.data })
   } catch(err) {
