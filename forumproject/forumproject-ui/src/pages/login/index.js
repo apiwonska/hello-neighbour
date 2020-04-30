@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import {
   Form,
@@ -71,6 +71,10 @@ class LogIn extends React.Component {
           </FormGroup>
           <SubmitButtonSmall type="submit" value="Log In"/>
         </Form>
+        <div>
+          <p>If you don't have an account yet, <Link to={'/register'}>register here</Link></p>
+          <p>Did you forget your login or password? Click <Link to={'/password-reset'}>this</Link> to restore your credentials</p>
+        </div>
       </div>
     )
   }
