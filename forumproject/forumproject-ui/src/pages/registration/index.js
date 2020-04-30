@@ -79,7 +79,7 @@ class Registration extends React.Component {
             <Field  component="input" type="password" name="password2"/>
             { this.renderFieldError('password2') }
           </FormGroup>
-          <SubmitButtonSmall type="submit"/>
+          <SubmitButtonSmall type="submit" value="Register"/>
         </Form>
       </div>
     )

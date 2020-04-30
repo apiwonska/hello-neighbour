@@ -16,6 +16,7 @@ import {
   NavUl,
   NavLi,
   NavLink,
+  NavLiBtn,
   NavToggleButton,
 } from './style';
 import LogoImgSrc from '../../img/logo.png'
@@ -43,7 +44,7 @@ class Header extends React.Component {
             <NavLink to={`/profile/${this.props.userId}`}>Profile</NavLink>
           </NavLi>
           <NavLi>
-            <button onClick={()=> this.props.logOut()}>Logout</button>
+            <NavLiBtn onClick={()=> this.props.logOut()}>Logout</NavLiBtn>
           </NavLi>
         </>
       )
@@ -69,7 +70,7 @@ class Header extends React.Component {
           <BrandDiv>
             <Link to='/'><LogoImg src={LogoImgSrc} /></Link>
           </BrandDiv>
-          <NavToggleButton onClick={this.toggleMenu}>
+          <NavToggleButton onClick={this.toggleMenu.bind(this)}>
             <FontAwesomeIcon 
               icon={!this.state.menuIsOpen? faBars : faTimes}
             />
