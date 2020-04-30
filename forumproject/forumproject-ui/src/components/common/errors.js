@@ -1,4 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
+
+import theme from '../../layout/utils/theme';
 
 export const Error = (props) => {
   return (
@@ -29,3 +32,8 @@ export const renderPageError = (err) => {
     return <DefaultError/>;
   }
 };
+
+export const FormError = styled.p`
+  color: ${ theme.colors.errorMsgText };
+  font-size: 14px;
+`;

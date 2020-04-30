@@ -12,14 +12,35 @@ import {
 import {
   SubmitButtonSmall
 } from '../../components/common/styledButtons';
-import { register } from '../../redux/actions';
+import { FormError } from '../../components/common/errors';
 import Spinner from '../../components/common/spinner';
+import { register } from '../../redux/actions';
 
 
 class Registration extends React.Component {
 
   onSubmit(formProps) {
     this.props.register(formProps);
+  }
+
+  renderFieldError(field) {
+    const error = this.props.auth.errors[field];
+
+    if (error) {
+      return <FormError>{ error }</FormError>;
+    }    
+  }
+
+  renderNonFieldErrors() {
+    const errors = this.props.auth.errors['non_field_errors'];
+    if (errors) {
+      const errorList = errors.map((el, ind) => {
+        return (
+          <FormError key={ ind }>{ el }</FormError>
+        )
+      })
+      return errorList;
+    }
   }
 
   render() {
@@ -37,21 +58,26 @@ class Registration extends React.Component {
       <div>
         <h2>Register</h2>
         <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
+          { this.renderNonFieldErrors() }
           <FormGroup>
             <Label htmlFor="username">Username:</Label>
             <Field component="input" type="text" name="username" />
+            { this.renderFieldError('username') }
           </FormGroup>
           <FormGroup>
             <Label htmlFor="email">Email:</Label>
             <Field component="input" type="text" name="email" />
+            { this.renderFieldError('email') }
           </FormGroup>
           <FormGroup>
             <Label htmlFor="password">Password:</Label>
             <Field  component="input" type="password" name="password"/>
+            { this.renderFieldError('password') }
           </FormGroup>
           <FormGroup>
             <Label htmlFor="password2">Confirm Password:</Label>
             <Field  component="input" type="password" name="password2"/>
+            { this.renderFieldError('password2') }
           </FormGroup>
           <SubmitButtonSmall type="submit"/>
         </Form>

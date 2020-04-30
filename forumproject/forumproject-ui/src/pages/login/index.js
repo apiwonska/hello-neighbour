@@ -13,6 +13,7 @@ import {
   SubmitButtonSmall
 } from '../../components/common/styledButtons';
 import Spinner from '../../components/common/spinner';
+import { FormError } from '../../components/common/errors';
 import { logIn } from '../../redux/actions';
 
 
@@ -20,6 +21,26 @@ class LogIn extends React.Component {
 
   onSubmit(formProps) {
     this.props.logIn(formProps);
+  }
+
+  renderFieldError(field) {
+    const error = this.props.auth.errors[field];
+
+    if (error) {
+      return <FormError>{ error }</FormError>;
+    }    
+  }
+
+  renderNonFieldErrors() {
+    const errors = this.props.auth.errors['non_field_errors'];
+    if (errors) {
+      const errorList = errors.map((el, ind) => {
+        return (
+          <FormError key={ ind }>{ el }</FormError>
+        )
+      })
+      return errorList;
+    }
   }
 
   render() {
@@ -37,13 +58,16 @@ class LogIn extends React.Component {
       <div>
         <h2>Log In</h2>
         <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
+          { this.renderNonFieldErrors() }
           <FormGroup>
             <Label htmlFor="username">Username:</Label>
             <Field component="input" type="text" name="username" autoComplete="none"/>
-          </FormGroup>
+            { this.renderFieldError('username') }
+          </FormGroup>          
           <FormGroup>
             <Label htmlFor="password">Password:</Label>
             <Field  component="input" type="password" name="password" autoComplete="none"/>
+            { this.renderFieldError('password') }
           </FormGroup>
           <SubmitButtonSmall type="submit" value="Log In"/>
         </Form>
@@ -55,7 +79,7 @@ class LogIn extends React.Component {
 const mapStateToProps = state => {
   return (
     {
-      auth: state.auth
+      auth: state.auth,
     }
   )
 }
