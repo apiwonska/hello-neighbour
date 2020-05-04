@@ -3,15 +3,18 @@ import { Route } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Header from '../components/header';
-import Footer from '../components/footer';
+import Login from '../pages/auth/login';
+import Logout from '../pages/auth/logout';
+import Registration from '../pages/auth/registration';
+import PasswordReset from '../pages/auth/passwordReset';
 import Home from '../pages/home';
-import LogIn from '../pages/login';
 import CategoryList from '../pages/categoryList';
 import Profile from '../pages/profile';
-import Registration from '../pages/registration';
 import Thread from '../pages/thread';
 import ThreadList from '../pages/threadList';
+
+import Header from '../components/header';
+import Footer from '../components/footer';
 import PrivateRoute from './PrivateRoute';
 import RestrictedRoute from './RestrictedRoute';
 
@@ -21,7 +24,9 @@ const Routing = (props) => {
       <Header/>
       <Route path='/' exact component={ props.authenticated ? CategoryList : Home } />
       <RestrictedRoute path='/register' exact component={ Registration } />
-      <RestrictedRoute path='/auth' exact component={ LogIn } />
+      <RestrictedRoute path='/auth' exact component={ Login } />
+      <RestrictedRoute path='/logout' exact component={ Logout } />
+      <RestrictedRoute path='/password-reset' exact component={ PasswordReset } />
       <PrivateRoute path='/categories/:categoryId' exact component={ ThreadList } />
       <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
       <PrivateRoute path='/profile/:userId' exact component={ Profile } />

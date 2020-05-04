@@ -8,6 +8,8 @@ import {
   LOGIN_USER_FULFILLED,
   LOGIN_USER_ERRORS,
   LOGOUT_USER,
+  RESET_PASSWORD_FULFILLED,
+  RESET_PASSWORD_ERRORS,
   FETCH_CATEGORIES_PENDING,
   FETCH_CATEGORIES_FULFILLED,
   FETCH_CATEGORIES_ERRORS,
@@ -22,7 +24,7 @@ import {
   FETCH_POSTS_BY_THREAD_ERRORS,
   FETCH_USER_PENDING,
   FETCH_USER_FULFILLED,
-  FETCH_USER_ERRORS,  
+  FETCH_USER_ERRORS,
   // CREATE_POST
 } from './types';
 import store from '../store';
@@ -59,6 +61,15 @@ export const logIn = (formProps) => async dispatch => {
 
 export const logOut = () => {
   return { type: LOGOUT_USER }
+}
+
+export const resetPassword = (formProps) => async dispatch => {
+  try {
+    const response = await axios.post(`/api/password-reset/`, formProps);
+    dispatch({ type: RESET_PASSWORD_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: RESET_PASSWORD_ERRORS, payload: err.response.data })
+  }
 }
 
 export const fetchCategories = () => async dispatch => {

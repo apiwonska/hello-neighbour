@@ -7,7 +7,7 @@ import {
   LOGIN_USER_PENDING,
   LOGIN_USER_FULFILLED,
   LOGIN_USER_ERRORS,
-  LOGOUT_USER
+  LOGOUT_USER,
 } from '../actions/types';
 
 const cookies = new Cookies();
