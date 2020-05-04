@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { fetchCategories } from '../../redux/actions';
-import Spinner from '../../components/common/spinner';
+import Spinner from '../../components/spinner';
 import { 
   CategoryContainer,
   CategoryLink
 } from './style';
-import { ContainerDiv } from '../../components/common/styledDivs';
-import { DefaultError } from '../../components/common/errors';
+import { ContainerDiv } from '../../components/styledDivs';
+import { DefaultError } from '../../components/errors';
 
 class CategoryList extends React.Component {
   componentDidMount() {

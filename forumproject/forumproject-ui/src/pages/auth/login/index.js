@@ -1,26 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import {
   Form,
   FormGroup,
   Label,
-} from '../../components/common/styledForms';
+} from '../../../components/styledForms';
 import {
   SubmitButtonSmall
-} from '../../components/common/styledButtons';
-import { FormError } from '../../components/common/errors';
-import Spinner from '../../components/common/spinner';
-import { register } from '../../redux/actions';
+} from '../../../components/styledButtons';
+import Spinner from '../../../components/spinner';
+import { FormError } from '../../../components/errors';
+import { logIn } from '../../../redux/actions';
 
 
-class Registration extends React.Component {
+class LogIn extends React.Component {
 
   onSubmit(formProps) {
-    this.props.register(formProps);
+    this.props.logIn(formProps);
   }
 
   renderFieldError(field) {
@@ -56,31 +56,25 @@ class Registration extends React.Component {
 
     return (
       <div>
-        <h2>Register</h2>
+        <h2>Log In</h2>
         <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
           { this.renderNonFieldErrors() }
           <FormGroup>
             <Label htmlFor="username">Username:</Label>
-            <Field component="input" type="text" name="username" />
+            <Field component="input" type="text" name="username" autoComplete="none"/>
             { this.renderFieldError('username') }
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email:</Label>
-            <Field component="input" type="text" name="email" />
-            { this.renderFieldError('email') }
-          </FormGroup>
+          </FormGroup>          
           <FormGroup>
             <Label htmlFor="password">Password:</Label>
-            <Field  component="input" type="password" name="password"/>
+            <Field  component="input" type="password" name="password" autoComplete="none"/>
             { this.renderFieldError('password') }
           </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password2">Confirm Password:</Label>
-            <Field  component="input" type="password" name="password2"/>
-            { this.renderFieldError('password2') }
-          </FormGroup>
-          <SubmitButtonSmall type="submit" value="Register"/>
+          <SubmitButtonSmall type="submit" value="Log In"/>
         </Form>
+        <div>
+          <p>If you don't have an account yet, <Link to={'/register'}>register here</Link></p>
+          <p>Did you forget your login or password? Click <Link to={'/password-reset'}>this</Link> to restore your credentials</p>
+        </div>
       </div>
     )
   }
@@ -89,12 +83,12 @@ class Registration extends React.Component {
 const mapStateToProps = state => {
   return (
     {
-      auth: state.auth
+      auth: state.auth,
     }
   )
 }
 
 export default compose(
-    reduxForm({ form: 'registration'}),
-    connect(mapStateToProps, { register })
-  )(Registration);
+    connect(mapStateToProps, { logIn }),
+    reduxForm({ form: 'logIn'})
+  )(LogIn);

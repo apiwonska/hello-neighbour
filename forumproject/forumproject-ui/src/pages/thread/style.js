@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import theme from '../../layout/utils/theme';
-import { SubmitButtonSmall } from '../../components/common/styledButtons';
+import { SubmitButtonSmall } from '../../components/styledButtons';
 
 export const LinkWrapper = styled.div`
   margin-bottom: 20px;

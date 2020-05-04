@@ -17,10 +17,10 @@ import {
   StyledTextArea,
   SubmitButton
 } from './style';
-import { renderPageError } from '../../components/common/errors';
-import Spinner from '../../components/common/spinner';
-import { ContainerDiv } from '../../components/common/styledDivs';
-import { AvatarThumbnail } from '../../components/common/styledImages';
+import { renderPageError } from '../../components/errors';
+import Spinner from '../../components/spinner';
+import { ContainerDiv } from '../../components/styledDivs';
+import { AvatarThumbnail } from '../../components/styledImages';
 import { fetchThread, fetchPostsByThread } from '../../redux/actions';
 
 

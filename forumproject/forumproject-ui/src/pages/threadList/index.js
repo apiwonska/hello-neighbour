@@ -12,10 +12,10 @@ import {
   DateWrapper,
   SecondaryText
 } from './style.js';
-import { PageNotFound, DefaultError } from '../../components/common/errors';
-import Spinner from '../../components/common/spinner';
-import { ContainerDiv } from '../../components/common/styledDivs';
-import { LinkButtonBig } from '../../components/common/styledButtons';
+import { PageNotFound, DefaultError } from '../../components/errors';
+import Spinner from '../../components/spinner';
+import { ContainerDiv } from '../../components/styledDivs';
+import { LinkButtonBig } from '../../components/styledButtons';
 import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
 
 

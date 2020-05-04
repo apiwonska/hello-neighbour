@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from '../../layout/utils/theme';
+import theme from '../layout/utils/theme';
 
 const smallBtn = {
   height: "30px",
