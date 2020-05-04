@@ -1,5 +1,4 @@
 from django.urls import include, path
-# from rest_framework.authtoken.views import ObtainAuthToken
 
 from users.api.views import CustomObtainAuthToken, ChangePasswordView
 
