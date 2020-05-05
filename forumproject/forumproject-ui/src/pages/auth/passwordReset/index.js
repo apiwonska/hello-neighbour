@@ -21,7 +21,7 @@ class PasswordReset extends React.Component {
   }
 
   renderFieldError(field) {
-    const error = this.props.passwordReset.errors[field];
+    const error = this.props.passwordReset.emailErrors[field];
     if (error) {
       return <FormError>{error}</FormError>
     }
