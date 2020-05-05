@@ -163,7 +163,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'forumproject.pagination.StandrdResultsSetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'forumproject.pagination.StandardResultsSetPagination',
     'PAGE_SIZE': 20
 }
 

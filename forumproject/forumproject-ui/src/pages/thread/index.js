@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 
 import {
   LinkWrapper,
@@ -21,7 +22,7 @@ import { renderPageError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
 import { AvatarThumbnail } from '../../components/styledImages';
-import { fetchThread, fetchPostsByThread } from '../../redux/actions';
+import { fetchThread, fetchPostsByThread, createPost } from '../../redux/actions';
 
 
 class Thread extends React.Component {
@@ -62,8 +63,8 @@ class Thread extends React.Component {
   }
 
   // Submit button will is rendered only when the input is valid (when it's not empty)
-  renderSubmitButton = () => { 
-    if (      
+  renderSubmitButton = () => {
+    if (
       this.props.postForm.hasOwnProperty("postCreate") && 
       !this.props.postForm.postCreate.hasOwnProperty("syncErrors")
     ) {
@@ -71,10 +72,12 @@ class Thread extends React.Component {
     }
   }
   
-  onSubmit = (formValues) => {
-    console.log(formValues);
-    // USER ID HERE IS ALWAYS 1. TO BE CHANGED
-    // createPost(formValues, this.props.match.params.threadId, 1);
+  handleCreatePost = (formValues, dispatch) => {
+    const user = this.props.auth.user.id;
+    const thread = Number(this.props.match.params.threadId)
+    const data = {...formValues, user, thread };
+    this.props.createPost(data);
+    dispatch(reset('postCreate'));
   }
 
   render() {    
@@ -114,7 +117,7 @@ class Thread extends React.Component {
           {this.renderPosts()}
 
           <PostWrapper>
-            <form action={`threads/${ thread.data.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.onSubmit)}>
+            <form action={`threads/${ thread.data.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.handleCreatePost)}>
               <Field name="content" component={ this.renderTextArea }/>
               { this.renderSubmitButton()}
             </form>
@@ -137,6 +140,7 @@ const validate = formValues => {
 const mapStateToProps = state => {
   return (
     { 
+      auth: state.auth,
       thread: state.thread,
       posts: state.postsByThread,
       postForm: state.form,
@@ -144,5 +148,7 @@ const mapStateToProps = state => {
   )
 }
 
-const ThreadWithForm = reduxForm({ form: 'postCreate', validate })(Thread);
-export default connect(mapStateToProps, {fetchThread, fetchPostsByThread})(ThreadWithForm);
+export default compose(
+  connect(mapStateToProps, {fetchThread, fetchPostsByThread, createPost}),
+  reduxForm({ form: 'postCreate', validate } )
+)(Thread);

@@ -13,10 +13,8 @@ import {
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import Spinner from '../../../components/spinner';
 import { FormError } from '../../../components/errors';
 import { confirmPasswordReset } from '../../../redux/actions';
-import { ThemeConsumer } from 'styled-components';
 
 
 class PasswordResetConfirm extends React.Component {

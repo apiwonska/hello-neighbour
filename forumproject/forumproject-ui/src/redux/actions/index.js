@@ -10,6 +10,7 @@ const instance = () => {
   const token = store.getState().auth.authenticated;
   const auth_header = token ? `Token ${token}` : '';
   instance.defaults.headers.common['Authorization'] = auth_header;
+  instance.defaults.headers.post['Content-Type'] = 'application/json';
   return instance;
 }
 
@@ -100,6 +101,34 @@ export const fetchPostsByThread = (threadId) => async dispatch => {
   }
 };
 
+export const createPost = (data) => async dispatch => {
+  try {
+    const response = await instance().post('/api/posts/', data);
+    // fetchPostsByThread(data['thread']);
+    dispatch({ type: types.CREATE_POST_FULFILLED, payload: response.data })
+  } catch(err) {
+    dispatch({ type: types.CREATE_POST_ERRORS, payload: err.response.data })
+  }
+};
+
+// export const updatePost = (data, postId) => async dispatch => {
+//   try {
+//     const response = await instance().patch(`/api/posts/${postId}`, data);
+//     dispatch({ type: types.UPDATE_POST_FULFILLED, payload: response.data })
+//   } catch(err) {
+//     dispatch({ type: types.UPDATE_POST_ERRORS, payload: err.response.data })
+//   }
+// };
+
+// export const deletePost = (data, postId) => async dispatch => {
+//   try {
+//     const response = await instance().delete(`/api/posts/${postId}`);
+//     dispatch({ type: types.DELETE_POST_FULFILLED, payload: response.data })
+//   } catch(err) {
+//     dispatch({ type: types.DELETE_POST_ERRORS, payload: err.response.data })
+//   }
+// };
+
 // Users
 export const fetchUser = (userId) => async dispatch => {
   dispatch({ type: types.FETCH_USER_PENDING });
@@ -110,14 +139,3 @@ export const fetchUser = (userId) => async dispatch => {
     dispatch({ type: types.FETCH_USER_ERRORS, payload: err.response.data })
   }
 };
-
-// export const createPost = (formValues, threadId, userId) => async dispatch => {
-//   const created = new Date().toISOString();
-//   console.log(formValues, threadId, userId, created)
-//   const response = await instance.post(`/thread/${threadId}/posts`, {...formValues, userId, created});
-
-//   dispatch ({
-//     type: types.CREATE_POST,
-//     payload: response.data
-//   })
-// }
