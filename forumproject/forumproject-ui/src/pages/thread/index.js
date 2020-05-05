@@ -16,13 +16,18 @@ import {
   Footer,
   DateSpan,
   StyledTextArea,
-  SubmitButton
+  SubmitButton,
 } from './style';
 import { renderPageError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
 import { AvatarThumbnail } from '../../components/styledImages';
-import { fetchThread, fetchPostsByThread, createPost } from '../../redux/actions';
+import { 
+  fetchThread, 
+  fetchPostsByThread, 
+  createPost,
+  deletePost
+} from '../../redux/actions';
 
 
 class Thread extends React.Component {
@@ -37,6 +42,18 @@ class Thread extends React.Component {
     this.props.fetchPostsByThread(threadId);
   }
 
+  handleCreatePost(formValues, dispatch) {
+    const user = this.props.auth.user.id;
+    const thread = Number(this.props.match.params.threadId)
+    const data = {...formValues, user, thread };
+    this.props.createPost(data);
+    dispatch(reset('postCreate'));
+  }
+
+  // handleDeletePost(postId) {
+  //   this.props.deletePost(postId);
+  // }
+
   renderPosts() {
     const { posts } = this.props;
     const postsList = posts.data.results.map(post => {
@@ -49,6 +66,7 @@ class Thread extends React.Component {
           <Content>{ post.content }</Content>
           <Footer>
             <DateSpan>{ post.created}</DateSpan>
+            { this.renderDeletePostButton(post.id, post.user.id) }
           </Footer>
         </PostWrapper>
       )
@@ -71,13 +89,11 @@ class Thread extends React.Component {
       return <SubmitButton type="submit" value="Submit Post" color="greenOutline"/>
     }
   }
-  
-  handleCreatePost = (formValues, dispatch) => {
-    const user = this.props.auth.user.id;
-    const thread = Number(this.props.match.params.threadId)
-    const data = {...formValues, user, thread };
-    this.props.createPost(data);
-    dispatch(reset('postCreate'));
+
+  renderDeletePostButton = (postId, userId) => {
+    if (userId === this.props.auth.user.id) {
+      return <button onClick={() => this.props.deletePost(postId)}>Delete</button>
+    }
   }
 
   render() {    
@@ -117,7 +133,7 @@ class Thread extends React.Component {
           {this.renderPosts()}
 
           <PostWrapper>
-            <form action={`threads/${ thread.data.id }/posts`} method="post" onSubmit={this.props.handleSubmit(this.handleCreatePost)}>
+            <form method="post" onSubmit={this.props.handleSubmit(this.handleCreatePost.bind(this))}>
               <Field name="content" component={ this.renderTextArea }/>
               { this.renderSubmitButton()}
             </form>
@@ -149,6 +165,6 @@ const mapStateToProps = state => {
 }
 
 export default compose(
-  connect(mapStateToProps, {fetchThread, fetchPostsByThread, createPost}),
+  connect(mapStateToProps, {fetchThread, fetchPostsByThread, createPost, deletePost}),
   reduxForm({ form: 'postCreate', validate } )
 )(Thread);

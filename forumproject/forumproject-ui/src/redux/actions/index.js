@@ -119,14 +119,14 @@ export const updatePost = (data, postId) => async dispatch => {
   }
 };
 
-// export const deletePost = (data, postId) => async dispatch => {
-//   try {
-//     const response = await instance().delete(`/api/posts/${postId}`);
-//     dispatch({ type: types.DELETE_POST_FULFILLED, payload: response.data })
-//   } catch(err) {
-//     dispatch({ type: types.DELETE_POST_ERRORS, payload: err.response.data })
-//   }
-// };
+export const deletePost = (postId) => async dispatch => {
+  try {
+    const response = await instance().delete(`/api/posts/${postId}/`);
+    dispatch({ type: types.DELETE_POST_FULFILLED, payload: postId })
+  } catch(err) {
+    dispatch({ type: types.DELETE_POST_ERRORS, payload: err.response.data })
+  }
+};
 
 // Users
 export const fetchUser = (userId) => async dispatch => {

@@ -1,9 +1,13 @@
+import _ from 'lodash';
+
 import {
   FETCH_POSTS_BY_THREAD_PENDING,
   FETCH_POSTS_BY_THREAD_FULFILLED,
   FETCH_POSTS_BY_THREAD_ERRORS,
   CREATE_POST_FULFILLED,
   CREATE_POST_ERRORS,
+  DELETE_POST_FULFILLED,
+  DELETE_POST_ERRORS,
 } from '../actions/types';
 
 
@@ -23,11 +27,18 @@ const reducer = (state=INITIAL_STATE, action) => {
     case FETCH_POSTS_BY_THREAD_ERRORS:
       return {...INITIAL_STATE, errors: action.payload};
     case CREATE_POST_FULFILLED:
-      const newCount = state.data.count + 1;
-      const newResults = [...state.data.results, action.payload]
-      return {...state, data: {...state.data, count: newCount, results: newResults}};
+      var count = state.data.count + 1;
+      var results = [...state.data.results, action.payload];
+      var data = {...state.data, count, results};
+      return {...state, data};
     case CREATE_POST_ERRORS:
       return {...state, errors: action.payload};
+    case DELETE_POST_FULFILLED:
+      var count = state.data.count - 1;
+      var results = [...state.data.results];
+      _.remove(results, {id: action.payload});
+      var data = {...state.data, count, results};
+      return {...state, data}
     default:
       return state;
   }
