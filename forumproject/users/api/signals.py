@@ -22,7 +22,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     """
 
     host = settings.URL_FRONT
-    path = reverse('password_reset:reset-password-request')
+    path = '#/password-reset/confirm/'
     token = reset_password_token.key
 
     # send an e-mail to the user

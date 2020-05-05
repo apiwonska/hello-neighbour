@@ -79,6 +79,22 @@ class RegistrationViewSet(viewsets.ModelViewSet):
     http_method_names = ['post']
     permission_classes = [AllowAny]
 
+    def create(self, request, *args, **kwargs):
+        """Creates a new user. 
+        Returns token, user id and username in the response.
+        Response sets the authentication cookie.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)        
+        user = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        user_data = {'id': user.id, 'username': user.username}
+        token, created = Token.objects.get_or_create(user=user)
+        data = {'token': token.key, 'user': user_data}
+        response = Response(data , status=status.HTTP_201_CREATED, headers=headers)
+        response.set_cookie('Authorization', token.key)
+        return response
+
 
 class ChangePasswordView(generics.UpdateAPIView):
     """An endpoint for changing password.

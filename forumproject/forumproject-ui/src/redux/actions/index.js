@@ -1,6 +1,19 @@
 import axios from 'axios';
 
 import {
+  // Auth
+  REGISTER_USER_PENDING,
+  REGISTER_USER_FULFILLED,
+  REGISTER_USER_ERRORS,
+  LOGIN_USER_PENDING,
+  LOGIN_USER_FULFILLED,
+  LOGIN_USER_ERRORS,
+  LOGOUT_USER,
+  RESET_PASSWORD_FULFILLED,
+  RESET_PASSWORD_ERRORS,
+  RESET_PASSWORD_CONFIRM_FULFILLED,
+  RESET_PASSWORD_CONFIRM_ERRORS,
+  // Forum
   FETCH_CATEGORIES_PENDING,
   FETCH_CATEGORIES_FULFILLED,
   FETCH_CATEGORIES_ERRORS,
@@ -18,62 +31,107 @@ import {
   FETCH_USER_ERRORS,
   // CREATE_POST
 } from './types';
-import store from '../../store';
+import store from '../store';
 
 
-// Set authentication header by default
-const token = store.getState().token;
-const auth_header = token ? `Token ${token}` : '';
-const instance = axios.create()
-instance.defaults.headers.common['Authorization'] = auth_header;
+// Create axios instance and set authentication header
+const instance = () => {
+  const instance = axios.create()
+  const token = store.getState().auth.authenticated;
+  const auth_header = token ? `Token ${token}` : '';
+  instance.defaults.headers.common['Authorization'] = auth_header;
+  return instance;
+}
+
+export const register = (formProps) => async dispatch => {
+  dispatch({ type: REGISTER_USER_PENDING })
+  try {
+    const response = await axios.post(`/api/registration/`, formProps);
+    dispatch({ type: REGISTER_USER_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: REGISTER_USER_ERRORS, payload: err.response.data })
+  }
+};
+
+export const logIn = (formProps) => async dispatch => {
+  dispatch({ type: LOGIN_USER_PENDING })
+  try {
+    const response = await axios.post(`/api/token-auth/`, formProps);
+    dispatch({ type: LOGIN_USER_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: LOGIN_USER_ERRORS, payload: err.response.data })
+  }
+};
+
+export const logOut = () => {
+  return { type: LOGOUT_USER }
+}
+
+export const resetPassword = (formProps) => async dispatch => {
+  try {
+    const response = await axios.post(`/api/password-reset/`, formProps);
+    dispatch({ type: RESET_PASSWORD_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: RESET_PASSWORD_ERRORS, payload: err.response.data })
+  }
+}
+
+export const confirmPasswordReset = (data) => async dispatch => {
+  try {
+    const response = await axios.post(`/api/password-reset/confirm/`, data);
+    dispatch({ type: RESET_PASSWORD_CONFIRM_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: RESET_PASSWORD_CONFIRM_ERRORS, payload: err.response.data })
+  }
+}
 
 export const fetchCategories = () => async dispatch => {
   dispatch({ type: FETCH_CATEGORIES_PENDING })
   try {
-    const response = await instance.get(`/api/categories`);
+    const response = await instance().get(`/api/categories`);
     dispatch({ type: FETCH_CATEGORIES_FULFILLED, payload: response.data })    
-  } catch(err) {
-    dispatch({ type: FETCH_CATEGORIES_ERRORS, payload: err })
+  } catch(err) {    
+    dispatch({ type: FETCH_CATEGORIES_ERRORS, payload: err.response.data })
   }
 };
 
 export const fetchThreadsByCategory = (categoryId) => async dispatch => {
   dispatch({ type: FETCH_THREADS_BY_CATEGORY_PENDING })
   try {
-    const response = await instance.get(`/api/threads/?category=${categoryId}`);
+    const response = await instance().get(`/api/threads/?category=${categoryId}`);
     dispatch({ type: FETCH_THREADS_BY_CATEGORY_FULFILLED, payload: response.data })
   } catch(err) {
-    dispatch({ type: FETCH_THREADS_BY_CATEGORY_ERRORS, payload: err })
+    dispatch({ type: FETCH_THREADS_BY_CATEGORY_ERRORS, payload: err.response.data })
   }
 };
 
 export const fetchThread = (threadId) => async dispatch => {
   dispatch({ type: FETCH_THREAD_PENDING })
   try {
-    const response = await instance.get(`/api/threads/${threadId}`);
+    const response = await instance().get(`/api/threads/${threadId}`);
     dispatch({ type: FETCH_THREAD_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_THREAD_ERRORS, payload: err })
+    dispatch({ type: FETCH_THREAD_ERRORS, payload: err.response.data })
   }
 };
 
 export const fetchPostsByThread = (threadId) => async dispatch => {
   dispatch({ type: FETCH_POSTS_BY_THREAD_PENDING })
   try {
-    const response = await instance.get(`/api/posts/?thread=${threadId}`);
+    const response = await instance().get(`/api/posts/?thread=${threadId}`);
     dispatch({ type: FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_POSTS_BY_THREAD_ERRORS, payload: err })
+    dispatch({ type: FETCH_POSTS_BY_THREAD_ERRORS, payload: err.response.data })
   }
 };
 
 export const fetchUser = (userId) => async dispatch => {
   dispatch({ type: FETCH_USER_PENDING });
   try {
-    const response = await instance.get(`/api/users/${userId}`);
+    const response = await instance().get(`/api/users/${userId}`);
     dispatch({ type: FETCH_USER_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_USER_ERRORS, payload: err })
+    dispatch({ type: FETCH_USER_ERRORS, payload: err.response.data })
   }
 };
 

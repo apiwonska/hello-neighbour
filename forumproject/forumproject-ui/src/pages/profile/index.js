@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { ContainerDiv } from '../../components/common/styledDivs';
-import { LinkButtonSmall as Button } from '../../components/common/styledButtons';
+import { ContainerDiv } from '../../components/styledDivs';
+import { LinkButtonSmall as Button } from '../../components/styledButtons';
 import {
   ImageWrapper,
   Avatar,
@@ -11,8 +11,8 @@ import {
   Data,
   DataWrapper
 } from './style';
-import { renderPageError } from '../../components/common/errors';
-import Spinner from '../../components/common/spinner';
+import { renderPageError } from '../../components/errors';
+import Spinner from '../../components/spinner';
 import { fetchUser } from '../../redux/actions';
 
 
@@ -113,7 +113,7 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => {
   return (
     {
-      owner: state.owner,
+      owner: state.auth.user,
       user: state.user
     }
   )

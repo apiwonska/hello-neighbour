@@ -16,23 +16,53 @@ import {
   NavUl,
   NavLi,
   NavLink,
+  NavLiBtn,
   NavToggleButton,
 } from './style';
 import LogoImgSrc from '../../img/logo.png'
+import { logOut } from '../../redux/actions';
 
 class Header extends React.Component {
   state = {
     menuIsOpen: false,
   }
 
-  toggleMenu = () => {
+  toggleMenu() {
     this.setState({ 
       menuIsOpen: !this.state.menuIsOpen 
     })
   }
 
+  renderMenu() {
+    if (this.props.authenticated) {
+      return (
+        <>
+          <NavLi>
+            <NavLink to='/'>Main</NavLink>
+          </NavLi>
+          <NavLi>
+            <NavLink to={`/profile/${this.props.userId}`}>Profile</NavLink>
+          </NavLi>
+          <NavLi>
+            <NavLiBtn onClick={()=> this.props.logOut()}>Logout</NavLiBtn>
+          </NavLi>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <NavLi>
+            <NavLink to={'/auth'}>Log In</NavLink>
+          </NavLi>
+          <NavLi>
+            <NavLink to={'/register'}>Register</NavLink>
+          </NavLi>
+        </>
+      )
+    }
+  }
+
   render() {
-    const ownerId = this.props.owner['id'];
 
     return(
       <NavSection>
@@ -40,22 +70,14 @@ class Header extends React.Component {
           <BrandDiv>
             <Link to='/'><LogoImg src={LogoImgSrc} /></Link>
           </BrandDiv>
-          <NavToggleButton onClick={this.toggleMenu}>
+          <NavToggleButton onClick={this.toggleMenu.bind(this)}>
             <FontAwesomeIcon 
               icon={!this.state.menuIsOpen? faBars : faTimes}
             />
           </NavToggleButton>
           <Nav>            
             <NavUl showMenu={this.state.menuIsOpen}>
-              <NavLi>
-                <NavLink to='/'>Main</NavLink>
-              </NavLi>
-              <NavLi>
-                <NavLink to={`/profile/${ownerId}`}>Profile</NavLink>
-              </NavLi>
-              <NavLi>
-                <NavLink to='/'>Logout</NavLink>
-              </NavLi>
+              { this.renderMenu() }
             </NavUl>
           </Nav>
         </NavContainerDiv>
@@ -67,10 +89,11 @@ class Header extends React.Component {
 const mapStateToProps = state => {
   return (
     {
-      owner: state.owner
+      authenticated: state.auth.authenticated,
+      userId: state.auth.user.id
     }
   )
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { logOut })(Header);
 

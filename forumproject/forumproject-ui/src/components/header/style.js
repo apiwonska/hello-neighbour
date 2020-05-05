@@ -76,13 +76,13 @@ export const NavUl = styled(StyledUl)`
 export const NavLi = styled.li`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 20px;
+  justify-content: center;  
   height: 40px;  
 
   :hover {
     color: ${theme.colors.black};
     background-color: ${theme.colors.neutralLight};
+    cursor: pointer;
   }
 
   ${navbarMediaBreakpoint} {
@@ -91,6 +91,24 @@ export const NavLi = styled.li`
 `;
 
 export const NavLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 100%;
   color: ${theme.colors.black};
   text-decoration: none;
+`;
+
+export const NavLiBtn = styled.button`
+  font-size: 16px;
+  font-family: ${theme.fonts.default};
+  color: ${theme.colors.black};
+  border: 0;
+  padding: 0 20px;
+  height: 100%;
+  background-color: rgba(0,0,0,0);
+
+  :hover {
+    cursor: pointer;
+  }
 `;

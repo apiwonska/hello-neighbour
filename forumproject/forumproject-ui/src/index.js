@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import store from './store';
+import store from './redux/store';
 import Layout from './layout/Layout';
-import Routing from './Routing';
+import Routing from './routing';
 
 class App extends React.Component{
   render() {

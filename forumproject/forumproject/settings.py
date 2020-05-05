@@ -170,7 +170,7 @@ REST_FRAMEWORK = {
 # Used for creating reset password url
 # Change later to front!
 if DEBUG:
-    URL_FRONT = 'http://localhost:8000'
+    URL_FRONT = 'http://localhost:3000/'
 else:
     pass
 

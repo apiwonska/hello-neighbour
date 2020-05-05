@@ -1,3 +1,21 @@
+// Auth
+export const REGISTER_USER_PENDING = 'register_user_pending';
+export const REGISTER_USER_FULFILLED = 'register_user_fulfilled';
+export const REGISTER_USER_ERRORS = 'register_user_errors';
+
+export const LOGIN_USER_PENDING = 'login_user_pending';
+export const LOGIN_USER_FULFILLED = 'login_user_fulfilled';
+export const LOGIN_USER_ERRORS = 'login_user_errors';
+
+export const LOGOUT_USER = 'logout_user';
+
+export const RESET_PASSWORD_FULFILLED = 'reset_password_fulfilled';
+export const RESET_PASSWORD_ERRORS = 'reset_password_errors';
+
+export const RESET_PASSWORD_CONFIRM_FULFILLED = 'reset_password_confirm_fulfilled';
+export const RESET_PASSWORD_CONFIRM_ERRORS = 'reset_password_confirm_errors';
+
+// Forum
 export const FETCH_CATEGORIES_PENDING = 'fetch_categories_pending';
 export const FETCH_CATEGORIES_FULFILLED = 'fetch_categories_fulfilled';
 export const FETCH_CATEGORIES_ERRORS = 'fetch_categories_errors';
