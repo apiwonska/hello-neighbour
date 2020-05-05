@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {
+  // Auth
   REGISTER_USER_PENDING,
   REGISTER_USER_FULFILLED,
   REGISTER_USER_ERRORS,
@@ -10,6 +11,9 @@ import {
   LOGOUT_USER,
   RESET_PASSWORD_FULFILLED,
   RESET_PASSWORD_ERRORS,
+  RESET_PASSWORD_CONFIRM_FULFILLED,
+  RESET_PASSWORD_CONFIRM_ERRORS,
+  // Forum
   FETCH_CATEGORIES_PENDING,
   FETCH_CATEGORIES_FULFILLED,
   FETCH_CATEGORIES_ERRORS,
@@ -69,6 +73,15 @@ export const resetPassword = (formProps) => async dispatch => {
     dispatch({ type: RESET_PASSWORD_FULFILLED, payload: response.data })    
   } catch(err) {
     dispatch({ type: RESET_PASSWORD_ERRORS, payload: err.response.data })
+  }
+}
+
+export const confirmPasswordReset = (data) => async dispatch => {
+  try {
+    const response = await axios.post(`/api/password-reset/confirm/`, data);
+    dispatch({ type: RESET_PASSWORD_CONFIRM_FULFILLED, payload: response.data })    
+  } catch(err) {
+    dispatch({ type: RESET_PASSWORD_CONFIRM_ERRORS, payload: err.response.data })
   }
 }
 
