@@ -90,12 +90,21 @@ export const fetchThread = (threadId) => async dispatch => {
   }
 };
 
+export const createThread = (data) => async dispatch => {
+  try {
+    const response = await instance().post('/api/threads/', data);
+    dispatch({ type: types.CREATE_THREAD_FULFILLED, payload: response.data })
+  } catch(err) {
+    dispatch({ type: types.CREATE_THREAD_ERRORS, payload: err.response.data })
+  }
+};
+
 // Posts
 export const fetchPostsByThread = (threadId) => async dispatch => {
   dispatch({ type: types.FETCH_POSTS_BY_THREAD_PENDING })
   try {
     const response = await instance().get(`/api/posts/?thread=${threadId}`);
-    dispatch({ type: types.FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })
   } catch(err) {
     dispatch({ type: types.FETCH_POSTS_BY_THREAD_ERRORS, payload: err.response.data })
   }
