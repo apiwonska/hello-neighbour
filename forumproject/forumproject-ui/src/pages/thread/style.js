@@ -29,10 +29,25 @@ export const PostWrapper = styled.div`
   border-radius: ${ theme.radius.sm };
 `;
 
+export const PostHeader = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const PostHeaderInnerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+`;
+
 export const UserLink = styled(Link)`
-  margin: 5px 0 10px;
   font-weight: 600;
   color: ${theme.colors.black};
+`;
+
+export const DateSpan = styled.span `
+  font-size: 14px;
+  color: ${ theme.colors.neutralMidDark};
 `;
 
 export const ThreadTitle = styled.h4`
@@ -45,13 +60,8 @@ export const Content = styled.div`
   margin-bottom: 10px;
 `;
 
-export const Footer = styled.div`
-  display: flex;
-`;
-
-export const DateSpan = styled.span`
-  font-size: 14px;
-  color: ${ theme.colors.neutralMidDark};
+export const NameSpan = styled.span`
+  margin: 0 20 px;
 `;
 
 export const StyledTextArea = styled.textarea`
