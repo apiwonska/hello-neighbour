@@ -1,36 +1,6 @@
 import axios from 'axios';
 
-import {
-  // Auth
-  REGISTER_USER_PENDING,
-  REGISTER_USER_FULFILLED,
-  REGISTER_USER_ERRORS,
-  LOGIN_USER_PENDING,
-  LOGIN_USER_FULFILLED,
-  LOGIN_USER_ERRORS,
-  LOGOUT_USER,
-  RESET_PASSWORD_FULFILLED,
-  RESET_PASSWORD_ERRORS,
-  RESET_PASSWORD_CONFIRM_FULFILLED,
-  RESET_PASSWORD_CONFIRM_ERRORS,
-  // Forum
-  FETCH_CATEGORIES_PENDING,
-  FETCH_CATEGORIES_FULFILLED,
-  FETCH_CATEGORIES_ERRORS,
-  FETCH_THREADS_BY_CATEGORY_PENDING,
-  FETCH_THREADS_BY_CATEGORY_FULFILLED,
-  FETCH_THREADS_BY_CATEGORY_ERRORS,
-  FETCH_THREAD_PENDING,
-  FETCH_THREAD_FULFILLED,
-  FETCH_THREAD_ERRORS,
-  FETCH_POSTS_BY_THREAD_PENDING,
-  FETCH_POSTS_BY_THREAD_FULFILLED,
-  FETCH_POSTS_BY_THREAD_ERRORS,
-  FETCH_USER_PENDING,
-  FETCH_USER_FULFILLED,
-  FETCH_USER_ERRORS,
-  // CREATE_POST
-} from './types';
+import * as types from './types';
 import store from '../store';
 
 
@@ -40,108 +10,131 @@ const instance = () => {
   const token = store.getState().auth.authenticated;
   const auth_header = token ? `Token ${token}` : '';
   instance.defaults.headers.common['Authorization'] = auth_header;
+  instance.defaults.headers.post['Content-Type'] = 'application/json';
   return instance;
 }
 
+// AUTHENTICATION
 export const register = (formProps) => async dispatch => {
-  dispatch({ type: REGISTER_USER_PENDING })
+  dispatch({ type: types.REGISTER_USER_PENDING })
   try {
     const response = await axios.post(`/api/registration/`, formProps);
-    dispatch({ type: REGISTER_USER_FULFILLED, payload: response.data })    
+    dispatch({ type: types.REGISTER_USER_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: REGISTER_USER_ERRORS, payload: err.response.data })
+    dispatch({ type: types.REGISTER_USER_ERRORS, payload: err.response.data })
   }
 };
 
 export const logIn = (formProps) => async dispatch => {
-  dispatch({ type: LOGIN_USER_PENDING })
+  dispatch({ type: types.LOGIN_USER_PENDING })
   try {
     const response = await axios.post(`/api/token-auth/`, formProps);
-    dispatch({ type: LOGIN_USER_FULFILLED, payload: response.data })    
+    dispatch({ type: types.LOGIN_USER_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: LOGIN_USER_ERRORS, payload: err.response.data })
+    dispatch({ type: types.LOGIN_USER_ERRORS, payload: err.response.data })
   }
 };
 
 export const logOut = () => {
-  return { type: LOGOUT_USER }
+  return { type: types.LOGOUT_USER }
 }
 
 export const resetPassword = (formProps) => async dispatch => {
   try {
     const response = await axios.post(`/api/password-reset/`, formProps);
-    dispatch({ type: RESET_PASSWORD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.RESET_PASSWORD_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: RESET_PASSWORD_ERRORS, payload: err.response.data })
+    dispatch({ type: types.RESET_PASSWORD_ERRORS, payload: err.response.data })
   }
 }
 
 export const confirmPasswordReset = (data) => async dispatch => {
   try {
     const response = await axios.post(`/api/password-reset/confirm/`, data);
-    dispatch({ type: RESET_PASSWORD_CONFIRM_FULFILLED, payload: response.data })    
+    dispatch({ type: types.RESET_PASSWORD_CONFIRM_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: RESET_PASSWORD_CONFIRM_ERRORS, payload: err.response.data })
+    dispatch({ type: types.RESET_PASSWORD_CONFIRM_ERRORS, payload: err.response.data })
   }
 }
 
+// FORUM
+// Categories
 export const fetchCategories = () => async dispatch => {
-  dispatch({ type: FETCH_CATEGORIES_PENDING })
+  dispatch({ type: types.FETCH_CATEGORIES_PENDING })
   try {
     const response = await instance().get(`/api/categories`);
-    dispatch({ type: FETCH_CATEGORIES_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_CATEGORIES_FULFILLED, payload: response.data })    
   } catch(err) {    
-    dispatch({ type: FETCH_CATEGORIES_ERRORS, payload: err.response.data })
+    dispatch({ type: types.FETCH_CATEGORIES_ERRORS, payload: err.response.data })
   }
 };
 
+// Threads
 export const fetchThreadsByCategory = (categoryId) => async dispatch => {
-  dispatch({ type: FETCH_THREADS_BY_CATEGORY_PENDING })
+  dispatch({ type: types.FETCH_THREADS_BY_CATEGORY_PENDING })
   try {
     const response = await instance().get(`/api/threads/?category=${categoryId}`);
-    dispatch({ type: FETCH_THREADS_BY_CATEGORY_FULFILLED, payload: response.data })
+    dispatch({ type: types.FETCH_THREADS_BY_CATEGORY_FULFILLED, payload: response.data })
   } catch(err) {
-    dispatch({ type: FETCH_THREADS_BY_CATEGORY_ERRORS, payload: err.response.data })
+    dispatch({ type: types.FETCH_THREADS_BY_CATEGORY_ERRORS, payload: err.response.data })
   }
 };
 
 export const fetchThread = (threadId) => async dispatch => {
-  dispatch({ type: FETCH_THREAD_PENDING })
+  dispatch({ type: types.FETCH_THREAD_PENDING })
   try {
     const response = await instance().get(`/api/threads/${threadId}`);
-    dispatch({ type: FETCH_THREAD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_THREAD_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_THREAD_ERRORS, payload: err.response.data })
+    dispatch({ type: types.FETCH_THREAD_ERRORS, payload: err.response.data })
   }
 };
 
+// Posts
 export const fetchPostsByThread = (threadId) => async dispatch => {
-  dispatch({ type: FETCH_POSTS_BY_THREAD_PENDING })
+  dispatch({ type: types.FETCH_POSTS_BY_THREAD_PENDING })
   try {
     const response = await instance().get(`/api/posts/?thread=${threadId}`);
-    dispatch({ type: FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_POSTS_BY_THREAD_ERRORS, payload: err.response.data })
+    dispatch({ type: types.FETCH_POSTS_BY_THREAD_ERRORS, payload: err.response.data })
   }
 };
 
+export const createPost = (data) => async dispatch => {
+  try {
+    const response = await instance().post('/api/posts/', data);
+    dispatch({ type: types.CREATE_POST_FULFILLED, payload: response.data })
+  } catch(err) {
+    dispatch({ type: types.CREATE_POST_ERRORS, payload: err.response.data })
+  }
+};
+
+export const updatePost = (data, postId) => async dispatch => {
+  try {
+    const response = await instance().patch(`/api/posts/${postId}/`, data);
+    dispatch({ type: types.UPDATE_POST_FULFILLED, payload: response.data })
+  } catch(err) {
+    dispatch({ type: types.UPDATE_POST_ERRORS, payload: err.response.data })
+  }
+};
+
+export const deletePost = (postId) => async dispatch => {
+  try {
+    const response = await instance().delete(`/api/posts/${postId}/`);
+    dispatch({ type: types.DELETE_POST_FULFILLED, payload: postId })
+  } catch(err) {
+    dispatch({ type: types.DELETE_POST_ERRORS, payload: err.response.data })
+  }
+};
+
+// Users
 export const fetchUser = (userId) => async dispatch => {
-  dispatch({ type: FETCH_USER_PENDING });
+  dispatch({ type: types.FETCH_USER_PENDING });
   try {
     const response = await instance().get(`/api/users/${userId}`);
-    dispatch({ type: FETCH_USER_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_USER_FULFILLED, payload: response.data })    
   } catch(err) {
-    dispatch({ type: FETCH_USER_ERRORS, payload: err.response.data })
+    dispatch({ type: types.FETCH_USER_ERRORS, payload: err.response.data })
   }
 };
-
-// export const createPost = (formValues, threadId, userId) => async dispatch => {
-//   const created = new Date().toISOString();
-//   console.log(formValues, threadId, userId, created)
-//   const response = await instance.post(`/thread/${threadId}/posts`, {...formValues, userId, created});
-
-//   dispatch ({
-//     type: CREATE_POST,
-//     payload: response.data
-//   })
-// }

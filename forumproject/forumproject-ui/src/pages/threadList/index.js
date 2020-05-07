@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt } from '@fortawesome/free-regular-svg-icons'
+import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
+import moment from 'moment';
 
 import {
   CategoryHeader,
@@ -17,6 +18,7 @@ import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
 import { LinkButtonBig } from '../../components/styledButtons';
 import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
+import { formatTime } from '../../utils';
 
 
 class ThreadList extends React.Component {
@@ -50,8 +52,8 @@ class ThreadList extends React.Component {
               </ThreadLengthSpan>
             </TitleRowWrapper>
             <DateWrapper>
-              <SecondaryText>Added: { thread.created }</SecondaryText>
-              <SecondaryText>Last post: { thread.updated }</SecondaryText>
+              <SecondaryText>Added: { formatTime.main(thread.created) }</SecondaryText>
+              <SecondaryText>Last post: { formatTime.main(thread.updated) }</SecondaryText>
             </DateWrapper>
           </ThreadWrapper>
         )

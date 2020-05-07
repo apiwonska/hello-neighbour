@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import theme from '../layout/utils/theme';
 
+// Properties used for small buttons
 const smallBtn = {
   height: "30px",
   padding: "0 20px",

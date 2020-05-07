@@ -10,7 +10,7 @@ import {
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import { FormError, renderPageError } from '../../../components/errors';
+import { FormError } from '../../../components/errors';
 import { resetPassword } from '../../../redux/actions';
 
 
