@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { Field, reduxForm, reset } from 'redux-form';
+import { Field, Form } from 'react-final-form';
 
 import {
   LinkWrapper,
   NavLink,
   FirstPostWrapper,
   PostWrapper,
+  PostHeader,
+  PostHeaderInnerWrapper,
+  DateSpan,
   UserLink,
   ThreadTitle,
   Content,
-  Footer,
-  DateSpan,
   StyledTextArea,
   SubmitButton,
 } from './style';
@@ -28,6 +28,7 @@ import {
   createPost,
   deletePost
 } from '../../redux/actions';
+import { formatTime } from '../../utils';
 
 
 class Thread extends React.Component {
@@ -42,61 +43,42 @@ class Thread extends React.Component {
     this.props.fetchPostsByThread(threadId);
   }
 
-  handleCreatePost(formValues, dispatch) {
+  handleCreatePost = (values) => {
     const user = this.props.auth.user.id;
     const thread = Number(this.props.match.params.threadId)
-    const data = {...formValues, user, thread };
-    this.props.createPost(data);
-    dispatch(reset('postCreate'));
+    const data = {...values, user, thread };
+    this.props.createPost(data)
   }
-
-  // handleDeletePost(postId) {
-  //   this.props.deletePost(postId);
-  // }
 
   renderPosts() {
     const { posts } = this.props;
     const postsList = posts.data.results.map(post => {
       return (
         <PostWrapper key={ post.id }>
-          <UserLink to={`/profile/${ post.user.id }`}>
-            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>{ post.user.username }
-          </UserLink>
-          <ThreadTitle>{ post.title }</ThreadTitle>
+          <PostHeader>
+            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>
+            <PostHeaderInnerWrapper>
+              <UserLink UserLink to={`/profile/${post.user.id}`} >
+                { post.user.username }
+              </UserLink>
+              <DateSpan>
+                { formatTime.main(post.created) }
+              </DateSpan>
+            </PostHeaderInnerWrapper>
+          </PostHeader>
+          {/* <UserLink to={`/profile/${ post.user.id }`}>
+            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>
+            { post.user.username }
+            <DateSpan>{ formatTime.main(post.created)}</DateSpan>
+          </UserLink> */}
           <Content>{ post.content }</Content>
-          <Footer>
-            <DateSpan>{ post.created}</DateSpan>
-            { this.renderDeletePostButton(post.id, post.user.id) }
-          </Footer>
         </PostWrapper>
       )
     })
     return postsList;
   }
 
-  renderTextArea = ({ input }) => {
-    return (
-      <StyledTextArea {...input} rows="3" placeholder="Add your comment.." maxLength="2000"></StyledTextArea> 
-    )
-  }
-
-  // Submit button will is rendered only when the input is valid (when it's not empty)
-  renderSubmitButton = () => {
-    if (
-      this.props.postForm.hasOwnProperty("postCreate") && 
-      !this.props.postForm.postCreate.hasOwnProperty("syncErrors")
-    ) {
-      return <SubmitButton type="submit" value="Submit Post" color="greenOutline"/>
-    }
-  }
-
-  renderDeletePostButton = (postId, userId) => {
-    if (userId === this.props.auth.user.id) {
-      return <button onClick={() => this.props.deletePost(postId)}>Delete</button>
-    }
-  }
-
-  render() {    
+  render() {
     const { thread, posts } = this.props;
     const categoryId = this.props.match.params.categoryId;
 
@@ -117,26 +99,47 @@ class Thread extends React.Component {
           </LinkWrapper>
 
           <FirstPostWrapper>
-            <UserLink to={`/profile/${ thread.data.user.id }`}>
+            <PostHeader>
               <AvatarThumbnail src={thread.data.user.avatar_thumbnail} alt="Avatar thumbnail"/>
-              { thread.data.user.username }
-            </UserLink>
+              <PostHeaderInnerWrapper>
+                <UserLink to={`/profile/${ thread.data.user.id }`}>
+                  { thread.data.user.username }
+                </UserLink>
+                <DateSpan>
+                  { formatTime.main(thread.data.created) }
+                </DateSpan>
+              </PostHeaderInnerWrapper>
+            </PostHeader>
             <ThreadTitle>{ thread.data.title }</ThreadTitle>
             <Content>{ thread.data.subject }</Content>
-            <Footer>
-              <DateSpan>
-                { thread.data.created }
-              </DateSpan>
-            </Footer>
           </FirstPostWrapper>
 
           {this.renderPosts()}
-
+          
+          {/* Create post form */}
           <PostWrapper>
-            <form method="post" onSubmit={this.props.handleSubmit(this.handleCreatePost.bind(this))}>
-              <Field name="content" component={ this.renderTextArea }/>
-              { this.renderSubmitButton()}
-            </form>
+            <Form onSubmit={this.handleCreatePost}>
+              {({handleSubmit, values, form}) => {
+                return(
+                  <form 
+                    onSubmit={async (event) => {
+                      await handleSubmit(event);
+                      form.reset();
+                  }}>
+                    <Field name="content" > 
+                      {({ input }) => {
+                        return (
+                          <StyledTextArea {...input} rows="3" placeholder="Add your comment.." maxLength="2000"/> 
+                        )
+                      }}
+                    </Field>
+                    { values['content'] && 
+                      <SubmitButton type="submit" value="Submit Post" color="greenOutline"/>
+                    }
+                  </form>
+                );
+              }}
+            </Form>
           </PostWrapper>
         </ContainerDiv>
       );
@@ -145,26 +148,14 @@ class Thread extends React.Component {
   }
 }
 
-const validate = formValues => {
-  const errors = {};
-  if(!formValues.content) {
-    errors.content = 'You must enter text';
-  }
-  return errors;
-}
-
 const mapStateToProps = state => {
   return (
     { 
       auth: state.auth,
       thread: state.thread,
       posts: state.postsByThread,
-      postForm: state.form,
     }
   )
 }
 
-export default compose(
-  connect(mapStateToProps, {fetchThread, fetchPostsByThread, createPost, deletePost}),
-  reduxForm({ form: 'postCreate', validate } )
-)(Thread);
+export default connect(mapStateToProps, {fetchThread, fetchPostsByThread, createPost, deletePost})(Thread);
