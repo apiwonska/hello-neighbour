@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "final-form": "^4.19.1",
+    "history": "^4.10.1",
     "http-proxy-middleware": "^1.0.3",
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
@@ -26,7 +27,8 @@
     "redux-form": "^8.3.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.0.1",
-    "universal-cookie": "^4.0.3"
+    "universal-cookie": "^4.0.3",
+    "validator": "^13.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
