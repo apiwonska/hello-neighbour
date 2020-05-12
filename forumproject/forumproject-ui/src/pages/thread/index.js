@@ -66,11 +66,6 @@ class Thread extends React.Component {
               </DateSpan>
             </PostHeaderInnerWrapper>
           </PostHeader>
-          {/* <UserLink to={`/profile/${ post.user.id }`}>
-            <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>
-            { post.user.username }
-            <DateSpan>{ formatTime.main(post.created)}</DateSpan>
-          </UserLink> */}
           <Content>{ post.content }</Content>
         </PostWrapper>
       )
