@@ -2,6 +2,12 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import theme from '../../layout/utils/theme';
+import { LinkButtonSmall } from '../../components/styledButtons';
+
+export const LinkButton = styled(LinkButtonSmall)`
+  width: 200px;
+  margin: 0 0 20px auto;
+`;
 
 export const CategoryHeader = styled.h2`
   text-align: center;

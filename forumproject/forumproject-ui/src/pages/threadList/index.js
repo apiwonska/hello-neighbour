@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
-import moment from 'moment';
 
 import {
   CategoryHeader,
@@ -11,12 +10,12 @@ import {
   ThreadLink,
   ThreadLengthSpan,
   DateWrapper,
-  SecondaryText
+  SecondaryText,
+  LinkButton
 } from './style.js';
 import { PageNotFound, DefaultError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
-import { LinkButtonBig } from '../../components/styledButtons';
 import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
 import { formatTime } from '../../utils';
 
@@ -81,10 +80,13 @@ class ThreadList extends React.Component {
     };
 
     if (categories.fetched && category) {
+
       return (
         <ContainerDiv>
           <CategoryHeader>{ category.name }</CategoryHeader>
-          <LinkButtonBig to="/" color="green">Add Thread</LinkButtonBig>
+          <div>
+            <LinkButton to={`/categories/${categoryId}/threads/new/`} color="green">Add Thread</LinkButton>
+          </div>
           <div>
             { this.renderThreadList() }
           </div>
