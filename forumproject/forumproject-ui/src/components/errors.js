@@ -34,6 +34,6 @@ export const renderPageError = (err) => {
 };
 
 export const FormError = styled.p`
-  color: ${ theme.colors.errorMsgText };
+  color: ${theme.colors.errorMsgText};
   font-size: 14px;
 `;
