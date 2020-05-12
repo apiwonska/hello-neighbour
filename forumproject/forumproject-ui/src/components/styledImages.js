@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const AvatarThumbnail = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  margin: 15 px;
+  margin: 10 px;
 `;

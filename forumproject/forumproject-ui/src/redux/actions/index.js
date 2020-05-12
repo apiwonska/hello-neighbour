@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import * as types from './types';
 import store from '../store';
-
+import history from '../../routing/history';
 
 // Create axios instance and set authentication header
 const instance = () => {
@@ -84,9 +84,20 @@ export const fetchThread = (threadId) => async dispatch => {
   dispatch({ type: types.FETCH_THREAD_PENDING })
   try {
     const response = await instance().get(`/api/threads/${threadId}`);
-    dispatch({ type: types.FETCH_THREAD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_THREAD_FULFILLED, payload: response.data })
   } catch(err) {
     dispatch({ type: types.FETCH_THREAD_ERRORS, payload: err.response.data })
+  }
+};
+
+export const createThread = (data) => async dispatch => {
+  try {
+    const response = await instance().post('/api/threads/', data);
+    const { id, category } = response.data;
+    history.push(`/categories/${category}/threads/${id}`);
+    dispatch({ type: types.CREATE_THREAD_FULFILLED, payload: response.data })
+  } catch(err) {
+    dispatch({ type: types.CREATE_THREAD_ERRORS, payload: err.response.data })
   }
 };
 
@@ -95,7 +106,7 @@ export const fetchPostsByThread = (threadId) => async dispatch => {
   dispatch({ type: types.FETCH_POSTS_BY_THREAD_PENDING })
   try {
     const response = await instance().get(`/api/posts/?thread=${threadId}`);
-    dispatch({ type: types.FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })    
+    dispatch({ type: types.FETCH_POSTS_BY_THREAD_FULFILLED, payload: response.data })
   } catch(err) {
     dispatch({ type: types.FETCH_POSTS_BY_THREAD_ERRORS, payload: err.response.data })
   }
@@ -121,7 +132,7 @@ export const updatePost = (data, postId) => async dispatch => {
 
 export const deletePost = (postId) => async dispatch => {
   try {
-    const response = await instance().delete(`/api/posts/${postId}/`);
+    await instance().delete(`/api/posts/${postId}/`);
     dispatch({ type: types.DELETE_POST_FULFILLED, payload: postId })
   } catch(err) {
     dispatch({ type: types.DELETE_POST_ERRORS, payload: err.response.data })

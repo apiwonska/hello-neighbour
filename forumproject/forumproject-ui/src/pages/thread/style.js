@@ -46,21 +46,22 @@ export const UserLink = styled(Link)`
 `;
 
 export const DateSpan = styled.span `
-  font-size: 14px;
+  font-size: 12px;
   color: ${ theme.colors.neutralMidDark};
 `;
 
 export const ThreadTitle = styled.h4`
-  margin: 5px 0 10px;
+  margin: 15px 0;
   font-weight: 600;
 `;
 
 export const Content = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 10px;
 `;
 
 export const NameSpan = styled.span`
+  font-size: 12px;
   margin: 0 20 px;
 `;
 
