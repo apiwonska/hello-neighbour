@@ -11,11 +11,11 @@ import {
   Input,
   FormGroup,
   Label,
+  FormError,
   FormWrapper
 } from '../../components/styledForms';
 import { ContainerDiv } from '../../components/styledDivs';
 import { createThread } from '../../redux/actions';
-import { FormError } from '../../components/errors';
 import {
   required,
   minLength,
@@ -55,7 +55,7 @@ class CreateThread extends React.Component {
         <FinalForm onSubmit={this.handleCreateThread}>
           {({handleSubmit, pristine, hasValidationErrors}) => (
             <form onSubmit={handleSubmit}>
-              <FormWrapper>              
+              <FormWrapper>
                 <FormGroup>
                   <Label htmlFor="title">Title:</Label>
                   <Field name="title" validate={titleValidator} >
