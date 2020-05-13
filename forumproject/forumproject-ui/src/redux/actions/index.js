@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 import * as types from './types';
 import store from '../store';
@@ -14,12 +15,31 @@ const instance = () => {
   return instance;
 }
 
+const cookies = new Cookies();
+
+const setCookie = async(name, value) => {
+  const cookieExpirationDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  await cookies.set(name, value, {
+    domain: 'localhost',
+    path: '/',
+    expires: cookieExpirationDate
+  });
+};
+
+const setAuthCookies = async(data) => {
+  const token = data['token'];
+  const user = data['user'];
+  await setCookie('User', JSON.stringify(user));
+  await setCookie('Authorization', token);
+};
+
 // AUTHENTICATION
 export const register = (formProps) => async dispatch => {
   dispatch({ type: types.REGISTER_USER_PENDING })
   try {
     const response = await axios.post(`/api/registration/`, formProps);
-    dispatch({ type: types.REGISTER_USER_FULFILLED, payload: response.data })    
+    await setAuthCookies(response.data);
+    dispatch({ type: types.REGISTER_USER_FULFILLED, payload: response.data })
   } catch(err) {
     dispatch({ type: types.REGISTER_USER_ERRORS, payload: err.response.data })
   }
@@ -29,14 +49,17 @@ export const logIn = (formProps) => async dispatch => {
   dispatch({ type: types.LOGIN_USER_PENDING })
   try {
     const response = await axios.post(`/api/token-auth/`, formProps);
-    dispatch({ type: types.LOGIN_USER_FULFILLED, payload: response.data })    
+    await setAuthCookies(response.data);
+    dispatch({ type: types.LOGIN_USER_FULFILLED, payload: response.data })
   } catch(err) {
     dispatch({ type: types.LOGIN_USER_ERRORS, payload: err.response.data })
   }
 };
 
-export const logOut = () => {
-  return { type: types.LOGOUT_USER }
+export const logOut = () => async dispatch => {
+  await cookies.remove('Authorization');
+  await cookies.remove('User');
+  dispatch({ type: types.LOGOUT_USER })
 }
 
 export const resetPassword = (formProps) => async dispatch => {
