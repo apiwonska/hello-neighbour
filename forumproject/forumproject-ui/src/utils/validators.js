@@ -24,6 +24,12 @@ export const isEmail = value => {
   }
 }
 
+export const matchPassword = password => value => {
+  if (value !== password) {
+    return 'Password must match';
+  }
+}
+
 export const composeValidators = (...validators) => value => {
   return [...validators].reduce((acc, curr) => acc || curr(value), undefined);
 }
