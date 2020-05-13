@@ -14,6 +14,7 @@ import Profile from '../pages/profile';
 import Thread from '../pages/thread';
 import CreateThread from '../pages/createThread';
 import ThreadList from '../pages/threadList';
+import PageNotFound from '../pages/pageNotFound';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
@@ -35,6 +36,7 @@ const Routing = (props) => {
         <PrivateRoute path='/categories/:categoryId/threads/new' exact component={ CreateThread } />
         <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
         <PrivateRoute path='/profile/:userId' exact component={ Profile } />
+        <Route path='*' component={ PageNotFound} />
       </Switch>
       <Footer/>
     </Router>
