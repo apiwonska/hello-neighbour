@@ -167,13 +167,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 }
 
-# Used for creating reset password url
-# Change later to front!
-if DEBUG:
-    URL_FRONT = 'http://localhost:3000/'
-else:
-    pass
-
 # Emails
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
