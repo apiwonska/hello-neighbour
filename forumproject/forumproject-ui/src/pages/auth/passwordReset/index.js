@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
+import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import {
   Input,
@@ -26,7 +28,12 @@ class PasswordReset extends React.Component {
     await this.props.resetPassword(formProps);
 
     const errors = this.props.passwordReset.emailErrors;
-    if (errors) return errors;
+    if (!_.isEmpty(errors)) return errors;
+    if (this.props.passwordReset.emailSent) {
+      this.props.history.push('/password-reset/confirm', {
+        emailSent: true
+      });
+    }
   }
 
   render() {
@@ -36,6 +43,10 @@ class PasswordReset extends React.Component {
       <div>
         <h2>Password Reset</h2>
 
+        <div>
+          We will send you an authentication token to your email.
+        </div>
+
         <FinalForm onSubmit={this.onSubmit}>
           {({handleSubmit, pristine, hasValidationErrors}) => (
             <form onSubmit={handleSubmit}>
@@ -44,14 +55,12 @@ class PasswordReset extends React.Component {
                   <Label htmlFor="email">Email:</Label>
                   <Field name="email" validate={emailValidator} >
                     {({input, meta: {touched, error, submitError} }) => (
-                      (
-                        <>
-                          <Input {...input} type="email" placeholder="Enter your email" />
-                          <FormError>
-                            { touched && (error || submitError) }
-                          </FormError>
-                        </>
-                      )
+                      <>
+                        <Input {...input} type="email" placeholder="Enter your email" />
+                        <FormError>
+                          { touched && (error || submitError) }
+                        </FormError>
+                      </>
                     )}
                   </Field>
                 </FormGroup>
@@ -65,9 +74,10 @@ class PasswordReset extends React.Component {
           )}
         </FinalForm>
 
-        { this.props.passwordReset.emailSent && 
-          <p>Email was sent. Please, check your inbox.</p>
-        }
+        <div>
+          If you already have a token click this <Link to='/password-reset/confirm'>link</Link>.
+        </div>
+
       </div>
     )
   }

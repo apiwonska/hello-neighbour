@@ -31,7 +31,7 @@ const Routing = (props) => {
         <RestrictedRoute path='/auth' exact component={ Login } />
         <RestrictedRoute path='/logout' exact component={ Logout } />
         <RestrictedRoute path='/password-reset' exact component={ PasswordReset } />
-        <RestrictedRoute path = '/password-reset/confirm' exact component = { PasswordResetConfirm } />
+        <RestrictedRoute path='/password-reset/confirm' exact component={ PasswordResetConfirm } />
         <PrivateRoute path='/categories/:categoryId' exact component={ ThreadList } />
         <PrivateRoute path='/categories/:categoryId/threads/new' exact component={ CreateThread } />
         <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
