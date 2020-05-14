@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import _ from 'lodash';
 
 import {
   Input,
@@ -26,7 +25,7 @@ import {
 
 class Registration extends React.Component {
 
-  handleRegister = async(formProps) => {
+  onSubmit = async(formProps) => {
     await this.props.register(formProps);
 
     const errors = this.props.auth.errors;
@@ -42,7 +41,7 @@ class Registration extends React.Component {
       <div>
         <h2>Register</h2>
 
-        <FinalForm onSubmit={this.handleRegister}>
+        <FinalForm onSubmit={this.onSubmit}>
           {({handleSubmit, pristine, hasValidationErrors, values}) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>

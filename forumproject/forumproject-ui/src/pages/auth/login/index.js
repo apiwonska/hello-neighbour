@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 
 import {
   Input,
@@ -20,7 +19,7 @@ import { required } from '../../../utils/validators';
 
 class LogIn extends React.Component {
 
-  handleLogIn = async(formProps) => {
+  onSubmit = async(formProps) => {
     await this.props.logIn(formProps);
 
     const errors = this.props.auth.errors;
@@ -32,12 +31,12 @@ class LogIn extends React.Component {
       <div>
         <h2>Log In</h2>
 
-        <FinalForm onSubmit={this.handleLogIn}>
+        <FinalForm onSubmit={this.onSubmit}>
           {({handleSubmit, pristine, hasValidationErrors, submitErrors}) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <FormGroup>
-                  <FormError>{ submitErrors ? _.values(submitErrors)[0] : '' }</FormError>
+                  <FormError>{ submitErrors ? submitErrors['non_field_errors'] : '' }</FormError>
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="username">Username:</Label>
@@ -51,7 +50,7 @@ class LogIn extends React.Component {
                   </Field>
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="password">Username:</Label>
+                  <Label htmlFor="password">Password:</Label>
                   <Field name="password" validate={required}>
                     {({ input, meta:{touched, error, submitError} }) => (
                       <>

@@ -39,7 +39,10 @@ const reducer = (state=INITIAL_STATE, action) => {
 
     case REGISTER_USER_PENDING:
     case LOGIN_USER_PENDING:
-      return {...INITIAL_STATE, processing: true};
+      return {
+        ...state,
+        processing: true,
+      };
     
     case REGISTER_USER_FULFILLED:
     case LOGIN_USER_FULFILLED:
