@@ -1,86 +1,105 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { reduxForm, Field } from 'redux-form';
-import { Redirect } from 'react-router-dom';
+import { Field, Form as FinalForm } from 'react-final-form';
 
 import {
-  Form,
+  Input,
   FormGroup,
   Label,
+  FormError,
+  FormWrapper
 } from '../../../components/styledForms';
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import { FormError } from '../../../components/errors';
-import Spinner from '../../../components/spinner';
 import { register } from '../../../redux/actions';
+import {
+  required,
+  minLength,
+  maxLength,
+  isEmail,
+  matchPassword,
+  composeValidators
+} from '../../../utils/validators';
 
 
 class Registration extends React.Component {
 
-  onSubmit(formProps) {
-    this.props.register(formProps);
-  }
+  onSubmit = async(formProps) => {
+    await this.props.register(formProps);
 
-  renderFieldError(field) {
-    const error = this.props.auth.errors[field];
-
-    if (error) {
-      return <FormError>{ error }</FormError>;
-    }    
-  }
-
-  renderNonFieldErrors() {
-    const errors = this.props.auth.errors['non_field_errors'];
-    if (errors) {
-      const errorList = errors.map((el, ind) => {
-        return (
-          <FormError key={ ind }>{ el }</FormError>
-        )
-      })
-      return errorList;
-    }
+    const errors = this.props.auth.errors;
+    if (errors) return errors;
   }
 
   render() {
-    const { processing, authenticated } = this.props.auth;
-
-    if (authenticated) {
-      return <Redirect to='/'/>;
-    }
-
-    if (processing) {
-      return <Spinner/>;
-    }
+    const usernameValidator = composeValidators(required, minLength(3), maxLength(150));
+    const emailValidator = composeValidators(required, isEmail);
+    const passwordValidator = composeValidators(required, minLength(8), maxLength(128));
 
     return (
       <div>
         <h2>Register</h2>
-        <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
-          { this.renderNonFieldErrors() }
-          <FormGroup>
-            <Label htmlFor="username">Username:</Label>
-            <Field component="input" type="text" name="username" />
-            { this.renderFieldError('username') }
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email:</Label>
-            <Field component="input" type="text" name="email" />
-            { this.renderFieldError('email') }
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password:</Label>
-            <Field  component="input" type="password" name="password"/>
-            { this.renderFieldError('password') }
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password2">Confirm Password:</Label>
-            <Field  component="input" type="password" name="password2"/>
-            { this.renderFieldError('password2') }
-          </FormGroup>
-          <SubmitButtonSmall type="submit" value="Register"/>
-        </Form>
+
+        <FinalForm onSubmit={this.onSubmit}>
+          {({handleSubmit, pristine, hasValidationErrors, values}) => (
+            <form onSubmit={handleSubmit}>
+              <FormWrapper>
+                <FormGroup>
+                  <Label htmlFor="username">Username:</Label>
+                  <Field name="username" validate={usernameValidator}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="text"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="email">Email:</Label>
+                  <Field name="email" validate={emailValidator}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="email"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password">Password:</Label>
+                  <Field name="password" validate={passwordValidator}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="password"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password2">Confirm Password:</Label>
+                  <Field 
+                    name="password2" 
+                    validate={composeValidators(required, matchPassword(values['password']))}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="password"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <SubmitButtonSmall 
+                  type="submit" 
+                  value="Register"
+                  disable={pristine || hasValidationErrors}
+                />
+              </FormWrapper>
+            </form>
+          )}
+        </FinalForm>
       </div>
     )
   }
@@ -94,7 +113,4 @@ const mapStateToProps = state => {
   )
 }
 
-export default compose(
-    reduxForm({ form: 'registration'}),
-    connect(mapStateToProps, { register })
-  )(Registration);
+export default connect(mapStateToProps, { register })(Registration);

@@ -21,8 +21,6 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     :return:
     """
 
-    host = settings.URL_FRONT
-    path = '#/password-reset/confirm/'
     token = reset_password_token.key
 
     # send an e-mail to the user
@@ -30,7 +28,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         'current_user': reset_password_token.user,
         'username': reset_password_token.user.username,
         'email': reset_password_token.user.email,
-        'reset_password_url': f"{host}{path}?token={token}",
+        'token': token,
         'website_name': 'Forum',
     }
     # render email text

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
 import {
   FETCH_POSTS_BY_THREAD_PENDING,
@@ -6,8 +6,8 @@ import {
   FETCH_POSTS_BY_THREAD_ERRORS,
   CREATE_POST_FULFILLED,
   CREATE_POST_ERRORS,
-  DELETE_POST_FULFILLED,
-  DELETE_POST_ERRORS,
+  // DELETE_POST_FULFILLED,
+  // DELETE_POST_ERRORS,
 } from '../actions/types';
 
 

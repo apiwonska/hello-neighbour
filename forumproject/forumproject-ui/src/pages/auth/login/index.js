@@ -1,76 +1,74 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-import { Link, Redirect } from 'react-router-dom';
+import { Field, Form as FinalForm } from 'react-final-form';
+import { Link } from 'react-router-dom';
 
 import {
-  Form,
+  Input,
   FormGroup,
   Label,
+  FormError,
+  FormWrapper
 } from '../../../components/styledForms';
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import Spinner from '../../../components/spinner';
-import { FormError } from '../../../components/errors';
 import { logIn } from '../../../redux/actions';
+import { required } from '../../../utils/validators';
 
 
 class LogIn extends React.Component {
 
-  onSubmit(formProps) {
-    this.props.logIn(formProps);
-  }
+  onSubmit = async(formProps) => {
+    await this.props.logIn(formProps);
 
-  renderFieldError(field) {
-    const error = this.props.auth.errors[field];
-
-    if (error) {
-      return <FormError>{ error }</FormError>;
-    }    
-  }
-
-  renderNonFieldErrors() {
-    const errors = this.props.auth.errors['non_field_errors'];
-    if (errors) {
-      const errorList = errors.map((el, ind) => {
-        return (
-          <FormError key={ ind }>{ el }</FormError>
-        )
-      })
-      return errorList;
-    }
+    const errors = this.props.auth.errors;
+    if (errors) { return errors };
   }
 
   render() {
-    const { processing, authenticated } = this.props.auth;
-
-    if (authenticated) {
-      return <Redirect to='/'/>;
-    }
-
-    if (processing) {
-      return <Spinner/>;
-    }
-
     return (
       <div>
         <h2>Log In</h2>
-        <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
-          { this.renderNonFieldErrors() }
-          <FormGroup>
-            <Label htmlFor="username">Username:</Label>
-            <Field component="input" type="text" name="username" autoComplete="none"/>
-            { this.renderFieldError('username') }
-          </FormGroup>          
-          <FormGroup>
-            <Label htmlFor="password">Password:</Label>
-            <Field  component="input" type="password" name="password" autoComplete="none"/>
-            { this.renderFieldError('password') }
-          </FormGroup>
-          <SubmitButtonSmall type="submit" value="Log In"/>
-        </Form>
+
+        <FinalForm onSubmit={this.onSubmit}>
+          {({handleSubmit, pristine, hasValidationErrors, submitErrors}) => (
+            <form onSubmit={handleSubmit}>
+              <FormWrapper>
+                <FormGroup>
+                  <FormError>{ submitErrors ? submitErrors['non_field_errors'] : '' }</FormError>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="username">Username:</Label>
+                  <Field name="username" validate={required}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="text"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password">Password:</Label>
+                  <Field name="password" validate={required}>
+                    {({ input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="password"/>
+                        <FormError>{ touched && (error || submitError)}</FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <SubmitButtonSmall 
+                  type="submit" 
+                  value="Log In" 
+                  disable={pristine || hasValidationErrors}
+                />
+              </FormWrapper>
+            </form>
+          )}
+        </FinalForm>
         <div>
           <p>If you don't have an account yet, <Link to={'/register'}>register here</Link></p>
           <p>Did you forget your login or password? Click <Link to={'/password-reset'}>this</Link> to restore your credentials</p>
@@ -88,7 +86,4 @@ const mapStateToProps = state => {
   )
 }
 
-export default compose(
-    connect(mapStateToProps, { logIn }),
-    reduxForm({ form: 'logIn'})
-  )(LogIn);
+export default connect(mapStateToProps, { logIn })(LogIn);

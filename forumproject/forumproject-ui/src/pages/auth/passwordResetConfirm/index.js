@@ -1,71 +1,141 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { reduxForm, Field } from 'redux-form';
+import { Field, Form as FinalForm } from 'react-final-form';
 import { Link } from 'react-router-dom';
-import queryString from 'query-string';
+import _ from 'lodash';
 
 import {
-  Form,
+  Input,
   FormGroup,
-  Label
+  Label,
+  FormError,
+  FormWrapper
 } from '../../../components/styledForms';
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import { FormError } from '../../../components/errors';
 import { confirmPasswordReset } from '../../../redux/actions';
+import {
+  required,
+  minLength,
+  maxLength,
+  matchPassword,
+  composeValidators
+} from '../../../utils/validators';
 
 
 class PasswordResetConfirm extends React.Component {
 
-  onSubmit(formProps) {
-    const values = queryString.parse(this.props.location.search)
-    const token = values.token;
-    const data = {...formProps, token};
-    this.props.confirmPasswordReset(data);
+  state = {
+    emailSent: false,
+    passwordChanged: false
   }
 
-  renderTokenError() {
-    // Token is outdated
-    const statusError = this.props.passwordReset.passwordErrors['status'];
-    // Token was not passed
-    const tokenError = this.props.passwordReset.passwordErrors['token'];
-
-    if (statusError || tokenError) {
-      return <FormError>The reset password link is not valid</FormError>;
+  componentDidMount() {
+    const emailSent = this.props.location.state && this.props.location.state.emailSent;
+    if (emailSent) {
+      this.setState({ emailSent: true });
+      // We delete history state to prevent showing the email was sent 
+      // message again, when the user navigates to this page
+      this.props.history.replace('/password-reset/confirm', {})
     }
   }
 
-  renderFieldError(field) {
-    const error = this.props.passwordReset.passwordErrors[field];
+  onSubmit = async(values) => {
+    _.omit(values, ['password2'])
+    await this.props.confirmPasswordReset(values);
+    this.setState({emailSent: false});
 
-    if (error) {
-      return <FormError>{ error }</FormError>;
-    }
-  }
-  
-  renderSuccessMesage() {
-    const { resetPasswordConfirmed } = this.props.passwordReset;
-    if (resetPasswordConfirmed) {
-      return <p>Password was changed. You can <Link to={'/auth'}>log in</Link> now.</p>;
+    const errors = this.props.passwordReset.passwordErrors;
+    if (!_.isEmpty(errors)) return errors;
+
+    if (this.props.passwordReset.resetPasswordConfirmed) {
+      this.setState({ passwordChanged: true});
     }
   }
 
   render() {
+    
+    const passwordValidator = composeValidators(required, minLength(8), maxLength(128));
+
     return(
       <>
         <h2>Password Reset Confirm</h2>
-        { this.renderTokenError() }
-        <Form method='post' onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
-          <FormGroup>
-            <Label htmlFor="password">Password:</Label>
-            <Field component="input" type="password" name="password" autoComplete="none"/>
-            { this.renderFieldError('password') }
-          </FormGroup>
-          <SubmitButtonSmall type="submit" value="Change Password" />
-        </Form>
-        { this.renderSuccessMesage()}
+        <div>
+          { this.state.emailSent &&
+            'The confirmation token was sent to your email.'
+          }
+        </div>
+
+        <FinalForm onSubmit={this.onSubmit}>
+          {({handleSubmit, pristine, hasValidationErrors, submitErrors, form, submitSucceeded, values}) => {
+            if (submitSucceeded) {
+              form.reset();
+              Object.keys(values).forEach(field => form.resetFieldState(field));
+            }
+            return (
+            <form onSubmit={handleSubmit}>
+              <FormWrapper>
+                <FormGroup>
+                  <FormError>
+                    { submitErrors ? (submitErrors['status'] ? 'The token is not valid' : '') : '' }
+                  </FormError>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="token">Token:</Label>
+                  <Field name="token" validate={required}>
+                    {({input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="text"/>
+                        <FormError>
+                          { touched && (error || submitError)}
+                        </FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password">New password:</Label>
+                  <Field name="password" validate={passwordValidator}>
+                    {({input, meta:{touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="password"/>
+                        <FormError>
+                          { touched && (error || submitError)}
+                        </FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="password2">Confirm password:</Label>
+                  <Field 
+                    name="password2" 
+                    validate={composeValidators(required, matchPassword(values['password']))}
+                  >
+                    {({input, meta:{touched, error} }) => (
+                      <>
+                        <Input {...input} type="password"/>
+                        <FormError>
+                          { touched && error}
+                        </FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <SubmitButtonSmall 
+                  type="submit" 
+                  value="Change Password" 
+                  disable = {pristine || hasValidationErrors}
+                />
+              </FormWrapper>
+            </form>
+          )}}
+        </FinalForm>
+
+        { this.state.passwordChanged &&
+          <p>Password was changed. You can <Link to={'/auth'}>log in</Link> now.</p> 
+        }
       </>
     );
   }
@@ -79,7 +149,4 @@ const mapStateToProps = state => {
   )
 }
 
-export default compose(
-  connect(mapStateToProps, { confirmPasswordReset }),
-  reduxForm({ form: 'passwordResetConfirm' })
-)(PasswordResetConfirm);
+export default connect(mapStateToProps, {confirmPasswordReset})(PasswordResetConfirm);

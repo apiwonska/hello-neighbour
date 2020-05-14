@@ -1,51 +1,83 @@
 import React from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
+import { Field, Form as FinalForm } from 'react-final-form';
+import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import {
-  Form,
-  FormGroup
+  Input,
+  FormGroup,
+  Label,
+  FormError,
+  FormWrapper
 } from '../../../components/styledForms';
 import {
   SubmitButtonSmall
 } from '../../../components/styledButtons';
-import { FormError } from '../../../components/errors';
 import { resetPassword } from '../../../redux/actions';
+import { 
+  required,
+  isEmail,
+  composeValidators  
+} from '../../../utils/validators';
 
 
 class PasswordReset extends React.Component {
 
-  onSubmit(formProps) {
-    this.props.resetPassword(formProps);
-  }
+  onSubmit = async(formProps) => {
+    await this.props.resetPassword(formProps);
 
-  renderFieldError(field) {
-    const error = this.props.passwordReset.emailErrors[field];
-    if (error) {
-      return <FormError>{error}</FormError>
-    }
-  }
-
-  renderSuccessMesage() {
-    const { emailSent } = this.props.passwordReset;
-    if (emailSent) {
-      return <p>Email was sent. Please, check your inbox.</p>;
+    const errors = this.props.passwordReset.emailErrors;
+    if (!_.isEmpty(errors)) return errors;
+    if (this.props.passwordReset.emailSent) {
+      this.props.history.push('/password-reset/confirm', {
+        emailSent: true
+      });
     }
   }
 
   render() {
+    const emailValidator = composeValidators(required, isEmail);
+
     return (
       <div>
         <h2>Password Reset</h2>
-        <Form method="post" onSubmit={this.props.handleSubmit(this.onSubmit.bind(this))}>
-          <FormGroup>
-            <Field component="input" type="text" name="email" placeholder="Enter your email" autoComplete="none"/>
-            { this.renderFieldError('email') }
-          </FormGroup>
-          <SubmitButtonSmall type="submit" value="Reset Password"/>
-        </Form>
-          { this.renderSuccessMesage()}
+
+        <div>
+          We will send you an authentication token to your email.
+        </div>
+
+        <FinalForm onSubmit={this.onSubmit}>
+          {({handleSubmit, pristine, hasValidationErrors}) => (
+            <form onSubmit={handleSubmit}>
+              <FormWrapper>
+                <FormGroup>
+                  <Label htmlFor="email">Email:</Label>
+                  <Field name="email" validate={emailValidator} >
+                    {({input, meta: {touched, error, submitError} }) => (
+                      <>
+                        <Input {...input} type="email" placeholder="Enter your email" />
+                        <FormError>
+                          { touched && (error || submitError) }
+                        </FormError>
+                      </>
+                    )}
+                  </Field>
+                </FormGroup>
+                <SubmitButtonSmall 
+                  type="submit" 
+                  value="Reset Password"
+                  disable={pristine || hasValidationErrors}
+                />
+              </FormWrapper>
+            </form>
+          )}
+        </FinalForm>
+
+        <div>
+          If you already have a token click this <Link to='/password-reset/confirm'>link</Link>.
+        </div>
+
       </div>
     )
   }
@@ -60,7 +92,4 @@ const mapStateToProps = state => {
 }
 
 
-export default compose(
-  connect(mapStateToProps, { resetPassword }),
-  reduxForm({ form: 'passwordReset' })
-)(PasswordReset);
+export default connect(mapStateToProps, { resetPassword })(PasswordReset);

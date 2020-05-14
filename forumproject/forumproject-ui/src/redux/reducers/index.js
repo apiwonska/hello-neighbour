@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 
 import authReducer from './authReducer';
 import passwordResetReducer from './passwordResetReducer';
@@ -17,8 +16,7 @@ const reducers = combineReducers({
   threadsByCategory: threadsByCategoryReducer,
   thread: threadReducer,
   postsByThread: postsByThreadReducer,
-  user: userReducer,
-  form: formReducer,
+  user: userReducer
 });
 
 export default reducers;
