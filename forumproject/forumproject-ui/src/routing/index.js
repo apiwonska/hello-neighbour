@@ -10,10 +10,11 @@ import PasswordReset from '../pages/auth/passwordReset';
 import PasswordResetConfirm from '../pages/auth/passwordResetConfirm';
 import Home from '../pages/home';
 import CategoryList from '../pages/categoryList';
-import Profile from '../pages/profile';
-import Thread from '../pages/thread';
-import CreateThread from '../pages/createThread';
 import ThreadList from '../pages/threadList';
+import CreateThread from '../pages/createThread';
+import Thread from '../pages/thread';
+import Profile from '../pages/profile';
+import PasswordChange from '../pages/passwordChange';
 import PageNotFound from '../pages/pageNotFound';
 
 import Header from '../components/header';
@@ -36,6 +37,7 @@ const Routing = (props) => {
         <PrivateRoute path='/categories/:categoryId/threads/new' exact component={ CreateThread } />
         <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
         <PrivateRoute path='/profile/:userId' exact component={ Profile } />
+        <PrivateRoute path='/profile/:userId/password-change' exact component={ PasswordChange } />
         <Route path='*' component={ PageNotFound} />
       </Switch>
       <Footer/>

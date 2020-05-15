@@ -100,7 +100,12 @@ class Profile extends React.Component {
           { this.state.isOwner &&
             <>
               <Button to='/' color="greenOutline">Edit Profile</Button>
-              <Button to='/' color="greenOutline">Change Password</Button>
+              <Button 
+                to={`/profile/${user.id}/password-change`} 
+                color="greenOutline"
+              >
+                Change Password
+              </Button>
             </>
           }
           <Button to='/' color="greenOutline">{ postsBtnText }</Button>
