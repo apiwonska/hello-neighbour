@@ -16,9 +16,7 @@ import {
 } from '../../../components/styledButtons';
 import { resetPassword } from '../../../redux/actions';
 import { 
-  required,
-  isEmail,
-  composeValidators  
+  emailValidator 
 } from '../../../utils/validators';
 
 
@@ -37,8 +35,6 @@ class PasswordReset extends React.Component {
   }
 
   render() {
-    const emailValidator = composeValidators(required, isEmail);
-
     return (
       <div>
         <h2>Password Reset</h2>

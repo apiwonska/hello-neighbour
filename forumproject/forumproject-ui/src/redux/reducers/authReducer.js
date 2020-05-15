@@ -8,6 +8,9 @@ import {
   LOGIN_USER_FULFILLED,
   LOGIN_USER_ERRORS,
   LOGOUT_USER,
+  CHANGE_PASSWORD_PENDING,
+  CHANGE_PASSWORD_FULFILLED,
+  CHANGE_PASSWORD_ERRORS
 } from '../actions/types';
 
 const cookies = new Cookies();
@@ -35,19 +38,24 @@ const INITIAL_STATE = {
 };
 
 const reducer = (state=INITIAL_STATE, action) => {
+  let token = null;
+  let user = null;
+
   switch (action.type) {
 
     case REGISTER_USER_PENDING:
     case LOGIN_USER_PENDING:
+    case CHANGE_PASSWORD_PENDING:
       return {
         ...state,
         processing: true,
+        errors: {}
       };
     
     case REGISTER_USER_FULFILLED:
     case LOGIN_USER_FULFILLED:
-      const token = action.payload['token'];
-      const user = action.payload['user'];
+      token = action.payload['token'];
+      user = action.payload['user'];
       return {
         ...state,
         processing: false, 
@@ -63,6 +71,22 @@ const reducer = (state=INITIAL_STATE, action) => {
         processing: false, 
         authenticated: '', 
         user: {}, 
+        errors: action.payload
+      };
+    
+    case CHANGE_PASSWORD_FULFILLED:
+      token = action.payload['token'];
+      return {
+        ...state,
+        processing: false,
+        authenticated: token,
+        errors: {}
+      };
+
+    case CHANGE_PASSWORD_ERRORS:
+      return {
+        ...state,
+        processing: false,
         errors: action.payload
       };
     

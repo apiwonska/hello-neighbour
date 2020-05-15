@@ -9,11 +9,17 @@ export const LOGIN_USER_ERRORS = 'login_user_errors';
 
 export const LOGOUT_USER = 'logout_user';
 
+export const RESET_PASSWORD_PENDING = 'reset_password_pending';
 export const RESET_PASSWORD_FULFILLED = 'reset_password_fulfilled';
 export const RESET_PASSWORD_ERRORS = 'reset_password_errors';
 
+export const RESET_PASSWORD_CONFIRM_PENDING = 'reset_password_confirm_pending';
 export const RESET_PASSWORD_CONFIRM_FULFILLED = 'reset_password_confirm_fulfilled';
 export const RESET_PASSWORD_CONFIRM_ERRORS = 'reset_password_confirm_errors';
+
+export const CHANGE_PASSWORD_PENDING = 'change_password_pending';
+export const CHANGE_PASSWORD_FULFILLED = 'change_password_fulfilled';
+export const CHANGE_PASSWORD_ERRORS = 'change_password_errors';
 
 // FORUM
 

@@ -17,10 +17,8 @@ import {
 import { confirmPasswordReset } from '../../../redux/actions';
 import {
   required,
-  minLength,
-  maxLength,
-  matchPassword,
-  composeValidators
+  passwordValidator,
+  password2Validator
 } from '../../../utils/validators';
 
 
@@ -55,8 +53,13 @@ class PasswordResetConfirm extends React.Component {
   }
 
   render() {
-    
-    const passwordValidator = composeValidators(required, minLength(8), maxLength(128));
+    if (this.state.passwordChanged) {
+      return (
+        <div>
+          Password was changed. You can <Link to={'/auth'}>log in</Link> now.
+        </div>
+      )
+    };
 
     return(
       <>
@@ -111,7 +114,7 @@ class PasswordResetConfirm extends React.Component {
                   <Label htmlFor="password2">Confirm password:</Label>
                   <Field 
                     name="password2" 
-                    validate={composeValidators(required, matchPassword(values['password']))}
+                    validate={password2Validator(values['password'])}
                   >
                     {({input, meta:{touched, error} }) => (
                       <>
@@ -132,10 +135,6 @@ class PasswordResetConfirm extends React.Component {
             </form>
           )}}
         </FinalForm>
-
-        { this.state.passwordChanged &&
-          <p>Password was changed. You can <Link to={'/auth'}>log in</Link> now.</p> 
-        }
       </>
     );
   }
