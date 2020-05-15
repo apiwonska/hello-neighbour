@@ -32,8 +32,3 @@ export const renderPageError = (err) => {
     return <DefaultError/>;
   }
 };
-
-export const FormError = styled.p`
-  color: ${theme.colors.errorMsgText};
-  font-size: 14px;
-`;
