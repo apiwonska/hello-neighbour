@@ -14,12 +14,10 @@ import {
 } from '../../../components/styledButtons';
 import { register } from '../../../redux/actions';
 import {
-  required,
-  minLength,
-  maxLength,
-  isEmail,
-  matchPassword,
-  composeValidators
+  usernameValidator,
+  emailValidator,
+  passwordValidator,
+  password2Validator
 } from '../../../utils/validators';
 
 
@@ -33,9 +31,6 @@ class Registration extends React.Component {
   }
 
   render() {
-    const usernameValidator = composeValidators(required, minLength(3), maxLength(150));
-    const emailValidator = composeValidators(required, isEmail);
-    const passwordValidator = composeValidators(required, minLength(8), maxLength(128));
 
     return (
       <div>
@@ -82,7 +77,7 @@ class Registration extends React.Component {
                   <Label htmlFor="password2">Confirm Password:</Label>
                   <Field 
                     name="password2" 
-                    validate={composeValidators(required, matchPassword(values['password']))}>
+                    validate={password2Validator(values['password'])}>
                     {({ input, meta:{touched, error, submitError} }) => (
                       <>
                         <Input {...input} type="password"/>

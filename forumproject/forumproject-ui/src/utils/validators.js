@@ -33,3 +33,23 @@ export const matchPassword = password => value => {
 export const composeValidators = (...validators) => value => {
   return [...validators].reduce((acc, curr) => acc || curr(value), undefined);
 }
+
+export const usernameValidator = composeValidators(
+  required, 
+  minLength(3), 
+  maxLength(150));
+
+export const emailValidator = composeValidators(
+  required, 
+  isEmail);
+
+export const passwordValidator = composeValidators(
+  required, 
+  minLength(8), 
+  maxLength(128));
+
+export const password2Validator = (password) => {
+  return composeValidators(
+    required, 
+    matchPassword(password));
+};
