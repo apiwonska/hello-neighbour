@@ -38,6 +38,16 @@ export const Content = styled.div`
   margin-bottom: 10px;
 `;
 
+export const StyledTextArea = styled.textarea`
+  width: 100%;
+  font-size: 14px;
+  height: auto;
+  border: none;
+  font-family: ${theme.fonts.default};
+  resize: vertical;
+  margin-bottom: 10px;
+`;
+
 export const Footer = styled.div`
   display: flex;
   justify-content: end;

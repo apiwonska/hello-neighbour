@@ -58,7 +58,7 @@ class Thread extends React.Component {
           <PostHeader>
             <AvatarThumbnail src={post.user.avatar_thumbnail} alt="Avatar thumbnail"/>
             <PostHeaderInnerWrapper>
-              <UserLink UserLink to={`/profile/${post.user.id}`} >
+              <UserLink to={`/profile/${post.user.id}`} >
                 { post.user.username }
               </UserLink>
               <DateSpan>
