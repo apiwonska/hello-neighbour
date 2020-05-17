@@ -39,6 +39,16 @@ class ThreadSerializer(serializers.ModelSerializer):
         return representation
 
 
+class ThreadShortSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Thread
+        fields = ['id', 'title', 'category']
+        extra_kwargs = {
+            'title': {'read_only': True}
+        }
+
+
 class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -52,4 +62,5 @@ class PostSerializer(serializers.ModelSerializer):
         """
         representation = super().to_representation(instance)
         representation['user'] = UserSerializer(instance.user).data
+        representation['thread'] = ThreadShortSerializer(instance.thread).data
         return representation
