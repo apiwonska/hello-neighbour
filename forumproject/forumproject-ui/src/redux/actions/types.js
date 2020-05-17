@@ -45,6 +45,10 @@ export const FETCH_POSTS_BY_THREAD_PENDING = 'fetch_posts_by_thread_pending';
 export const FETCH_POSTS_BY_THREAD_FULFILLED = 'fetch_posts_by_thread_fulfilled';
 export const FETCH_POSTS_BY_THREAD_ERRORS = 'fetch_posts_by_thread_errors';
 
+export const FETCH_POSTS_BY_USER_PENDING = 'fetch_posts_by_user_pending';
+export const FETCH_POSTS_BY_USER_FULFILLED = 'fetch_posts_by_user_fulfilled';
+export const FETCH_POSTS_BY_USER_ERRORS = 'fetch_posts_by_user_errors';
+
 export const CREATE_POST_FULFILLED = 'create_post_fulfilled';
 export const CREATE_POST_ERRORS = 'create_post_errors';
 
