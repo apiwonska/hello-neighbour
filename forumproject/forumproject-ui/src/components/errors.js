@@ -15,9 +15,9 @@ export const DefaultError = () => {
   )
 };
 
-export const PageNotFound = () => {
+export const NotFound = () => {
   return (
-    <Error message='Page not found'/>
+    <Error message='Not found'/>
   )
 };
 
@@ -27,7 +27,7 @@ export const renderPageError = (err) => {
     const error404 = (typeof errorMessage === 'string') && errorMessage.includes('404');
 
     if (error404) {
-      return <PageNotFound/>;
+      return <NotFound/>;
     }
     return <DefaultError/>;
   }

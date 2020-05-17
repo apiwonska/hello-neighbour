@@ -13,7 +13,7 @@ import {
   SecondaryText,
   LinkButton
 } from './style.js';
-import { PageNotFound, DefaultError } from '../../components/errors';
+import { NotFound, DefaultError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
 import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
@@ -72,7 +72,7 @@ class ThreadList extends React.Component {
     }
 
     if (categories.fetched && !category) {
-      return <PageNotFound/>;
+      return <NotFound/>;
     };
 
     if (categories.errors) {
