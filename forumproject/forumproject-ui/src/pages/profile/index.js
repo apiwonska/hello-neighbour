@@ -101,14 +101,21 @@ class Profile extends React.Component {
             <>
               <Button to='/' color="greenOutline">Edit Profile</Button>
               <Button 
-                to={`/profile/${user.id}/password-change`} 
+                to={`/profile/password-change`} 
                 color="greenOutline"
               >
                 Change Password
               </Button>
             </>
           }
-          <Button to='/' color="greenOutline">{ postsBtnText }</Button>
+          <Button 
+            to={`/profile/posts`}
+            color = "greenOutline" 
+          >
+            {
+              this.state.isOwner ? 'Your posts' : 'User\'s posts'
+            }
+          </Button>
         </ContainerDiv>
       )
     };
