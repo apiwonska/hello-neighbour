@@ -14,6 +14,7 @@ import ThreadList from '../pages/threadList';
 import CreateThread from '../pages/createThread';
 import Thread from '../pages/thread';
 import Profile from '../pages/profile';
+import EditProfile from '../pages/editProfile';
 import UserPosts from '../pages/userPosts';
 import PasswordChange from '../pages/passwordChange';
 import NotFound from '../pages/notFound';
@@ -39,6 +40,7 @@ const Routing = (props) => {
         <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
         <PrivateRoute path='/profile/password-change' exact component={ PasswordChange } />
         <PrivateRoute path='/profile/posts' exact component={ UserPosts } />
+        <PrivateRoute path='/profile/edit' exact component={ EditProfile } />
         <PrivateRoute path='/profile/:userId' exact component={ Profile } />
         <Route path='*' component={ NotFound} />
       </Switch>
