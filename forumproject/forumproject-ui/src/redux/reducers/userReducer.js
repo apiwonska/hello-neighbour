@@ -5,6 +5,9 @@ import {
   UPDATE_USER_PENDING,
   UPDATE_USER_FULFILLED,
   UPDATE_USER_ERRORS,
+  UPLOAD_AVATAR_PENDING,
+  UPLOAD_AVATAR_FULFILLED,
+  UPLOAD_AVATAR_ERRORS,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -13,7 +16,9 @@ const INITIAL_STATE = {
   data: {},
   errors: null,
   updating: false,
-  updateErrors: null,
+  updateErrors: {},
+  uploading: {},
+  uploadErrors: {},
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -27,9 +32,25 @@ const reducer = (state = INITIAL_STATE, action) => {
     case UPDATE_USER_PENDING:
       return { ...state, updating: true };
     case UPDATE_USER_FULFILLED:
-      return { ...state, updating: false, data: action.payload };
+      return {
+        ...state,
+        updating: false,
+        data: action.payload,
+        updateErrors: {},
+      };
     case UPDATE_USER_ERRORS:
       return { ...state, updating: false, updateErrors: action.payload };
+    case UPLOAD_AVATAR_PENDING:
+      return { ...state, uploading: true };
+    case UPLOAD_AVATAR_FULFILLED:
+      return {
+        ...state,
+        uploading: false,
+        data: action.payload,
+        uploadErrors: {},
+      };
+    case UPLOAD_AVATAR_ERRORS:
+      return { ...state, uploading: false, uploadErrors: action.payload };
     default:
       return state;
   }
