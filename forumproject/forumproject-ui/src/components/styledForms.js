@@ -16,6 +16,10 @@ export const Label = styled.label``;
 
 export const Input = styled.input``;
 
+export const TextArea = styled.textarea`
+  width: 100%;
+  `;
+
 export const FormError = styled.div`
   color: ${ theme.colors.errorMsgText };
   font-size: 12px;
