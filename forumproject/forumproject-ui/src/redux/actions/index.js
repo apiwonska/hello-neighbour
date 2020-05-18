@@ -307,3 +307,21 @@ export const fetchUser = (userId) => async dispatch => {
     })
   }
 };
+
+export const updateUser = (data, userId) => async dispatch => {
+  dispatch({
+    type: types.UPDATE_USER_PENDING
+  });
+  try {
+    const response = await forum().patch(`/api/users/${userId}/`, data);
+    dispatch({
+      type: types.UPDATE_USER_FULFILLED,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: types.UPDATE_USER_ERRORS,
+      payload: err.response.data
+    })
+  }
+};

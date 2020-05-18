@@ -62,3 +62,7 @@ export const DELETE_POST_ERRORS = 'delete_post_errors';
 export const FETCH_USER_PENDING = 'fetch_user_pending';
 export const FETCH_USER_FULFILLED = 'fetch_user_fulfilled';
 export const FETCH_USER_ERRORS = 'fetch_user_errors';
+
+export const UPDATE_USER_PENDING = 'update_user_pending';
+export const UPDATE_USER_FULFILLED = 'update_user_fulfilled';
+export const UPDATE_USER_ERRORS = 'update_user_errors';
