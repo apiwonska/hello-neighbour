@@ -52,7 +52,6 @@ class EditProfile extends React.Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
-    // console.log('avatar', this.state.selectedFile, this.state.selectedFile.name, formData)
     this.props.uploadAvatar(formData, userId);
   };
 
@@ -76,8 +75,9 @@ class EditProfile extends React.Component {
             </ImageWrapper>
             <input type="file" onChange={this.handleFileSelect} />
             <button onClick={this.handleFileUpload}>Upload</button>
-            {/* {console.log(user.uploadErrors)} */}
-            {/* <FormError></FormError> */}
+            {user.updateErrors && user.uploadErrors.avatar && (
+              <FormError>{user.uploadErrors.avatar}</FormError>
+            )}
           </div>
 
           <FinalForm
