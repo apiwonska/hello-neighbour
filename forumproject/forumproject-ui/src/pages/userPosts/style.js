@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 
 import theme from '../../layout/utils/theme';
 
-
 export const PostWrapper = styled.div`
-  background-color: ${ theme.colors.white };  
+  background-color: ${theme.colors.white};
   padding: 10px;
   margin-bottom: 20px;
-  box-shadow: 0 0 4px ${ theme.colors.neutralMidLight };
-  border-radius: ${ theme.radius.sm };
+  box-shadow: 0 0 4px ${theme.colors.neutralMidLight};
+  border-radius: ${theme.radius.sm};
 `;
 
 export const PostHeader = styled.div`
@@ -28,9 +27,9 @@ export const ThreadLink = styled(Link)`
   color: ${theme.colors.black};
 `;
 
-export const DateSpan = styled.span `
+export const DateSpan = styled.span`
   font-size: 12px;
-  color: ${ theme.colors.neutralMidDark};
+  color: ${theme.colors.neutralMidDark};
 `;
 
 export const Content = styled.div`

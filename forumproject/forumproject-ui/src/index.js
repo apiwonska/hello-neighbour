@@ -6,19 +6,16 @@ import store from './redux/store';
 import Layout from './layout/Layout';
 import Routing from './routing';
 
-class App extends React.Component{
+class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
         <Layout>
-          <Routing/> 
+          <Routing />
         </Layout>
       </Provider>
-    )
+    );
   }
 }
 
-ReactDOM.render(  
-    <App/>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));

@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Field, Form as FinalForm } from "react-final-form";
-import { Link } from "react-router-dom";
-import _ from "lodash";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, Form as FinalForm } from 'react-final-form';
+import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import {
   PostWrapper,
@@ -12,13 +12,13 @@ import {
   Content,
   Footer,
   StyledTextArea,
-} from "./style";
-import { renderPageError } from "../../components/errors";
-import Spinner from "../../components/spinner";
-import { ContainerDiv } from "../../components/styledDivs";
-import { fetchPostsByUser, updatePost, deletePost } from "../../redux/actions";
-import { formatTime } from "../../utils";
-import { required } from "../../utils/validators";
+} from './style';
+import { renderPageError } from '../../components/errors';
+import Spinner from '../../components/spinner';
+import { ContainerDiv } from '../../components/styledDivs';
+import { fetchPostsByUser, updatePost, deletePost } from '../../redux/actions';
+import { formatTime } from '../../utils';
+import { required } from '../../utils/validators';
 
 class UserPosts extends React.Component {
   state = {
@@ -30,16 +30,16 @@ class UserPosts extends React.Component {
     await this.props.fetchPostsByUser(userId);
   };
 
-  handleDeletePost = postId => {
+  handleDeletePost = (postId) => {
     this.props.deletePost(postId);
   };
 
-  handleUpdatePost = async values => {
+  handleUpdatePost = async (values) => {
     await this.props.updatePost(values, String(this.state.editingPost));
     this.setState({ editingPost: null });
   };
 
-  handleShowUpdateForm = postId => {
+  handleShowUpdateForm = (postId) => {
     this.setState({ editingPost: postId });
   };
 
@@ -50,7 +50,7 @@ class UserPosts extends React.Component {
   renderPostList = () => {
     const { posts } = this.props;
 
-    const renderHeader = post => (
+    const renderHeader = (post) => (
       <PostHeader>
         <PostHeaderInnerWrapper>
           <Link
@@ -63,7 +63,7 @@ class UserPosts extends React.Component {
       </PostHeader>
     );
 
-    const postsList = posts.data.results.map(post => {
+    const postsList = posts.data.results.map((post) => {
       // Renders the update post form
       if (this.state.editingPost === post.id) {
         return (
@@ -71,7 +71,7 @@ class UserPosts extends React.Component {
             {renderHeader(post)}
             <FinalForm
               onSubmit={this.handleUpdatePost}
-              initialValues={{ content: post["content"] }}
+              initialValues={{ content: post.content }}
             >
               {({ handleSubmit, hasValidationErrors }) => (
                 <form onSubmit={handleSubmit}>
@@ -135,7 +135,7 @@ class UserPosts extends React.Component {
   }
 }
 
-const mapsToProps = state => {
+const mapsToProps = (state) => {
   return {
     auth: state.auth,
     posts: state.postsByUser,

@@ -2,12 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faBars
-} from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faBars } from '@fortawesome/free-solid-svg-icons';
 
-import { 
+import {
   NavSection,
   NavContainerDiv,
   BrandDiv,
@@ -19,18 +16,18 @@ import {
   NavLiBtn,
   NavToggleButton,
 } from './style';
-import LogoImgSrc from '../../img/logo.png'
+import LogoImgSrc from '../../img/logo.png';
 import { logOut } from '../../redux/actions';
 
 class Header extends React.Component {
   state = {
     menuIsOpen: false,
-  }
+  };
 
   toggleMenu() {
-    this.setState({ 
-      menuIsOpen: !this.state.menuIsOpen 
-    })
+    this.setState({
+      menuIsOpen: !this.state.menuIsOpen,
+    });
   }
 
   renderMenu() {
@@ -38,62 +35,55 @@ class Header extends React.Component {
       return (
         <>
           <NavLi>
-            <NavLink to='/'>Main</NavLink>
+            <NavLink to="/">Main</NavLink>
           </NavLi>
           <NavLi>
             <NavLink to={`/profile/${this.props.userId}`}>Profile</NavLink>
           </NavLi>
           <NavLi>
-            <NavLiBtn onClick={()=> this.props.logOut()}>Logout</NavLiBtn>
+            <NavLiBtn onClick={() => this.props.logOut()}>Logout</NavLiBtn>
           </NavLi>
         </>
-      )
-    } else {
-      return (
-        <>
-          <NavLi>
-            <NavLink to={'/auth'}>Log In</NavLink>
-          </NavLi>
-          <NavLi>
-            <NavLink to={'/register'}>Register</NavLink>
-          </NavLi>
-        </>
-      )
+      );
     }
+    return (
+      <>
+        <NavLi>
+          <NavLink to="/auth">Log In</NavLink>
+        </NavLi>
+        <NavLi>
+          <NavLink to="/register">Register</NavLink>
+        </NavLi>
+      </>
+    );
   }
 
   render() {
-
-    return(
+    return (
       <NavSection>
         <NavContainerDiv>
           <BrandDiv>
-            <Link to='/'><LogoImg src={LogoImgSrc} /></Link>
+            <Link to="/">
+              <LogoImg src={LogoImgSrc} />
+            </Link>
           </BrandDiv>
           <NavToggleButton onClick={this.toggleMenu.bind(this)}>
-            <FontAwesomeIcon 
-              icon={!this.state.menuIsOpen? faBars : faTimes}
-            />
+            <FontAwesomeIcon icon={!this.state.menuIsOpen ? faBars : faTimes} />
           </NavToggleButton>
-          <Nav>            
-            <NavUl showMenu={this.state.menuIsOpen}>
-              { this.renderMenu() }
-            </NavUl>
+          <Nav>
+            <NavUl showMenu={this.state.menuIsOpen}>{this.renderMenu()}</NavUl>
           </Nav>
         </NavContainerDiv>
       </NavSection>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
-  return (
-    {
-      authenticated: state.auth.authenticated,
-      userId: state.auth.user.id
-    }
-  )
-}
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth.authenticated,
+    userId: state.auth.user.id,
+  };
+};
 
 export default connect(mapStateToProps, { logOut })(Header);
-

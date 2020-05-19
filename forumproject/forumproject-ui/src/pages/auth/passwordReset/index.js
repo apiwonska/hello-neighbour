@@ -9,59 +9,55 @@ import {
   FormGroup,
   Label,
   FormError,
-  FormWrapper
+  FormWrapper,
 } from '../../../components/styledForms';
-import {
-  SubmitButtonSmall
-} from '../../../components/styledButtons';
+import { SubmitButtonSmall } from '../../../components/styledButtons';
 import { resetPassword } from '../../../redux/actions';
-import { 
-  emailValidator 
-} from '../../../utils/validators';
-
+import { emailValidator } from '../../../utils/validators';
 
 class PasswordReset extends React.Component {
-
-  onSubmit = async(formProps) => {
+  onSubmit = async (formProps) => {
     await this.props.resetPassword(formProps);
 
     const errors = this.props.passwordReset.emailErrors;
     if (!_.isEmpty(errors)) return errors;
     if (this.props.passwordReset.emailSent) {
       this.props.history.push('/password-reset/confirm', {
-        emailSent: true
+        emailSent: true,
       });
     }
-  }
+  };
 
   render() {
     return (
       <div>
         <h2>Password Reset</h2>
 
-        <div>
-          We will send you an authentication token to your email.
-        </div>
+        <div>We will send you an authentication token to your email.</div>
 
         <FinalForm onSubmit={this.onSubmit}>
-          {({handleSubmit, pristine, hasValidationErrors}) => (
+          {({ handleSubmit, pristine, hasValidationErrors }) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <FormGroup>
                   <Label htmlFor="email">Email:</Label>
-                  <Field name="email" validate={emailValidator} >
-                    {({input, meta: {touched, error, submitError} }) => (
+                  <Field name="email" validate={emailValidator}>
+                    {({ input, meta: { touched, error, submitError } }) => (
                       <>
-                        <Input {...input} type="email" placeholder="Enter your email" />
+                        <Input
+                          {...input}
+                          type="email"
+                          placeholder="Enter your email"
+                        />
                         <FormError>
-                          { touched && (error || submitError) }
+                          {touched && (error || submitError)}
                         </FormError>
                       </>
                     )}
                   </Field>
                 </FormGroup>
-                <SubmitButtonSmall 
-                  type="submit" 
+                <SubmitButtonSmall
+                  type="submit"
                   value="Reset Password"
                   disable={pristine || hasValidationErrors}
                 />
@@ -71,21 +67,20 @@ class PasswordReset extends React.Component {
         </FinalForm>
 
         <div>
-          If you already have a token click this <Link to='/password-reset/confirm'>link</Link>.
-        </div>
-
+          If you already have a token click this
+{' '}
+          <Link to="/password-reset/confirm">link</Link>
+.
+</div>
       </div>
-    )
+    );
   }
-};
-
-const mapStateToProps = state => {
-  return (
-    {
-      passwordReset: state.passwordReset
-    }
-  )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    passwordReset: state.passwordReset,
+  };
+};
 
 export default connect(mapStateToProps, { resetPassword })(PasswordReset);

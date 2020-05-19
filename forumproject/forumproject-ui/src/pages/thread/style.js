@@ -14,19 +14,19 @@ export const NavLink = styled(Link)`
 `;
 
 export const FirstPostWrapper = styled.div`
-  background-color: ${ theme.colors.neutralExtraLight };  
+  background-color: ${theme.colors.neutralExtraLight};
   padding: 10px;
   margin-bottom: 20px;
-  box-shadow: 0 0 4px ${ theme.colors.neutralMidLight };
-  border-radius: ${ theme.radius.sm };
+  box-shadow: 0 0 4px ${theme.colors.neutralMidLight};
+  border-radius: ${theme.radius.sm};
 `;
 
 export const PostWrapper = styled.div`
-  background-color: ${ theme.colors.white };  
+  background-color: ${theme.colors.white};
   padding: 10px;
   margin-bottom: 20px;
-  box-shadow: 0 0 4px ${ theme.colors.neutralMidLight };
-  border-radius: ${ theme.radius.sm };
+  box-shadow: 0 0 4px ${theme.colors.neutralMidLight};
+  border-radius: ${theme.radius.sm};
 `;
 
 export const PostHeader = styled.div`
@@ -45,9 +45,9 @@ export const UserLink = styled(Link)`
   color: ${theme.colors.black};
 `;
 
-export const DateSpan = styled.span `
+export const DateSpan = styled.span`
   font-size: 12px;
-  color: ${ theme.colors.neutralMidDark};
+  color: ${theme.colors.neutralMidDark};
 `;
 
 export const ThreadTitle = styled.h4`
@@ -77,7 +77,7 @@ export const StyledTextArea = styled.textarea`
 export const SubmitButton = styled(SubmitButtonSmall)`
   width: auto;
   margin: 0 0 0 auto;
-  font-family: ${ theme.fonts.default };
+  font-family: ${theme.fonts.default};
   /* &:hover {
     cursor: pointer;
   } */

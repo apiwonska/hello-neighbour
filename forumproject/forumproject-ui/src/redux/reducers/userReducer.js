@@ -8,7 +8,7 @@ import {
   UPLOAD_AVATAR_PENDING,
   UPLOAD_AVATAR_FULFILLED,
   UPLOAD_AVATAR_ERRORS,
-} from "../actions/types";
+} from '../actions/types';
 
 const INITIAL_STATE = {
   fetching: false,

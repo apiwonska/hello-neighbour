@@ -12,13 +12,13 @@ const mainTimeFormat = (str) => {
 
   if (timeDiff > week) {
     return moment(str).format('LL');
-  } else if (timeDiff > day) {
-    return moment(str).calendar();
-  } else {
-    return moment(str).startOf('second').fromNow();
   }
+  if (timeDiff > day) {
+    return moment(str).calendar();
+  }
+  return moment(str).startOf('second').fromNow();
 };
 
 export const formatTime = {
-  main: mainTimeFormat
-}
+  main: mainTimeFormat,
+};

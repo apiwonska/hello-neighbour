@@ -18,11 +18,11 @@ export const CategoryHeader = styled.h2`
 `;
 
 export const ThreadWrapper = styled.div`
-  background-color: ${ theme.colors.neutralExtraLight };  
+  background-color: ${theme.colors.neutralExtraLight};
   padding: 5px;
   margin-bottom: 20px;
-  box-shadow: 0 0 4px ${ theme.colors.neutralLight };
-  border-radius: ${ theme.radius.sm };
+  box-shadow: 0 0 4px ${theme.colors.neutralLight};
+  border-radius: ${theme.radius.sm};
 `;
 
 export const TitleRowWrapper = styled.div`
@@ -34,12 +34,12 @@ export const ThreadLink = styled(Link)`
   margin: 5px 0 15px;
   font-weight: 600;
   text-decoration: none;
-  color: ${ theme.colors.black };
+  color: ${theme.colors.black};
 `;
 
-export const ThreadLengthSpan = styled.span `
+export const ThreadLengthSpan = styled.span`
   font-size: 14px;
-  color: ${ theme.colors.neutralMidDark};
+  color: ${theme.colors.neutralMidDark};
 `;
 
 export const DateWrapper = styled.div`
@@ -49,6 +49,6 @@ export const DateWrapper = styled.div`
 
 export const SecondaryText = styled.span`
   font-size: 14px;
-  color: ${ theme.colors.neutralMidDark};
+  color: ${theme.colors.neutralMidDark};
   margin-right: 15px;
 `;

@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const StyledWrapper = styled.div`
-  min-height:100vh;
+  min-height: 100vh;
   min-width: 300px;
   display: flex;
   flex-direction: column;
@@ -39,12 +39,10 @@ const StyledWrapper = styled.div`
 
 const Layout = ({ children }) => (
   <ThemeProvider theme={theme}>
-    <React.Fragment>
-      <GlobalStyle/>
-      <StyledWrapper>
-        { children }
-      </StyledWrapper>
-    </React.Fragment>
+    <>
+      <GlobalStyle />
+      <StyledWrapper>{children}</StyledWrapper>
+    </>
   </ThemeProvider>
 );
 

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 import { SubmitButtonSmall, ButtonSmall } from '../../components/styledButtons';
 
-
 export const Button = styled(ButtonSmall)`
   width: 150px;
   margin: 0 10px;

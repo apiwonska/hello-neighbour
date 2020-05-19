@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import theme from '../../layout/utils/theme';
 
-const navbarHeight = "60px";
+const navbarHeight = '60px';
 const navbarMediaBreakpoint = theme.media.landscapePhone;
 
 export const NavSection = styled.section`
@@ -14,16 +14,16 @@ export const NavSection = styled.section`
   margin-bottom: 40px;
 `;
 
-export const NavContainerDiv = styled.div`  
+export const NavContainerDiv = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  
+
   ${navbarMediaBreakpoint} {
     display: flex;
   }
 `;
 
-export const BrandDiv = styled.div`    
+export const BrandDiv = styled.div`
   display: flex;
   align-items: center;
   height: ${navbarHeight};
@@ -38,13 +38,13 @@ export const Nav = styled.nav`
   margin-left: auto;
 `;
 
-export const NavToggleButton = styled.button `
+export const NavToggleButton = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;
   color: ${theme.colors.black};
   background-color: ${theme.colors.white};
-  border:0;
+  border: 0;
   margin: 0;
   padding: 0;
 
@@ -53,17 +53,16 @@ export const NavToggleButton = styled.button `
   }
 `;
 
-const StyledUl = styled.ul` 
-`;
+const StyledUl = styled.ul``;
 
 export const NavUl = styled(StyledUl)`
   position: absolute;
-  display: ${props => !props.showMenu ? 'none' : 'block'}; 
+  display: ${(props) => (!props.showMenu ? 'none' : 'block')};
   width: 100%;
   list-style: none;
   margin: 0;
   padding: 0;
-  background-color: ${theme.colors.white};    
+  background-color: ${theme.colors.white};
   box-shadow: 0 4px 4px ${theme.colors.neutralLight};
 
   ${navbarMediaBreakpoint} {
@@ -76,8 +75,8 @@ export const NavUl = styled(StyledUl)`
 export const NavLi = styled.li`
   display: flex;
   align-items: center;
-  justify-content: center;  
-  height: 40px;  
+  justify-content: center;
+  height: 40px;
 
   :hover {
     color: ${theme.colors.black};
@@ -106,7 +105,7 @@ export const NavLiBtn = styled.button`
   border: 0;
   padding: 0 20px;
   height: 100%;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 
   :hover {
     cursor: pointer;

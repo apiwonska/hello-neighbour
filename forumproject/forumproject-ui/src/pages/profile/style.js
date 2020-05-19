@@ -2,9 +2,7 @@ import styled from 'styled-components';
 
 import theme from '../../layout/utils/theme';
 
-export const ImageWrapper = styled.div`
-  
-`;
+export const ImageWrapper = styled.div``;
 
 export const Avatar = styled.img`
   display: block;

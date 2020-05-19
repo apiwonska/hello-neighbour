@@ -6,13 +6,13 @@ const theme = {
   fonts,
   radius: {
     sm: '5px',
-    bg: '8px'
+    bg: '8px',
   },
   media: {
     landscapePhone: '@media (min-width: 576px)',
     tablet: '@media (min-width: 728px)',
-    desktop: '@media (min-width: 1024px)'
-  }
-}
+    desktop: '@media (min-width: 1024px)',
+  },
+};
 
 export default theme;

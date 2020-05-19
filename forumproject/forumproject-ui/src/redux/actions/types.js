@@ -14,7 +14,8 @@ export const RESET_PASSWORD_FULFILLED = 'reset_password_fulfilled';
 export const RESET_PASSWORD_ERRORS = 'reset_password_errors';
 
 export const RESET_PASSWORD_CONFIRM_PENDING = 'reset_password_confirm_pending';
-export const RESET_PASSWORD_CONFIRM_FULFILLED = 'reset_password_confirm_fulfilled';
+export const RESET_PASSWORD_CONFIRM_FULFILLED =
+  'reset_password_confirm_fulfilled';
 export const RESET_PASSWORD_CONFIRM_ERRORS = 'reset_password_confirm_errors';
 
 export const CHANGE_PASSWORD_PENDING = 'change_password_pending';
@@ -29,9 +30,12 @@ export const FETCH_CATEGORIES_FULFILLED = 'fetch_categories_fulfilled';
 export const FETCH_CATEGORIES_ERRORS = 'fetch_categories_errors';
 
 // Threads
-export const FETCH_THREADS_BY_CATEGORY_PENDING = 'fetch_threads_by_category_pending';
-export const FETCH_THREADS_BY_CATEGORY_FULFILLED = 'fetch_threads_by_category_fulfilled';
-export const FETCH_THREADS_BY_CATEGORY_ERRORS = 'fetch_threads_by_category_errors';
+export const FETCH_THREADS_BY_CATEGORY_PENDING =
+  'fetch_threads_by_category_pending';
+export const FETCH_THREADS_BY_CATEGORY_FULFILLED =
+  'fetch_threads_by_category_fulfilled';
+export const FETCH_THREADS_BY_CATEGORY_ERRORS =
+  'fetch_threads_by_category_errors';
 
 export const FETCH_THREAD_PENDING = 'fetch_thread_pending';
 export const FETCH_THREAD_FULFILLED = 'fetch_thread_fulfilled';
@@ -42,7 +46,8 @@ export const CREATE_THREAD_ERRORS = 'create_thread_errors';
 
 // Posts
 export const FETCH_POSTS_BY_THREAD_PENDING = 'fetch_posts_by_thread_pending';
-export const FETCH_POSTS_BY_THREAD_FULFILLED = 'fetch_posts_by_thread_fulfilled';
+export const FETCH_POSTS_BY_THREAD_FULFILLED =
+  'fetch_posts_by_thread_fulfilled';
 export const FETCH_POSTS_BY_THREAD_ERRORS = 'fetch_posts_by_thread_errors';
 
 export const FETCH_POSTS_BY_USER_PENDING = 'fetch_posts_by_user_pending';

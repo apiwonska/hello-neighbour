@@ -1,9 +1,9 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Form as FinalForm, Field } from "react-final-form";
-import _ from "lodash";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Form as FinalForm, Field } from 'react-final-form';
+import _ from 'lodash';
 
-import { ContainerDiv } from "../../components/styledDivs";
+import { ContainerDiv } from '../../components/styledDivs';
 import {
   Input,
   TextArea,
@@ -11,14 +11,14 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from "../../components/styledForms";
-import { ImageWrapper, Avatar } from "./style";
-import { emailValidator } from "../../utils/validators";
-import { SubmitButtonSmall } from "../../components/styledButtons";
-import { fetchUser, updateUser } from "../../redux/actions";
-import Spinner from "../../components/spinner";
-import { uploadAvatar } from "../../redux/actions";
+} from '../../components/styledForms';
+import { ImageWrapper, Avatar } from './style';
+import { emailValidator } from '../../utils/validators';
+import { SubmitButtonSmall } from '../../components/styledButtons';
+import { fetchUser, updateUser, uploadAvatar } from '../../redux/actions';
+import Spinner from '../../components/spinner';
 
+const x = 1;
 class EditProfile extends React.Component {
   state = {
     selectedFile: null,
@@ -28,8 +28,8 @@ class EditProfile extends React.Component {
     this.props.fetchUser(this.props.ownerId);
   };
 
-  handleUpdateInfo = initialValues => async values => {
-    values.description = values.description || "";
+  handleUpdateInfo = (initialValues) => async (values) => {
+    values.description = values.description || '';
     // Only submit the form if form values changed
     if (_.isEqual(values, initialValues)) return;
     // Username is read only
@@ -40,7 +40,7 @@ class EditProfile extends React.Component {
     if (!_.isEmpty(errors)) return errors;
   };
 
-  handleFileSelect = e => {
+  handleFileSelect = (e) => {
     this.setState({ selectedFile: e.target.files[0] });
   };
 
@@ -48,7 +48,7 @@ class EditProfile extends React.Component {
     const userId = this.props.ownerId;
     const formData = new FormData();
     formData.append(
-      "avatar",
+      'avatar',
       this.state.selectedFile,
       this.state.selectedFile.name
     );
@@ -57,7 +57,7 @@ class EditProfile extends React.Component {
 
   render() {
     // A value to ensure input id uniqueness
-    const id = "ep2";
+    const id = 'ep2';
     const { user } = this.props;
 
     if (user.fetching) {
@@ -144,7 +144,7 @@ class EditProfile extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ownerId: state.auth.user.id,
     user: state.user,

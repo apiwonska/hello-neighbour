@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 
 import { fetchCategories } from '../../redux/actions';
 import Spinner from '../../components/spinner';
-import { 
-  CategoryContainer,
-  CategoryLink
-} from './style';
+import { CategoryContainer, CategoryLink } from './style';
 import { ContainerDiv } from '../../components/styledDivs';
 import { DefaultError } from '../../components/errors';
 
@@ -19,16 +16,16 @@ class CategoryList extends React.Component {
   }
 
   renderCategoryList() {
-    const { categories } = this.props
-    const categoryList = categories.data.map(category => {
+    const { categories } = this.props;
+    const categoryList = categories.data.map((category) => {
       return (
         <CategoryContainer key={category.id}>
           <CategoryLink to={`/categories/${category.id}`}>
             {category.name}
           </CategoryLink>
         </CategoryContainer>
-      )
-    })
+      );
+    });
     return categoryList;
   }
 
@@ -36,7 +33,7 @@ class CategoryList extends React.Component {
     const { categories } = this.props;
 
     if (categories.fetching) {
-      return <Spinner/>;
+      return <Spinner />;
     }
 
     if (categories.errors) {
@@ -44,20 +41,16 @@ class CategoryList extends React.Component {
     }
 
     if (categories.fetched) {
-      return (
-        <ContainerDiv>
-          {this.renderCategoryList()}
-        </ContainerDiv>
-      );
+      return <ContainerDiv>{this.renderCategoryList()}</ContainerDiv>;
     }
     return null;
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    categories: state.categories
-  }
-}
+    categories: state.categories,
+  };
+};
 
-export default connect(mapStateToProps, {fetchCategories})(CategoryList);
+export default connect(mapStateToProps, { fetchCategories })(CategoryList);

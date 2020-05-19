@@ -9,6 +9,6 @@ const colors = {
   black: '#212F3D',
   whiteOverlay: 'rgba(255, 255, 255, 0.95)',
   errorMsgText: '#721C24',
-}
+};
 
 export default colors;

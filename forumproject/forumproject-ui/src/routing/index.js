@@ -27,32 +27,60 @@ import RestrictedRoute from './RestrictedRoute';
 const Routing = (props) => {
   return (
     <Router history={history}>
-      <Header/>
+      <Header />
       <Switch>
-        <Route path='/' exact component={ props.authenticated ? CategoryList : Home } />
-        <RestrictedRoute path='/register' exact component={ Registration } />
-        <RestrictedRoute path='/auth' exact component={ Login } />
-        <RestrictedRoute path='/logout' exact component={ Logout } />
-        <RestrictedRoute path='/password-reset' exact component={ PasswordReset } />
-        <RestrictedRoute path='/password-reset/confirm' exact component={ PasswordResetConfirm } />
-        <PrivateRoute path='/categories/:categoryId' exact component={ ThreadList } />
-        <PrivateRoute path='/categories/:categoryId/threads/new' exact component={ CreateThread } />
-        <PrivateRoute path='/categories/:categoryId/threads/:threadId' exact component={ Thread } />
-        <PrivateRoute path='/profile/password-change' exact component={ PasswordChange } />
-        <PrivateRoute path='/profile/posts' exact component={ UserPosts } />
-        <PrivateRoute path='/profile/edit' exact component={ EditProfile } />
-        <PrivateRoute path='/profile/:userId' exact component={ Profile } />
-        <Route path='*' component={ NotFound} />
+        <Route
+          path="/"
+          exact
+          component={props.authenticated ? CategoryList : Home}
+        />
+        <RestrictedRoute path="/register" exact component={Registration} />
+        <RestrictedRoute path="/auth" exact component={Login} />
+        <RestrictedRoute path="/logout" exact component={Logout} />
+        <RestrictedRoute
+          path="/password-reset"
+          exact
+          component={PasswordReset}
+        />
+        <RestrictedRoute
+          path="/password-reset/confirm"
+          exact
+          component={PasswordResetConfirm}
+        />
+        <PrivateRoute
+          path="/categories/:categoryId"
+          exact
+          component={ThreadList}
+        />
+        <PrivateRoute
+          path="/categories/:categoryId/threads/new"
+          exact
+          component={CreateThread}
+        />
+        <PrivateRoute
+          path="/categories/:categoryId/threads/:threadId"
+          exact
+          component={Thread}
+        />
+        <PrivateRoute
+          path="/profile/password-change"
+          exact
+          component={PasswordChange}
+        />
+        <PrivateRoute path="/profile/posts" exact component={UserPosts} />
+        <PrivateRoute path="/profile/edit" exact component={EditProfile} />
+        <PrivateRoute path="/profile/:userId" exact component={Profile} />
+        <Route path="*" component={NotFound} />
       </Switch>
-      <Footer/>
+      <Footer />
     </Router>
-  )
-}
+  );
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    authenticated: state.auth.authenticated
-  }
-}
+    authenticated: state.auth.authenticated,
+  };
+};
 
 export default connect(mapStateToProps)(Routing);
