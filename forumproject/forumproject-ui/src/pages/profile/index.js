@@ -99,7 +99,7 @@ class Profile extends React.Component {
           { this.renderUserData() }
           { this.state.isOwner &&
             <>
-              <Button to='/' color="greenOutline">Edit Profile</Button>
+              <Button to='/profile/edit' color="greenOutline">Edit Profile</Button>
               <Button 
                 to={`/profile/password-change`} 
                 color="greenOutline"

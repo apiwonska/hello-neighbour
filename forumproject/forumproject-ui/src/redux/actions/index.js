@@ -307,3 +307,41 @@ export const fetchUser = (userId) => async dispatch => {
     })
   }
 };
+
+export const updateUser = (data, userId) => async dispatch => {
+  dispatch({
+    type: types.UPDATE_USER_PENDING
+  });
+  try {
+    const response = await forum().patch(`/api/users/${userId}/`, data);
+    dispatch({
+      type: types.UPDATE_USER_FULFILLED,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: types.UPDATE_USER_ERRORS,
+      payload: err.response.data
+    })
+  }
+};
+
+export const uploadAvatar = (formData, userId) => async dispatch => {
+  dispatch({
+    type: types.UPLOAD_AVATAR_PENDING
+  });
+  try {
+    const instance = forum()
+    instance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+    const response = await instance.patch(`/api/users/${userId}/`, formData)
+    dispatch({
+      type: types.UPLOAD_AVATAR_FULFILLED,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: types.UPLOAD_AVATAR_ERRORS,
+      payload: err.response.data
+    })
+  }
+};

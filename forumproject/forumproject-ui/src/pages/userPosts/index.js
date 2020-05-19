@@ -73,7 +73,7 @@ class UserPosts extends React.Component {
               onSubmit={this.handleUpdatePost}
               initialValues={{ content: post["content"] }}
             >
-              {({ handleSubmit, hasValidationErrors, values }) => (
+              {({ handleSubmit, hasValidationErrors }) => (
                 <form onSubmit={handleSubmit}>
                   <>
                     <Field name="content" validate={required}>
