@@ -12,66 +12,72 @@ import {
   DateWrapper,
   SecondaryText,
   LinkButton,
-} from './style.js';
+} from './style';
 import { NotFound, DefaultError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
-import { fetchCategories, fetchThreadsByCategory } from '../../redux/actions';
+import {
+  fetchCategories as fetchCategories_,
+  fetchThreadsByCategory as fetchThreadsByCategory_,
+} from '../../redux/actions';
 import { formatTime } from '../../utils';
 
 class ThreadList extends React.Component {
   componentDidMount() {
-    const { categories } = this.props;
-    const { categoryId } = this.props.match.params;
+    const {
+      categories,
+      fetchCategories,
+      fetchThreadsByCategory,
+      match,
+    } = this.props;
+    const { categoryId } = match.params;
 
     if (!categories.fetched) {
-      this.props.fetchCategories();
+      fetchCategories();
     }
-    this.props.fetchThreadsByCategory(categoryId);
+    fetchThreadsByCategory(categoryId);
   }
 
   renderThreadList() {
-    const { threads } = this.props;
-    const { categoryId } = this.props.match.params;
+    const { threads, match } = this.props;
+    const { categoryId } = match.params;
 
     if (threads.fetching) {
       return <Spinner />;
     }
 
     if (threads.fetched) {
-      const threadsList = threads.data.results.map((thread) => {
-        return (
-          <ThreadWrapper key={thread.id}>
-            <TitleRowWrapper>
-              <ThreadLink to={`/categories/${categoryId}/threads/${thread.id}`}>
-                {thread.title}
-              </ThreadLink>
-              <ThreadLengthSpan>
-                <FontAwesomeIcon icon={faCommentAlt} /> 
-{' '}
-{thread.posts}
-              </ThreadLengthSpan>
-            </TitleRowWrapper>
-            <DateWrapper>
-              <SecondaryText>
-                Added:
-                {formatTime.main(thread.created)}
-              </SecondaryText>
-              <SecondaryText>
-                Last post:
-                {formatTime.main(thread.updated)}
-              </SecondaryText>
-            </DateWrapper>
-          </ThreadWrapper>
-        );
-      });
+      const threadsList = threads.data.results.map((thread) => (
+        <ThreadWrapper key={thread.id}>
+          <TitleRowWrapper>
+            <ThreadLink to={`/categories/${categoryId}/threads/${thread.id}`}>
+              {thread.title}
+            </ThreadLink>
+            <ThreadLengthSpan>
+              <FontAwesomeIcon icon={faCommentAlt} />
+              {thread.posts}
+            </ThreadLengthSpan>
+          </TitleRowWrapper>
+          <DateWrapper>
+            <SecondaryText>
+              Added:
+              {formatTime.main(thread.created)}
+            </SecondaryText>
+            <SecondaryText>
+              Last post:
+              {formatTime.main(thread.updated)}
+            </SecondaryText>
+          </DateWrapper>
+        </ThreadWrapper>
+      ));
       return threadsList;
     }
+    return null;
   }
 
   render() {
-    const { categories } = this.props;
-    const { categoryId } = this.props.match.params;
+    const { categories, match } = this.props;
+    const { categoryId } = match.params;
     // Looks in store for the category object for category id from params.
     const category = categories.data.find(
       (obj) => String(obj.id) === categoryId
@@ -109,14 +115,12 @@ class ThreadList extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    categories: state.categories,
-    threads: state.threadsByCategory,
-  };
-};
+const mapStateToProps = (state) => ({
+  categories: state.categories,
+  threads: state.threadsByCategory,
+});
 
 export default connect(mapStateToProps, {
-  fetchCategories,
-  fetchThreadsByCategory,
+  fetchCategories: fetchCategories_,
+  fetchThreadsByCategory: fetchThreadsByCategory_,
 })(ThreadList);

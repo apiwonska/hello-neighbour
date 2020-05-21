@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-import theme from '../layout/utils/theme';
+// import theme from '../layout/utils/theme';
 
 export const Error = (props) => {
   return <h2>{props.message}</h2>;

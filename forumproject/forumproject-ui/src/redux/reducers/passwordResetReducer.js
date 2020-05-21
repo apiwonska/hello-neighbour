@@ -7,9 +7,9 @@ import {
 
 const INITIAL_STATE = {
   emailSent: false,
-  emailErrors: [],
+  emailErrors: {},
   resetPasswordConfirmed: false,
-  passwordErrors: [],
+  resetErrors: {},
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -24,7 +24,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       return { ...INITIAL_STATE, resetPasswordConfirmed: true };
 
     case RESET_PASSWORD_CONFIRM_ERRORS:
-      return { ...INITIAL_STATE, passwordErrors: action.payload };
+      return { ...INITIAL_STATE, resetErrors: action.payload };
 
     default:
       return state;

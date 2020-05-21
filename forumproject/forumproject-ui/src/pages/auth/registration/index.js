@@ -10,7 +10,7 @@ import {
   FormWrapper,
 } from '../../../components/styledForms';
 import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { register } from '../../../redux/actions';
+import { register as register_ } from '../../../redux/actions';
 import {
   usernameValidator,
   emailValidator,
@@ -19,11 +19,14 @@ import {
 } from '../../../utils/validators';
 
 class Registration extends React.Component {
-  onSubmit = async (formProps) => {
-    await this.props.register(formProps);
+  onSubmit = async (values) => {
+    const { register } = this.props;
+    await register(values);
 
-    const { errors } = this.props.auth;
+    const { auth } = this.props;
+    const { errors } = auth;
     if (errors) return errors;
+    return null;
   };
 
   render() {
@@ -104,10 +107,8 @@ class Registration extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
-export default connect(mapStateToProps, { register })(Registration);
+export default connect(mapStateToProps, { register: register_ })(Registration);

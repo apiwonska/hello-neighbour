@@ -11,24 +11,24 @@ import {
   FormWrapper,
 } from '../../../components/styledForms';
 import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { logIn } from '../../../redux/actions';
+import { logIn as logIn_ } from '../../../redux/actions';
 import { required } from '../../../utils/validators';
 
 class LogIn extends React.Component {
   onSubmit = async (formProps) => {
-    await this.props.logIn(formProps);
+    const { logIn } = this.props;
+    await logIn(formProps);
 
-    const { errors } = this.props.auth;
-    if (errors) {
-      return errors;
-    }
+    const { auth } = this.props;
+    const { errors } = auth;
+    if (errors) return errors;
+    return null;
   };
 
   render() {
     return (
       <div>
         <h2>Log In</h2>
-
         <FinalForm onSubmit={this.onSubmit}>
           {({ handleSubmit, pristine, hasValidationErrors, submitErrors }) => (
             <form onSubmit={handleSubmit}>
@@ -38,32 +38,24 @@ class LogIn extends React.Component {
                     {submitErrors ? submitErrors.non_field_errors : ''}
                   </FormError>
                 </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="username">Username:</Label>
-                  <Field name="username" validate={required}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="text" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="password">Password:</Label>
-                  <Field name="password" validate={required}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="password" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
+                <Field name="username" validate={required}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor="username">Username:</Label>
+                      <Input {...input} type="text" />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
+                <Field name="password" validate={required}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor="password">Password:</Label>
+                      <Input {...input} type="password" />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
                 <SubmitButtonSmall
                   type="submit"
                   value="Log In"
@@ -75,25 +67,22 @@ class LogIn extends React.Component {
         </FinalForm>
         <div>
           <p>
-            If you don't have an account yet,
+            If you don&apos;t have an account&nbsp;
             <Link to="/register">register here</Link>
           </p>
           <p>
-            Did you forget your login or password? Click
-            <Link to="/password-reset">this</Link>
-{' '}
-to restore your credentials
-</p>
+            Did you forget your login or password? Click&nbsp;
+            <Link to="/password-reset">this</Link>&nbsp;to restore your
+            credentials
+          </p>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
-export default connect(mapStateToProps, { logIn })(LogIn);
+export default connect(mapStateToProps, { logIn: logIn_ })(LogIn);

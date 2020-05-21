@@ -17,30 +17,40 @@ import {
   passwordValidator,
   password2Validator,
 } from '../../utils/validators';
-import { changePassword } from '../../redux/actions';
+import { changePassword as changePassword_ } from '../../redux/actions';
 
 class PasswordChange extends React.Component {
-  state = {
-    passwordChanged: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      passwordChanged: false,
+    };
+  }
 
   onSubmit = async (values) => {
-    await this.props.changePassword(values);
+    const { changePassword } = this.props;
+    await changePassword(values);
 
-    const { errors } = this.props.auth;
+    const { auth } = this.props;
+    const { errors } = auth;
     if (!_.isEmpty(errors)) return errors;
 
     this.setState({ passwordChanged: true });
+    return null;
   };
 
   render() {
-    if (this.state.passwordChanged) {
+    const { passwordChanged } = this.state;
+    const { auth } = this.props;
+    const userId = auth.user.id;
+
+    if (passwordChanged) {
       return (
         <div>
           <p>Your password was changed!</p>
           <p>
             Go back to your
-            <Link to={`/profile/${this.props.auth.user.id}`}>profile</Link>
+            <Link to={`/profile/${userId}`}>profile</Link>
           </p>
         </div>
       );
@@ -123,10 +133,10 @@ class PasswordChange extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
-export default connect(mapStateToProps, { changePassword })(PasswordChange);
+export default connect(mapStateToProps, { changePassword: changePassword_ })(
+  PasswordChange
+);

@@ -12,20 +12,23 @@ import {
   FormWrapper,
 } from '../../../components/styledForms';
 import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { resetPassword } from '../../../redux/actions';
+import { resetPassword as resetPassword_ } from '../../../redux/actions';
 import { emailValidator } from '../../../utils/validators';
 
 class PasswordReset extends React.Component {
   onSubmit = async (formProps) => {
-    await this.props.resetPassword(formProps);
+    const { resetPassword, history } = this.props;
+    await resetPassword(formProps);
 
-    const errors = this.props.passwordReset.emailErrors;
+    const { passwordReset } = this.props;
+    const errors = passwordReset.emailErrors;
     if (!_.isEmpty(errors)) return errors;
-    if (this.props.passwordReset.emailSent) {
-      this.props.history.push('/password-reset/confirm', {
+    if (passwordReset.emailSent) {
+      history.push('/password-reset/confirm', {
         emailSent: true,
       });
     }
+    return null;
   };
 
   render() {
@@ -67,20 +70,18 @@ class PasswordReset extends React.Component {
         </FinalForm>
 
         <div>
-          If you already have a token click this
-{' '}
-          <Link to="/password-reset/confirm">link</Link>
-.
-</div>
+          If you already have a token click this{' '}
+          <Link to="/password-reset/confirm">link</Link>.
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    passwordReset: state.passwordReset,
-  };
-};
+const mapStateToProps = (state) => ({
+  passwordReset: state.passwordReset,
+});
 
-export default connect(mapStateToProps, { resetPassword })(PasswordReset);
+export default connect(mapStateToProps, { resetPassword: resetPassword_ })(
+  PasswordReset
+);

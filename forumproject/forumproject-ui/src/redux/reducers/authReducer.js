@@ -15,6 +15,11 @@ import {
 
 const cookies = new Cookies();
 
+const getUserFromCookie = () => {
+  const user = cookies.get('User');
+  return user || {};
+};
+
 const getTokenFromCookie = () => {
   const token = cookies.get('Authorization');
   const user = getUserFromCookie();
@@ -23,11 +28,6 @@ const getTokenFromCookie = () => {
   // the user will have to login to get user data
   if (noUserCookie) return '';
   return token || '';
-};
-
-const getUserFromCookie = () => {
-  const user = cookies.get('User');
-  return user || {};
 };
 
 const INITIAL_STATE = {

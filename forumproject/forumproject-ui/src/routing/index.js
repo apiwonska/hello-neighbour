@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import history from './history';
 import Login from '../pages/auth/login';
@@ -24,16 +25,12 @@ import Footer from '../components/footer';
 import PrivateRoute from './PrivateRoute';
 import RestrictedRoute from './RestrictedRoute';
 
-const Routing = (props) => {
+const Routing = ({ authenticated }) => {
   return (
     <Router history={history}>
       <Header />
       <Switch>
-        <Route
-          path="/"
-          exact
-          component={props.authenticated ? CategoryList : Home}
-        />
+        <Route path="/" exact component={authenticated ? CategoryList : Home} />
         <RestrictedRoute path="/register" exact component={Registration} />
         <RestrictedRoute path="/auth" exact component={Login} />
         <RestrictedRoute path="/logout" exact component={Logout} />
@@ -75,6 +72,10 @@ const Routing = (props) => {
       <Footer />
     </Router>
   );
+};
+
+Routing.propTypes = {
+  authenticated: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {

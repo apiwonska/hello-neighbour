@@ -16,26 +16,37 @@ import {
 import { renderPageError } from '../../components/errors';
 import Spinner from '../../components/spinner';
 import { ContainerDiv } from '../../components/styledDivs';
-import { fetchPostsByUser, updatePost, deletePost } from '../../redux/actions';
+import {
+  fetchPostsByUser as fetchPostsByUser_,
+  updatePost as updatePost_,
+  deletePost as deletePost_,
+} from '../../redux/actions';
 import { formatTime } from '../../utils';
 import { required } from '../../utils/validators';
 
 class UserPosts extends React.Component {
-  state = {
-    editingPost: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      editingPost: null,
+    };
+  }
 
-  componentDidMount = async () => {
-    const userId = this.props.auth.user.id;
-    await this.props.fetchPostsByUser(userId);
+  componentDidMount = () => {
+    const { auth, fetchPostsByUser } = this.props;
+    const userId = String(auth.user.id);
+    fetchPostsByUser(userId);
   };
 
   handleDeletePost = (postId) => {
-    this.props.deletePost(postId);
+    const { deletePost } = this.props;
+    deletePost(postId);
   };
 
   handleUpdatePost = async (values) => {
-    await this.props.updatePost(values, String(this.state.editingPost));
+    const { editingPost } = this.state;
+    const { updatePost } = this.props;
+    await updatePost(values, String(editingPost));
     this.setState({ editingPost: null });
   };
 
@@ -48,8 +59,8 @@ class UserPosts extends React.Component {
   };
 
   renderPostList = () => {
+    const { editingPost } = this.state;
     const { posts } = this.props;
-
     const renderHeader = (post) => (
       <PostHeader>
         <PostHeaderInnerWrapper>
@@ -65,7 +76,7 @@ class UserPosts extends React.Component {
 
     const postsList = posts.data.results.map((post) => {
       // Renders the update post form
-      if (this.state.editingPost === post.id) {
+      if (editingPost === post.id) {
         return (
           <PostWrapper key={post.id}>
             {renderHeader(post)}
@@ -82,7 +93,7 @@ class UserPosts extends React.Component {
                       )}
                     </Field>
                     <Footer>
-                      <button onClick={this.handleHideUpdateForm}>
+                      <button type="button" onClick={this.handleHideUpdateForm}>
                         Cancel
                       </button>
                       <button type="submit" disabled={hasValidationErrors}>
@@ -103,10 +114,16 @@ class UserPosts extends React.Component {
           {renderHeader(post)}
           <Content>{post.content}</Content>
           <Footer>
-            <button onClick={() => this.handleShowUpdateForm(post.id)}>
+            <button
+              type="button"
+              onClick={() => this.handleShowUpdateForm(post.id)}
+            >
               Update
             </button>
-            <button onClick={() => this.handleDeletePost(post.id)}>
+            <button
+              type="button"
+              onClick={() => this.handleDeletePost(post.id)}
+            >
               Delete
             </button>
           </Footer>
@@ -135,15 +152,13 @@ class UserPosts extends React.Component {
   }
 }
 
-const mapsToProps = (state) => {
-  return {
-    auth: state.auth,
-    posts: state.postsByUser,
-  };
-};
+const mapsToProps = (state) => ({
+  auth: state.auth,
+  posts: state.postsByUser,
+});
 
 export default connect(mapsToProps, {
-  fetchPostsByUser,
-  updatePost,
-  deletePost,
+  fetchPostsByUser: fetchPostsByUser_,
+  updatePost: updatePost_,
+  deletePost: deletePost_,
 })(UserPosts);

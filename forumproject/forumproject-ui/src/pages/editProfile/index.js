@@ -15,29 +15,38 @@ import {
 import { ImageWrapper, Avatar } from './style';
 import { emailValidator } from '../../utils/validators';
 import { SubmitButtonSmall } from '../../components/styledButtons';
-import { fetchUser, updateUser, uploadAvatar } from '../../redux/actions';
+import {
+  fetchUser as fetchUser_,
+  updateUser as updateUser_,
+  uploadAvatar as uploadAvatar_,
+} from '../../redux/actions';
 import Spinner from '../../components/spinner';
 
-const x = 1;
 class EditProfile extends React.Component {
-  state = {
-    selectedFile: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedFile: null,
+    };
+  }
 
   componentDidMount = () => {
-    this.props.fetchUser(this.props.ownerId);
+    const { ownerId, fetchUser } = this.props;
+    fetchUser(ownerId);
   };
 
-  handleUpdateInfo = (initialValues) => async (values) => {
-    values.description = values.description || '';
-    // Only submit the form if form values changed
-    if (_.isEqual(values, initialValues)) return;
+  handleUpdateInfo = async (values) => {
+    const newValues = { ...values };
+    const { ownerId, updateUser } = this.props;
+    newValues.description = values.description || '';
     // Username is read only
-    delete values.username;
+    delete newValues.username;
+    await updateUser(newValues, ownerId);
 
-    await this.props.updateUser(values, this.props.ownerId);
-    const errors = this.props.user.updateErrors;
+    const { user } = this.props;
+    const errors = user.updateErrors;
     if (!_.isEmpty(errors)) return errors;
+    return null;
   };
 
   handleFileSelect = (e) => {
@@ -45,14 +54,11 @@ class EditProfile extends React.Component {
   };
 
   handleFileUpload = () => {
-    const userId = this.props.ownerId;
+    const { ownerId: userId, uploadAvatar } = this.props;
+    const { selectedFile } = this.state;
     const formData = new FormData();
-    formData.append(
-      'avatar',
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-    this.props.uploadAvatar(formData, userId);
+    formData.append('avatar', selectedFile, selectedFile.name);
+    uploadAvatar(formData, userId);
   };
 
   render() {
@@ -66,7 +72,7 @@ class EditProfile extends React.Component {
 
     if (user.fetched) {
       const { username, email, description } = user.data;
-      const initialValues = { username, email, description };
+      const userData = { username, email, description };
       return (
         <ContainerDiv>
           <div>
@@ -74,68 +80,70 @@ class EditProfile extends React.Component {
               <Avatar src={user.data.avatar} alt="User avatar" />
             </ImageWrapper>
             <input type="file" onChange={this.handleFileSelect} />
-            <button onClick={this.handleFileUpload}>Upload</button>
+            <button type="button" onClick={this.handleFileUpload}>
+              Upload
+            </button>
             {user.updateErrors && user.uploadErrors.avatar && (
               <FormError>{user.uploadErrors.avatar}</FormError>
             )}
           </div>
 
-          <FinalForm
-            onSubmit={this.handleUpdateInfo(initialValues)}
-            initialValues={initialValues}
-          >
-            {({ handleSubmit, pristine, hasValidationErrors }) => {
-              return (
-                <form onSubmit={handleSubmit}>
-                  <FormWrapper>
-                    <FormGroup>
-                      <Label htmlFor={`username-${id}`}>Username:</Label>
-                      <Input
-                        id={`username-${id}`}
-                        value={initialValues.username}
-                        disabled="disabled"
-                        type="text"
-                      />
-                    </FormGroup>
-                    <Field name="email" validate={emailValidator}>
-                      {({ input, meta: { touched, error, submitError } }) => (
-                        <FormGroup>
-                          <Label htmlFor={`email-${id}`}>Email:</Label>
-                          <Input {...input} id={`email-${id}`} type="email" />
-                          <FormError>
-                            {touched && (error || submitError)}
-                          </FormError>
-                        </FormGroup>
-                      )}
-                    </Field>
-                    <Field name="description">
-                      {({ input, meta: { touched, error, submitError } }) => (
-                        <FormGroup>
-                          <Label htmlFor={`description-${id}`}>
-                            Description:
-                          </Label>
-                          <TextArea
-                            {...input}
-                            id={`description-${id}`}
-                            rows="6"
-                            maxLength="1000"
-                            placeholder="Tell us about yourself"
-                          />
-                          <FormError>
-                            {touched && (error || submitError)}
-                          </FormError>
-                        </FormGroup>
-                      )}
-                    </Field>
-                    <SubmitButtonSmall
-                      type="submit"
-                      value="Update Profile"
-                      disable={pristine || hasValidationErrors}
+          <FinalForm onSubmit={this.handleUpdateInfo} initialValues={userData}>
+            {({
+              handleSubmit,
+              pristine,
+              hasValidationErrors,
+              initialValues,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <FormWrapper>
+                  <FormGroup>
+                    <Label htmlFor={`username-${id}`}>Username:</Label>
+                    <Input
+                      id={`username-${id}`}
+                      value={initialValues.username}
+                      disabled="disabled"
+                      type="text"
                     />
-                  </FormWrapper>
-                </form>
-              );
-            }}
+                  </FormGroup>
+                  <Field name="email" validate={emailValidator}>
+                    {({ input, meta: { touched, error, submitError } }) => (
+                      <FormGroup>
+                        <Label htmlFor={`email-${id}`}>Email:</Label>
+                        <Input {...input} id={`email-${id}`} type="email" />
+                        <FormError>
+                          {touched && (error || submitError)}
+                        </FormError>
+                      </FormGroup>
+                    )}
+                  </Field>
+                  <Field name="description">
+                    {({ input, meta: { touched, error, submitError } }) => (
+                      <FormGroup>
+                        <Label htmlFor={`description-${id}`}>
+                          Description:
+                        </Label>
+                        <TextArea
+                          {...input}
+                          id={`description-${id}`}
+                          rows="6"
+                          maxLength="1000"
+                          placeholder="Tell us about yourself"
+                        />
+                        <FormError>
+                          {touched && (error || submitError)}
+                        </FormError>
+                      </FormGroup>
+                    )}
+                  </Field>
+                  <SubmitButtonSmall
+                    type="submit"
+                    value="Update Profile"
+                    disabled={pristine || hasValidationErrors}
+                  />
+                </FormWrapper>
+              </form>
+            )}
           </FinalForm>
         </ContainerDiv>
       );
@@ -144,15 +152,13 @@ class EditProfile extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    ownerId: state.auth.user.id,
-    user: state.user,
-  };
-};
+const mapStateToProps = (state) => ({
+  ownerId: state.auth.user.id,
+  user: state.user,
+});
 
 export default connect(mapStateToProps, {
-  fetchUser,
-  updateUser,
-  uploadAvatar,
+  fetchUser: fetchUser_,
+  updateUser: updateUser_,
+  uploadAvatar: uploadAvatar_,
 })(EditProfile);
