@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 import * as types from './types';
-import history from '../../routing/history';
+import history from '../../Routing/history';
 import forum from '../../apis/forum';
 
 // Authentication cookies

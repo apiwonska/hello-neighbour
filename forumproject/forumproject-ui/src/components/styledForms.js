@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import theme from '../layout/utils/theme';
+import theme from '../Layout/theme';
 
 export const Form = styled.form``;
 

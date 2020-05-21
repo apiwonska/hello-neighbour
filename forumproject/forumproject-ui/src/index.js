@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import store from './redux/store';
-import Layout from './layout/Layout';
-import Routing from './routing';
+import Layout from './Layout';
+import Routing from './Routing';
 
 class App extends React.Component {
   render() {
