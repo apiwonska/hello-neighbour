@@ -14,7 +14,7 @@ import {
   DataWrapper,
 } from './style';
 import { renderPageError } from '../../components/errors';
-import Spinner from '../../components/Spinner';
+import { Spinner } from '../../layout';
 import { fetchUser as fetchUser_ } from '../../redux/actions';
 
 class Profile extends React.Component {

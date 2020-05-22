@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from '../../Layout/theme';
+import theme from '../theme';
 
 const navbarHeight = '60px';
 const navbarMediaBreakpoint = theme.media.landscapePhone;

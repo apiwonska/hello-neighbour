@@ -20,7 +20,7 @@ import {
   SubmitButton,
 } from './style';
 // import { renderPageError, DefaultError } from '../../components/errors';
-import Spinner from '../../components/Spinner';
+import { Spinner } from '../../layout';
 import { ContainerDiv } from '../../components/styledDivs';
 import { AvatarThumbnail } from '../../components/styledImages';
 import {
@@ -29,7 +29,7 @@ import {
   createPost as createPost_,
   deletePost as deletePost_,
 } from '../../redux/actions';
-import { formatTime } from '../../utils';
+import formatTime from '../../utils/timeFormat';
 
 class Thread extends React.Component {
   componentDidMount() {

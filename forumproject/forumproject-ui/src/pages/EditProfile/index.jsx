@@ -21,7 +21,7 @@ import {
   updateUser as updateUser_,
   uploadAvatar as uploadAvatar_,
 } from '../../redux/actions';
-import Spinner from '../../components/Spinner';
+import { Spinner } from '../../layout';
 
 class EditProfile extends React.Component {
   constructor(props) {

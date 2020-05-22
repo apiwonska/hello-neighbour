@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from '../../Layout/theme';
+import { theme } from '../../layout';
 import { SubmitButtonSmall } from '../../components/styledButtons';
 
 export const LinkWrapper = styled.div`

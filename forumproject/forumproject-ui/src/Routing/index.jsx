@@ -20,8 +20,7 @@ import UserPosts from '../pages/UserPosts';
 import PasswordChange from '../pages/PasswordChange';
 import NotFound from '../pages/NotFound';
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { Header, Footer } from '../layout';
 import PrivateRoute from './PrivateRoute';
 import RestrictedRoute from './RestrictedRoute';
 

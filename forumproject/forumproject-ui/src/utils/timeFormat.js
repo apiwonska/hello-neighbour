@@ -19,6 +19,8 @@ const mainTimeFormat = (str) => {
   return moment(str).startOf('second').fromNow();
 };
 
-export const formatTime = {
+const formatTime = {
   main: mainTimeFormat,
 };
+
+export default formatTime;

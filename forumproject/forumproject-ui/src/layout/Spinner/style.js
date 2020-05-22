@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import theme from '../../Layout/theme';
+import theme from '../theme';
 
 const headerHeight = '60px';
 const footerHeight = '60px';

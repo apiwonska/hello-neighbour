@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { fetchCategories as fetchCategories_ } from '../../redux/actions';
-import Spinner from '../../components/Spinner';
+import { Spinner } from '../../layout';
 import { CategoryContainer, CategoryLink } from './style';
 import { ContainerDiv } from '../../components/styledDivs';
 // import { DefaultError } from '../../components/errors';

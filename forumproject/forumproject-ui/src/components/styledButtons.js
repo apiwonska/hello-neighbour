@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from '../Layout/theme';
+import theme from '../layout/theme';
 
 // Properties used for small buttons
 const smallBtn = {

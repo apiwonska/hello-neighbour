@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import theme from '../../Layout/theme';
+import { theme } from '../../layout';
 
 export const ImageWrapper = styled.div``;
 
