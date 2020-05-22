@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 import {
   FETCH_POSTS_BY_USER_PENDING,
   FETCH_POSTS_BY_USER_FULFILLED,
   FETCH_POSTS_BY_USER_ERRORS,
   DELETE_POST_FULFILLED,
-  UPDATE_POST_FULFILLED
-} from "../actions/types";
+  UPDATE_POST_FULFILLED,
+} from '../actions/types';
 
 const INITIAL_STATE = {
   fetching: false,
@@ -36,10 +36,10 @@ const reducer = (state = INITIAL_STATE, action) => {
       _.remove(results, { id: action.payload });
       data = { ...state.data, count, results };
       return { ...state, data, errors: null };
-    
+
     case UPDATE_POST_FULFILLED:
       results = [...state.data.results];
-      index = results.findIndex( el => el.id === action.payload.id );
+      index = results.findIndex((el) => el.id === action.payload.id);
       results.splice(index, 1, action.payload);
       data = { ...state.data, results };
       return { ...state, data, errors: null };

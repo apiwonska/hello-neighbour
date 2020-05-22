@@ -9,7 +9,6 @@ import postsByThreadReducer from './postsByThreadReducer';
 import postsByUserReducer from './postsByUserReducer';
 import userReducer from './userReducer';
 
-
 const reducers = combineReducers({
   auth: authReducer,
   passwordReset: passwordResetReducer,
@@ -18,7 +17,7 @@ const reducers = combineReducers({
   thread: threadReducer,
   postsByThread: postsByThreadReducer,
   postsByUser: postsByUserReducer,
-  user: userReducer
+  user: userReducer,
 });
 
 export default reducers;
