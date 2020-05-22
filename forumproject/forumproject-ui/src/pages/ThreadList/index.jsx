@@ -80,7 +80,7 @@ class ThreadList extends React.Component {
   render() {
     const { categories, match } = this.props;
     const { categoryId } = match.params;
-    // Looks in store for the category object for category id from params.
+    // looks in store for the category object for category id from params.
     const category = categories.data.find(
       (obj) => String(obj.id) === categoryId
     );

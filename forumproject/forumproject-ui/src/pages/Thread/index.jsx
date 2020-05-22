@@ -114,7 +114,7 @@ class Thread extends React.Component {
 
           {this.renderPosts()}
 
-          {/* Create post form */}
+          {/* create post form */}
           <PostWrapper>
             <Form onSubmit={this.handleCreatePost}>
               {({ handleSubmit, values, form }) => (

@@ -41,6 +41,8 @@ class PasswordChange extends React.Component {
   };
 
   render() {
+    // a value to ensure form input id uniqueness
+    const id = 'pch';
     const { passwordChanged } = this.state;
     const { auth } = this.props;
     const userId = auth.user.id;
@@ -77,48 +79,58 @@ class PasswordChange extends React.Component {
             return (
               <form onSubmit={handleSubmit}>
                 <FormWrapper>
-                  <FormGroup>
-                    <Label htmlFor="old_password">Old Password:</Label>
-                    <Field name="old_password" validate={required}>
-                      {({ input, meta: { touched, error, submitError } }) => (
-                        <>
-                          <Input {...input} type="password" />
-                          <FormError>
-                            {touched && (error || submitError)}
-                          </FormError>
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label htmlFor="password">Password:</Label>
-                    <Field name="password" validate={passwordValidator}>
-                      {({ input, meta: { touched, error, submitError } }) => (
-                        <>
-                          <Input {...input} type="password" />
-                          <FormError>
-                            {touched && (error || submitError)}
-                          </FormError>
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label htmlFor="password2">Confirm password:</Label>
-                    <Field
-                      name="password2"
-                      validate={password2Validator(values.password)}
-                    >
-                      {({ input, meta: { touched, error, submitError } }) => (
-                        <>
-                          <Input {...input} type="password" />
-                          <FormError>
-                            {touched && (error || submitError)}
-                          </FormError>
-                        </>
-                      )}
-                    </Field>
-                  </FormGroup>
+                  <Field name="old_password" validate={required}>
+                    {({ input, meta: { touched, error, submitError } }) => (
+                      <FormGroup>
+                        <Label htmlFor={`old_password-${id}`}>
+                          Old Password:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`old_password-${id}`}
+                          type="password"
+                        />
+                        <FormError>
+                          {touched && (error || submitError)}
+                        </FormError>
+                      </FormGroup>
+                    )}
+                  </Field>
+                  <Field name="password" validate={passwordValidator}>
+                    {({ input, meta: { touched, error, submitError } }) => (
+                      <FormGroup>
+                        <Label htmlFor={`password-${id}`}>Password:</Label>
+                        <Input
+                          {...input}
+                          id={`password-${id}`}
+                          type="password"
+                        />
+                        <FormError>
+                          {touched && (error || submitError)}
+                        </FormError>
+                      </FormGroup>
+                    )}
+                  </Field>
+                  <Field
+                    name="password2"
+                    validate={password2Validator(values.password)}
+                  >
+                    {({ input, meta: { touched, error, submitError } }) => (
+                      <FormGroup>
+                        <Label htmlFor={`password2-${id}`}>
+                          Confirm password:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`password2-${id}`}
+                          type="password"
+                        />
+                        <FormError>
+                          {touched && (error || submitError)}
+                        </FormError>
+                      </FormGroup>
+                    )}
+                  </Field>
                   <SubmitButtonSmall
                     type="submit"
                     value="Change Password"

@@ -40,7 +40,8 @@ class EditProfile extends React.Component {
     const newValues = { ...values };
     const { ownerId, updateUser } = this.props;
     newValues.description = values.description || '';
-    // Username is read only
+
+    // username is read only
     delete newValues.username;
     await updateUser(newValues, ownerId);
 
@@ -63,8 +64,8 @@ class EditProfile extends React.Component {
   };
 
   render() {
-    // A value to ensure input id uniqueness
-    const id = 'ep2';
+    // a value to ensure form input id uniqueness
+    const id = 'ep';
     const { user } = this.props;
 
     if (user.fetching) {

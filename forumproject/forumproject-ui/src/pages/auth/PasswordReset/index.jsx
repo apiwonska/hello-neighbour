@@ -33,6 +33,8 @@ class PasswordReset extends React.Component {
   };
 
   render() {
+    // a value to ensure input id uniqueness
+    const id = 'pr';
     return (
       <div>
         <h2>Password Reset</h2>
@@ -43,23 +45,20 @@ class PasswordReset extends React.Component {
           {({ handleSubmit, pristine, hasValidationErrors }) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
-                <FormGroup>
-                  <Label htmlFor="email">Email:</Label>
-                  <Field name="email" validate={emailValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input
-                          {...input}
-                          type="email"
-                          placeholder="Enter your email"
-                        />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
+                <Field name="email" validate={emailValidator}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor={`email-${id}`}>Email:</Label>
+                      <Input
+                        {...input}
+                        id={`email-${id}`}
+                        type="email"
+                        placeholder="Enter your email"
+                      />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
                 <SubmitButtonSmall
                   type="submit"
                   value="Reset Password"

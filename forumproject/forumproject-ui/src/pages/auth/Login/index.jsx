@@ -27,6 +27,8 @@ class LogIn extends React.Component {
   };
 
   render() {
+    // a value to ensure input id uniqueness
+    const id = 'login';
     return (
       <div>
         <h2>Log In</h2>
@@ -42,8 +44,8 @@ class LogIn extends React.Component {
                 <Field name="username" validate={required}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor="username">Username:</Label>
-                      <Input {...input} type="text" />
+                      <Label htmlFor={`username-${id}`}>Username:</Label>
+                      <Input {...input} id={`username-${id}`} type="text" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
@@ -51,8 +53,8 @@ class LogIn extends React.Component {
                 <Field name="password" validate={required}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor="password">Password:</Label>
-                      <Input {...input} type="password" />
+                      <Label htmlFor={`password-${id}`}>Password:</Label>
+                      <Input {...input} id={`password-${id}`} type="password" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}

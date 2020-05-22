@@ -40,6 +40,8 @@ class CreateThread extends React.Component {
   };
 
   render() {
+    // a value to ensure form input id uniqueness
+    const id = 'ct';
     return (
       <ContainerDiv>
         <h2>CreateThread</h2>
@@ -51,9 +53,10 @@ class CreateThread extends React.Component {
                 <Field name="title" validate={titleValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor="title">Title:</Label>
+                      <Label htmlFor={`title-${id}`}>Title:</Label>
                       <Input
                         {...input}
+                        id={`title-${id}`}
                         placeholder="Add title"
                         maxLength="100"
                       />
@@ -64,9 +67,10 @@ class CreateThread extends React.Component {
                 <Field name="subject" validate={subjectValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor="subject">Subject:</Label>
+                      <Label htmlFor={`subject-${id}`}>Subject:</Label>
                       <textarea
                         {...input}
+                        id={`subject-${id}`}
                         rows="3"
                         placeholder="Add subject"
                         maxLength="2000"

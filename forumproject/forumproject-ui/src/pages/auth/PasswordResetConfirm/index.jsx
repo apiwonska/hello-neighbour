@@ -34,8 +34,10 @@ class PasswordResetConfirm extends React.Component {
     const emailSent = location.state && location.state.emailSent;
     if (emailSent) {
       this.setState({ emailSent: true });
-      // We delete location state to prevent showing the email was sent
-      // message again, when the user navigates to this page
+      /**
+       * we delete location state to prevent showing the email was sent
+       * message again, when the user navigates to this page
+       */
       history.replace('/password-reset/confirm', {});
     }
   }
@@ -55,7 +57,10 @@ class PasswordResetConfirm extends React.Component {
   };
 
   render() {
+    // a value to ensure form input id uniqueness
+    const id = 'prc';
     const { passwordChanged, emailSent } = this.state;
+
     if (passwordChanged) {
       return (
         <div>
@@ -100,8 +105,8 @@ class PasswordResetConfirm extends React.Component {
                   <Field name="token" validate={required}>
                     {({ input, meta: { touched, error, submitError } }) => (
                       <FormGroup>
-                        <Label htmlFor="token">Token:</Label>
-                        <Input {...input} type="text" />
+                        <Label htmlFor={`token-${id}`}>Token:</Label>
+                        <Input {...input} id={`token-${id}`} type="text" />
                         <FormError>
                           {touched && (error || submitError)}
                         </FormError>
@@ -111,8 +116,12 @@ class PasswordResetConfirm extends React.Component {
                   <Field name="password" validate={passwordValidator}>
                     {({ input, meta: { touched, error, submitError } }) => (
                       <FormGroup>
-                        <Label htmlFor="password">New password:</Label>
-                        <Input {...input} type="password" />
+                        <Label htmlFor={`password-${id}`}>New password:</Label>
+                        <Input
+                          {...input}
+                          id={`password-${id}`}
+                          type="password"
+                        />
                         <FormError>
                           {touched && (error || submitError)}
                         </FormError>
@@ -125,8 +134,14 @@ class PasswordResetConfirm extends React.Component {
                   >
                     {({ input, meta: { touched, error } }) => (
                       <FormGroup>
-                        <Label htmlFor="password2">Confirm password:</Label>
-                        <Input {...input} type="password" />
+                        <Label htmlFor={`password2-${id}`}>
+                          Confirm password:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`password2-${id}`}
+                          type="password"
+                        />
                         <FormError>{touched && error}</FormError>
                       </FormGroup>
                     )}

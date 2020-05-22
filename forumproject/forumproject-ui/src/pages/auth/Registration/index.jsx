@@ -31,6 +31,9 @@ class Registration extends React.Component {
   };
 
   render() {
+    // a value to ensure form input id uniqueness
+    const id = 'reg';
+
     return (
       <div>
         <h2>Register</h2>
@@ -39,61 +42,51 @@ class Registration extends React.Component {
           {({ handleSubmit, pristine, hasValidationErrors, values }) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
-                <FormGroup>
-                  <Label htmlFor="username">Username:</Label>
-                  <Field name="username" validate={usernameValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="text" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="email">Email:</Label>
-                  <Field name="email" validate={emailValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="email" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="password">Password:</Label>
-                  <Field name="password" validate={passwordValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="password" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="password2">Confirm Password:</Label>
-                  <Field
-                    name="password2"
-                    validate={password2Validator(values.password)}
-                  >
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <>
-                        <Input {...input} type="password" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </>
-                    )}
-                  </Field>
-                </FormGroup>
+                <Field name="username" validate={usernameValidator}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor={`username-${id}`}>Username:</Label>
+                      <Input {...input} id={`username-${id}`} type="text" />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
+                <Field name="email" validate={emailValidator}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor={`email-${id}`}>Email:</Label>
+                      <Input {...input} id={`email-${id}`} type="email" />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
+                <Field name="password" validate={passwordValidator}>
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor={`password-${id}`}>Password:</Label>
+                      <Input {...input} id={`password-${id}`} type="password" />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
+                <Field
+                  name="password2"
+                  validate={password2Validator(values.password)}
+                >
+                  {({ input, meta: { touched, error, submitError } }) => (
+                    <FormGroup>
+                      <Label htmlFor={`password2-${id}`}>
+                        Confirm Password:
+                      </Label>
+                      <Input
+                        {...input}
+                        id={`password2-${id}`}
+                        type="password"
+                      />
+                      <FormError>{touched && (error || submitError)}</FormError>
+                    </FormGroup>
+                  )}
+                </Field>
                 <SubmitButtonSmall
                   type="submit"
                   value="Register"

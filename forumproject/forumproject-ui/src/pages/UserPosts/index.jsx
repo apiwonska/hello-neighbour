@@ -76,7 +76,7 @@ class UserPosts extends React.Component {
     );
 
     const postsList = posts.data.results.map((post) => {
-      // Renders the update post form
+      // renders the update post form
       if (editingPost === post.id) {
         return (
           <PostWrapper key={post.id}>
@@ -109,7 +109,7 @@ class UserPosts extends React.Component {
         );
       }
 
-      // Renders regular post by default
+      // renders regular post by default
       return (
         <PostWrapper key={post.id}>
           {renderHeader(post)}
