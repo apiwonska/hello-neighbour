@@ -86,9 +86,14 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  authenticated: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  authenticated: PropTypes.string,
+  userId: PropTypes.number,
   logOut: PropTypes.func.isRequired,
+};
+
+Header.defaultProps = {
+  authenticated: '',
+  userId: null,
 };
 
 const mapStateToProps = (state) => {
