@@ -20,7 +20,8 @@
     ],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-props-no-spreading": "off",
-    "react/prop-types": "off",
-    "import/prefer-default-export": "off"
+    "react/prop-types": "error",
+    "import/prefer-default-export": "off",
+    "no-nested-ternary": "error"
   }
 }

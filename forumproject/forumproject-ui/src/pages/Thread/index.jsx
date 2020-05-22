@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Field, Form } from 'react-final-form';
+import PropTypes from 'prop-types';
 
 import {
   LinkWrapper,
@@ -18,7 +19,7 @@ import {
   StyledTextArea,
   SubmitButton,
 } from './style';
-import { renderPageError } from '../../components/errors';
+// import { renderPageError, DefaultError } from '../../components/errors';
 import Spinner from '../../components/Spinner';
 import { ContainerDiv } from '../../components/styledDivs';
 import { AvatarThumbnail } from '../../components/styledImages';
@@ -79,9 +80,9 @@ class Thread extends React.Component {
       return <Spinner />;
     }
 
-    if (thread.errors || posts.errors) {
-      return renderPageError(thread.errors) || renderPageError(posts.errors);
-    }
+    // if (!_.isEmpty(thread.errors) || !.isEmpty(posts.errors)) {
+    // return renderPageError(thread.errors) || renderPageError(posts.errors);
+    // }
 
     if (thread.fetched && posts.fetched) {
       return (
@@ -150,6 +151,45 @@ class Thread extends React.Component {
     return null;
   }
 }
+
+Thread.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.object.isRequired,
+  }).isRequired,
+  auth: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }).isRequired,
+  thread: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      id: PropTypes.number,
+      user: PropTypes.shape({
+        id: PropTypes.number,
+        username: PropTypes.string,
+        avatar_thumbnail: PropTypes.string,
+      }),
+      title: PropTypes.string,
+      subject: PropTypes.string,
+      created: PropTypes.string,
+    }).isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  posts: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      results: PropTypes.array,
+    }).isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  fetchThread: PropTypes.func.isRequired,
+  fetchPostsByThread: PropTypes.func.isRequired,
+  createPost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

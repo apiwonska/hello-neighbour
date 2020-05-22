@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import {
   PostWrapper,
@@ -151,6 +152,25 @@ class UserPosts extends React.Component {
     return null;
   }
 }
+
+UserPosts.propTypes = {
+  auth: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }).isRequired,
+  posts: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      results: PropTypes.array,
+    }).isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  fetchPostsByUser: PropTypes.func.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
+};
 
 const mapsToProps = (state) => ({
   auth: state.auth,

@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   fetching: false,
   fetched: false,
   data: {},
-  errors: null,
+  errors: {},
 };
 
 const reducer = (state = INITIAL_STATE, action) => {

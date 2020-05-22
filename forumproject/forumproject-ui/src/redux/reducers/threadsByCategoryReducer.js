@@ -9,7 +9,7 @@ import {
 const INITIAL_STATE = {
   fetching: false,
   fetched: false,
-  data: [],
+  data: {},
   errors: {},
 };
 

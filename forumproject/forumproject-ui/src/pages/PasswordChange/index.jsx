@@ -3,6 +3,7 @@ import { Form as FinalForm, Field } from 'react-final-form';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import {
   Input,
@@ -132,6 +133,16 @@ class PasswordChange extends React.Component {
     );
   }
 }
+
+PasswordChange.propTypes = {
+  auth: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  changePassword: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

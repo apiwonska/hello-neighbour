@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form as FinalForm, Field } from 'react-final-form';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import { ContainerDiv } from '../../components/styledDivs';
 import {
@@ -151,6 +152,26 @@ class EditProfile extends React.Component {
     return null;
   }
 }
+
+EditProfile.propTypes = {
+  ownerId: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      id: PropTypes.number,
+      username: PropTypes.string,
+      email: PropTypes.string,
+      avatar: PropTypes.string,
+      description: PropTypes.string,
+    }).isRequired,
+    updateErrors: PropTypes.object,
+    uploadErrors: PropTypes.object,
+  }).isRequired,
+  fetchUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   ownerId: state.auth.user.id,

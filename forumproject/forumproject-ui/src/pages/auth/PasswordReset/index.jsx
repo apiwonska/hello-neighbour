@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import {
   Input,
@@ -77,6 +78,15 @@ class PasswordReset extends React.Component {
     );
   }
 }
+
+PasswordReset.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+  resetPassword: PropTypes.func.isRequired,
+  passwordReset: PropTypes.shape({
+    emailErrors: PropTypes.object.isRequired,
+    emailSent: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 const mapStateToProps = (state) => ({
   passwordReset: state.passwordReset,

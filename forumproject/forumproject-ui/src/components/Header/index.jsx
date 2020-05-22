@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faBars } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 import {
   NavSection,
@@ -83,6 +84,12 @@ class Header extends React.Component {
     );
   }
 }
+
+Header.propTypes = {
+  authenticated: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
+  logOut: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => {
   return {

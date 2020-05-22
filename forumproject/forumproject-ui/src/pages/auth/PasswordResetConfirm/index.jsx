@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import {
   Input,
@@ -33,7 +34,7 @@ class PasswordResetConfirm extends React.Component {
     const emailSent = location.state && location.state.emailSent;
     if (emailSent) {
       this.setState({ emailSent: true });
-      // We delete history state to prevent showing the email was sent
+      // We delete location state to prevent showing the email was sent
       // message again, when the user navigates to this page
       history.replace('/password-reset/confirm', {});
     }
@@ -144,6 +145,18 @@ class PasswordResetConfirm extends React.Component {
     );
   }
 }
+
+PasswordResetConfirm.propTypes = {
+  history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
+  location: PropTypes.shape({
+    state: PropTypes.shape({ emailSent: PropTypes.bool }),
+  }).isRequired,
+  confirmPasswordReset: PropTypes.func.isRequired,
+  passwordReset: PropTypes.shape({
+    resetErrors: PropTypes.object.isRequired,
+    resetPasswordConfirmed: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 const mapStateToProps = (state) => ({
   passwordReset: state.passwordReset,

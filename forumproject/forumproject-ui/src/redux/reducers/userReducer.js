@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   fetching: false,
   fetched: false,
   data: {},
-  errors: null,
+  errors: {},
   updating: false,
   updateErrors: {},
   uploading: {},

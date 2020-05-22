@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import {
   CategoryHeader,
@@ -91,7 +93,7 @@ class ThreadList extends React.Component {
       return <NotFound />;
     }
 
-    if (categories.errors) {
+    if (!_.isEmpty(categories.errors)) {
       return <DefaultError />;
     }
 
@@ -114,6 +116,26 @@ class ThreadList extends React.Component {
     return null;
   }
 }
+
+ThreadList.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.object.isRequired,
+  }).isRequired,
+  categories: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.array.isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  threads: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  fetchCategories: PropTypes.func.isRequired,
+  fetchThreadsByCategory: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   categories: state.categories,

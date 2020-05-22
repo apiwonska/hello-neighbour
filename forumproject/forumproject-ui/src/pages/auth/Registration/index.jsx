@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
+import PropTypes from 'prop-types';
 
 import {
   Input,
@@ -106,6 +107,11 @@ class Registration extends React.Component {
     );
   }
 }
+
+Registration.propTypes = {
+  register: PropTypes.func.isRequired,
+  auth: PropTypes.shape({ errors: PropTypes.object.isRequired }).isRequired,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

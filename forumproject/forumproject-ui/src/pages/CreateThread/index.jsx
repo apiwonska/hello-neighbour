@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
+import PropTypes from 'prop-types';
 
 import { SubmitButton, Button, FormGroupButtons } from './style';
 import {
@@ -91,6 +92,21 @@ class CreateThread extends React.Component {
     );
   }
 }
+
+CreateThread.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      categoryId: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  threadsByCategory: PropTypes.shape({
+    errors: PropTypes.shape({}),
+  }).isRequired,
+  createThread: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   threadsByCategory: state.threadsByCategory,

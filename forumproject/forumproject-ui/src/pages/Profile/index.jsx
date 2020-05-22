@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import { ContainerDiv } from '../../components/styledDivs';
 import { LinkButtonSmall as Button } from '../../components/styledButtons';
@@ -93,7 +95,7 @@ class Profile extends React.Component {
       return <Spinner />;
     }
 
-    if (user.errors) {
+    if (!_.isEmpty(user.errors)) {
       return renderPageError();
     }
 
@@ -123,6 +125,28 @@ class Profile extends React.Component {
     return null;
   }
 }
+
+Profile.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.object.isRequired,
+  }).isRequired,
+  owner: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
+  user: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      id: PropTypes.number,
+      username: PropTypes.string,
+      description: PropTypes.string,
+      email: PropTypes.string,
+      avatar: PropTypes.string,
+    }).isRequired,
+    errors: PropTypes.object.isRequired,
+  }).isRequired,
+  fetchUser: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   owner: state.auth.user,
