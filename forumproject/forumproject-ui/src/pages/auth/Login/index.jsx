@@ -10,10 +10,10 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../../components/styledForms';
-import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { logIn as logIn_ } from '../../../redux/actions';
-import { required } from '../../../utils/validators';
+} from 'components/styledForms';
+import { SubmitButtonSmall } from 'components/styledButtons';
+import { logIn as logIn_ } from 'redux/actions';
+import { required } from 'utils/validators';
 
 class LogIn extends React.Component {
   onSubmit = async (formProps) => {

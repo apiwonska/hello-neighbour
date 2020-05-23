@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContainerDiv } from '../../components/styledDivs';
-import { LinkButtonSmall as Button } from '../../components/styledButtons';
+import { ContainerDiv } from 'components/styledDivs';
+import { LinkButtonSmall as Button } from 'components/styledButtons';
 import {
   ImageWrapper,
   Avatar,
@@ -13,9 +13,9 @@ import {
   Data,
   DataWrapper,
 } from './style';
-import { renderPageError } from '../../components/errors';
-import { Spinner } from '../../layout';
-import { fetchUser as fetchUser_ } from '../../redux/actions';
+import { renderPageError } from 'components/errors';
+import { Spinner } from 'layout';
+import { fetchUser as fetchUser_ } from 'redux/actions';
 
 class Profile extends React.Component {
   constructor(props) {

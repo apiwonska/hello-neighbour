@@ -4,7 +4,7 @@ import { Form as FinalForm, Field } from 'react-final-form';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContainerDiv } from '../../components/styledDivs';
+import { ContainerDiv } from 'components/styledDivs';
 import {
   Input,
   TextArea,
@@ -12,16 +12,16 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../components/styledForms';
+} from 'components/styledForms';
 import { ImageWrapper, Avatar } from './style';
-import { emailValidator } from '../../utils/validators';
-import { SubmitButtonSmall } from '../../components/styledButtons';
+import { emailValidator } from 'utils/validators';
+import { SubmitButtonSmall } from 'components/styledButtons';
 import {
   fetchUser as fetchUser_,
   updateUser as updateUser_,
   uploadAvatar as uploadAvatar_,
-} from '../../redux/actions';
-import { Spinner } from '../../layout';
+} from 'redux/actions';
+import { Spinner } from 'layout';
 
 class EditProfile extends React.Component {
   constructor(props) {

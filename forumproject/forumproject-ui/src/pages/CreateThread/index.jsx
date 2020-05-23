@@ -10,10 +10,10 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../components/styledForms';
-import { ContainerDiv } from '../../components/styledDivs';
-import { createThread as createThread_ } from '../../redux/actions';
-import { titleValidator, subjectValidator } from '../../utils/validators';
+} from 'components/styledForms';
+import { ContainerDiv } from 'components/styledDivs';
+import { createThread as createThread_ } from 'redux/actions';
+import { titleValidator, subjectValidator } from 'utils/validators';
 
 class CreateThread extends React.Component {
   handleCreateThread = async (values) => {

@@ -11,14 +11,14 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../../components/styledForms';
-import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { confirmPasswordReset as confirmPasswordReset_ } from '../../../redux/actions';
+} from 'components/styledForms';
+import { SubmitButtonSmall } from 'components/styledButtons';
+import { confirmPasswordReset as confirmPasswordReset_ } from 'redux/actions';
 import {
   required,
   passwordValidator,
   password2Validator,
-} from '../../../utils/validators';
+} from 'utils/validators';
 
 class PasswordResetConfirm extends React.Component {
   constructor(props) {

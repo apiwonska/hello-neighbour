@@ -14,16 +14,16 @@ import {
   Footer,
   StyledTextArea,
 } from './style';
-import { renderPageError } from '../../components/errors';
-import { Spinner } from '../../layout';
-import { ContainerDiv } from '../../components/styledDivs';
+import { renderPageError } from 'components/errors';
+import { Spinner } from 'layout';
+import { ContainerDiv } from 'components/styledDivs';
 import {
   fetchPostsByUser as fetchPostsByUser_,
   updatePost as updatePost_,
   deletePost as deletePost_,
-} from '../../redux/actions';
-import formatTime from '../../utils/timeFormat';
-import { required } from '../../utils/validators';
+} from 'redux/actions';
+import formatTime from 'utils/timeFormat';
+import { required } from 'utils/validators';
 
 class UserPosts extends React.Component {
   constructor(props) {

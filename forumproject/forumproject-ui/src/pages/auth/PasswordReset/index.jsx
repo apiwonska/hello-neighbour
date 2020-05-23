@@ -11,10 +11,10 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../../components/styledForms';
-import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { resetPassword as resetPassword_ } from '../../../redux/actions';
-import { emailValidator } from '../../../utils/validators';
+} from 'components/styledForms';
+import { SubmitButtonSmall } from 'components/styledButtons';
+import { resetPassword as resetPassword_ } from 'redux/actions';
+import { emailValidator } from 'utils/validators';
 
 class PasswordReset extends React.Component {
   onSubmit = async (formProps) => {

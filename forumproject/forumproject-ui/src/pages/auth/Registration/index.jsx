@@ -9,15 +9,15 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../../components/styledForms';
-import { SubmitButtonSmall } from '../../../components/styledButtons';
-import { register as register_ } from '../../../redux/actions';
+} from 'components/styledForms';
+import { SubmitButtonSmall } from 'components/styledButtons';
+import { register as register_ } from 'redux/actions';
 import {
   usernameValidator,
   emailValidator,
   passwordValidator,
   password2Validator,
-} from '../../../utils/validators';
+} from 'utils/validators';
 
 class Registration extends React.Component {
   onSubmit = async (values) => {

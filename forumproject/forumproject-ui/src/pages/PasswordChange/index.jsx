@@ -11,14 +11,14 @@ import {
   Label,
   FormError,
   FormWrapper,
-} from '../../components/styledForms';
-import { SubmitButtonSmall } from '../../components/styledButtons';
+} from 'components/styledForms';
+import { SubmitButtonSmall } from 'components/styledButtons';
 import {
   required,
   passwordValidator,
   password2Validator,
-} from '../../utils/validators';
-import { changePassword as changePassword_ } from '../../redux/actions';
+} from 'utils/validators';
+import { changePassword as changePassword_ } from 'redux/actions';
 
 class PasswordChange extends React.Component {
   constructor(props) {

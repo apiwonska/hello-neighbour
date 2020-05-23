@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 // import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { fetchCategories as fetchCategories_ } from '../../redux/actions';
-import { Spinner } from '../../layout';
+import { fetchCategories as fetchCategories_ } from 'redux/actions';
+import { Spinner } from 'layout';
 import { CategoryContainer, CategoryLink } from './style';
-import { ContainerDiv } from '../../components/styledDivs';
-// import { DefaultError } from '../../components/errors';
+import { ContainerDiv } from 'components/styledDivs';
+// import { DefaultError } from 'components/errors';
 
 class CategoryList extends React.Component {
   componentDidMount() {
