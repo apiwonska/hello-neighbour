@@ -11,12 +11,18 @@ import {
   CREATE_THREAD_ERRORS,
 } from './types';
 
-export const fetchThreadsByCategory = (categoryId) => async (dispatch) => {
+export const fetchThreadsByCategory = (
+  categoryId,
+  itemsPerPage,
+  offset = 0
+) => async (dispatch) => {
   dispatch({
     type: FETCH_THREADS_BY_CATEGORY_PENDING,
   });
   try {
-    const response = await forum().get(`/api/threads/?category=${categoryId}`);
+    const response = await forum().get(
+      `/api/threads/?category=${categoryId}&limit=${itemsPerPage}&offset=${offset}`
+    );
     dispatch({
       type: FETCH_THREADS_BY_CATEGORY_FULFILLED,
       payload: response.data,
