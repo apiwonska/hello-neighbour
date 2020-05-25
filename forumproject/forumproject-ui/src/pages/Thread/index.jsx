@@ -5,6 +5,17 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Field, Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
+// import { renderPageError, DefaultError } from 'components/errors';
+import { Spinner } from 'layout';
+import { ContainerDiv } from 'components/styledDivs';
+import { AvatarThumbnail } from 'components/styledImages';
+import {
+  fetchThread as fetchThread_,
+  fetchPostsByThread as fetchPostsByThread_,
+  createPost as createPost_,
+  deletePost as deletePost_,
+} from 'redux/actions';
+import formatTime from 'utils/timeFormat';
 import {
   LinkWrapper,
   NavLink,
@@ -19,17 +30,6 @@ import {
   StyledTextArea,
   SubmitButton,
 } from './style';
-// import { renderPageError, DefaultError } from 'components/errors';
-import { Spinner } from 'layout';
-import { ContainerDiv } from 'components/styledDivs';
-import { AvatarThumbnail } from 'components/styledImages';
-import {
-  fetchThread as fetchThread_,
-  fetchPostsByThread as fetchPostsByThread_,
-  createPost as createPost_,
-  deletePost as deletePost_,
-} from 'redux/actions';
-import formatTime from 'utils/timeFormat';
 
 class Thread extends React.Component {
   componentDidMount() {

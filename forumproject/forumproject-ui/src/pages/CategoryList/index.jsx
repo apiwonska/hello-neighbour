@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
 import { Spinner } from 'layout';
-import { CategoryContainer, CategoryLink } from './style';
 import { ContainerDiv } from 'components/styledDivs';
+import { CategoryContainer, CategoryLink } from './style';
 // import { DefaultError } from 'components/errors';
 
 class CategoryList extends React.Component {

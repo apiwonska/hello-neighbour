@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es6": true
@@ -18,10 +18,20 @@
         "printWidth": 80
       }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [1, {
+      "extensions": [".js", ".jsx"]
+    }],
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "error",
     "import/prefer-default-export": "error",
     "no-nested-ternary": "error"
+  },
+  // accept absolute imports from src folder
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
   }
 }

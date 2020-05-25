@@ -3,7 +3,6 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import history from './history';
 import Login from 'pages/auth/Login';
 import Logout from 'pages/auth/Logout';
 import Registration from 'pages/auth/Registration';
@@ -21,6 +20,7 @@ import PasswordChange from 'pages/PasswordChange';
 import NotFound from 'pages/NotFound';
 
 import { Header, Footer } from 'layout';
+import history from './history';
 import PrivateRoute from './PrivateRoute';
 import RestrictedRoute from './RestrictedRoute';
 

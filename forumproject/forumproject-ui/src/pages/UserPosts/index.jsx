@@ -5,15 +5,6 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import {
-  PostWrapper,
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
-  Content,
-  Footer,
-  StyledTextArea,
-} from './style';
 import { renderPageError } from 'components/errors';
 import { Spinner } from 'layout';
 import { ContainerDiv } from 'components/styledDivs';
@@ -24,6 +15,15 @@ import {
 } from 'redux/actions';
 import formatTime from 'utils/timeFormat';
 import { required } from 'utils/validators';
+import {
+  PostWrapper,
+  PostHeader,
+  PostHeaderInnerWrapper,
+  DateSpan,
+  Content,
+  Footer,
+  StyledTextArea,
+} from './style';
 
 class UserPosts extends React.Component {
   constructor(props) {

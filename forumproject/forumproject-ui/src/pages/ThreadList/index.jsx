@@ -5,6 +5,14 @@ import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
+import { NotFound, DefaultError } from 'components/errors';
+import { Spinner } from 'layout';
+import { ContainerDiv } from 'components/styledDivs';
+import {
+  fetchCategories as fetchCategories_,
+  fetchThreadsByCategory as fetchThreadsByCategory_,
+} from 'redux/actions';
+import formatTime from 'utils/timeFormat';
 import {
   CategoryHeader,
   ThreadWrapper,
@@ -15,14 +23,6 @@ import {
   SecondaryText,
   LinkButton,
 } from './style';
-import { NotFound, DefaultError } from 'components/errors';
-import { Spinner } from 'layout';
-import { ContainerDiv } from 'components/styledDivs';
-import {
-  fetchCategories as fetchCategories_,
-  fetchThreadsByCategory as fetchThreadsByCategory_,
-} from 'redux/actions';
-import formatTime from 'utils/timeFormat';
 
 class ThreadList extends React.Component {
   componentDidMount() {

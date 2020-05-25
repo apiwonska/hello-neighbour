@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
 
-import { SubmitButton, Button, FormGroupButtons } from './style';
 import {
   Input,
   FormGroup,
@@ -14,6 +13,7 @@ import {
 import { ContainerDiv } from 'components/styledDivs';
 import { createThread as createThread_ } from 'redux/actions';
 import { titleValidator, subjectValidator } from 'utils/validators';
+import { SubmitButton, Button, FormGroupButtons } from './style';
 
 class CreateThread extends React.Component {
   handleCreateThread = async (values) => {

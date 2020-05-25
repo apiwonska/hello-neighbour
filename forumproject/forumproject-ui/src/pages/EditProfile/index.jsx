@@ -13,7 +13,6 @@ import {
   FormError,
   FormWrapper,
 } from 'components/styledForms';
-import { ImageWrapper, Avatar } from './style';
 import { emailValidator } from 'utils/validators';
 import { SubmitButtonSmall } from 'components/styledButtons';
 import {
@@ -22,6 +21,7 @@ import {
   uploadAvatar as uploadAvatar_,
 } from 'redux/actions';
 import { Spinner } from 'layout';
+import { ImageWrapper, Avatar } from './style';
 
 class EditProfile extends React.Component {
   constructor(props) {
