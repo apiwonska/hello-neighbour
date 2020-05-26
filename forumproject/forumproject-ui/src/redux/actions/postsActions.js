@@ -14,12 +14,18 @@ import {
   DELETE_POST_ERRORS,
 } from './types';
 
-export const fetchPostsByThread = (threadId) => async (dispatch) => {
+export const fetchPostsByThread = (
+  threadId,
+  itemsPerPage,
+  offset = 0
+) => async (dispatch) => {
   dispatch({
     type: FETCH_POSTS_BY_THREAD_PENDING,
   });
   try {
-    const response = await forum().get(`/api/posts/?thread=${threadId}`);
+    const response = await forum().get(
+      `/api/posts/?thread=${threadId}&limit=${itemsPerPage}&offset=${offset}`
+    );
     dispatch({
       type: FETCH_POSTS_BY_THREAD_FULFILLED,
       payload: response.data,
@@ -32,12 +38,16 @@ export const fetchPostsByThread = (threadId) => async (dispatch) => {
   }
 };
 
-export const fetchPostsByUser = (userId) => async (dispatch) => {
+export const fetchPostsByUser = (userId, itemsPerPage, offset = 0) => async (
+  dispatch
+) => {
   dispatch({
     type: FETCH_POSTS_BY_USER_PENDING,
   });
   try {
-    const response = await forum().get(`/api/posts/?user=${userId}`);
+    const response = await forum().get(
+      `/api/posts/?user=${userId}&limit=${itemsPerPage}&offset=${offset}`
+    );
     dispatch({
       type: FETCH_POSTS_BY_USER_FULFILLED,
       payload: response.data,

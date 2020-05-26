@@ -6,7 +6,7 @@ import { Field, Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
 // import { renderPageError, DefaultError } from 'components/errors';
-import { Spinner } from 'layout';
+import { Pagination, Spinner } from 'layout';
 import { ContainerDiv } from 'components/styledDivs';
 import { AvatarThumbnail } from 'components/styledImages';
 import {
@@ -19,7 +19,7 @@ import formatTime from 'utils/timeFormat';
 import {
   LinkWrapper,
   NavLink,
-  FirstPostWrapper,
+  ThreadWrapper,
   PostWrapper,
   PostHeader,
   PostHeaderInnerWrapper,
@@ -32,22 +32,64 @@ import {
 } from './style';
 
 class Thread extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: 1,
+      pages: null,
+    };
+    this.itemsPerPage = 10;
+  }
+
+  componentDidMount = async () => {
     const { thread, fetchThread, fetchPostsByThread, match } = this.props;
     const { threadId } = match.params;
 
     if (!thread.fetched || String(thread.data.id) !== threadId) {
       fetchThread(threadId);
     }
-    fetchPostsByThread(threadId);
+    await fetchPostsByThread(threadId, this.itemsPerPage);
+    this.setPages();
+  };
+
+  setPages() {
+    // if items number changed, updates state.pages
+    const { posts } = this.props;
+    const { count: itemsTotal } = posts.data;
+    const pagesCurrent = Math.ceil(itemsTotal / this.itemsPerPage);
+    const { pages: pagesPrev } = this.state;
+
+    if (pagesCurrent !== pagesPrev) {
+      this.setState({ pages: pagesCurrent });
+      return true;
+    }
+    return false;
   }
 
-  handleCreatePost = (values) => {
+  handleCreatePost = async (values) => {
     const { auth, createPost, match } = this.props;
     const userId = auth.user.id;
     const threadId = Number(match.params.threadId);
     const data = { ...values, user: userId, thread: threadId };
-    createPost(data);
+    await createPost(data);
+    const pageAppended = this.setPages();
+    if (pageAppended) this.handleMoveUserToEnd();
+  };
+
+  handleChangePage = async (event, page) => {
+    const { match, fetchPostsByThread } = this.props;
+    const { threadId } = match.params;
+    const offset = (page - 1) * this.itemsPerPage;
+    await fetchPostsByThread(threadId, this.itemsPerPage, offset);
+    this.setState({ currentPage: page });
+  };
+
+  handleMoveUserToEnd = async () => {
+    const { currentPage, pages: lastPage } = this.state;
+    if (currentPage !== lastPage) {
+      await this.handleChangePage(null, lastPage);
+    }
+    this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   };
 
   renderPosts() {
@@ -72,9 +114,25 @@ class Thread extends React.Component {
     return postsList;
   }
 
+  renderPagination() {
+    const { currentPage, pages } = this.state;
+
+    if (pages > 1) {
+      return (
+        <Pagination
+          count={pages}
+          page={currentPage}
+          onChange={this.handleChangePage}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     const { thread, posts, match } = this.props;
     const { categoryId } = match.params;
+    const { currentPage, pages } = this.state;
 
     if (thread.fetching || posts.fetching) {
       return <Spinner />;
@@ -95,56 +153,72 @@ class Thread extends React.Component {
             </NavLink>
           </LinkWrapper>
 
-          <FirstPostWrapper>
-            <PostHeader>
-              <AvatarThumbnail
-                src={thread.data.user.avatar_thumbnail}
-                alt="Avatar thumbnail"
-              />
-              <PostHeaderInnerWrapper>
-                <UserLink to={`/profile/${thread.data.user.id}`}>
-                  {thread.data.user.username}
-                </UserLink>
-                <DateSpan>{formatTime.main(thread.data.created)}</DateSpan>
-              </PostHeaderInnerWrapper>
-            </PostHeader>
-            <ThreadTitle>{thread.data.title}</ThreadTitle>
-            <Content>{thread.data.subject}</Content>
-          </FirstPostWrapper>
+          <div>
+            <button type="button" onClick={this.handleMoveUserToEnd}>
+              Add post
+            </button>
+          </div>
+
+          {currentPage === 1 && (
+            <ThreadWrapper>
+              <PostHeader>
+                <AvatarThumbnail
+                  src={thread.data.user.avatar_thumbnail}
+                  alt="Avatar thumbnail"
+                />
+                <PostHeaderInnerWrapper>
+                  <UserLink to={`/profile/${thread.data.user.id}`}>
+                    {thread.data.user.username}
+                  </UserLink>
+                  <DateSpan>{formatTime.main(thread.data.created)}</DateSpan>
+                </PostHeaderInnerWrapper>
+              </PostHeader>
+              <ThreadTitle>{thread.data.title}</ThreadTitle>
+              <Content>{thread.data.subject}</Content>
+            </ThreadWrapper>
+          )}
 
           {this.renderPosts()}
 
           {/* create post form */}
-          <PostWrapper>
-            <Form onSubmit={this.handleCreatePost}>
-              {({ handleSubmit, values, form }) => (
-                <form
-                  onSubmit={async (event) => {
-                    await handleSubmit(event);
-                    form.reset();
-                  }}
-                >
-                  <Field name="content">
-                    {({ input }) => (
-                      <StyledTextArea
-                        {...input}
-                        rows="3"
-                        placeholder="Add your comment.."
-                        maxLength="2000"
+          {currentPage === pages && (
+            <PostWrapper
+              ref={(el) => {
+                this.messagesEnd = el;
+              }}
+            >
+              <Form onSubmit={this.handleCreatePost}>
+                {({ handleSubmit, values, form }) => (
+                  <form
+                    onSubmit={async (event) => {
+                      await handleSubmit(event);
+                      form.reset();
+                    }}
+                  >
+                    <Field name="content">
+                      {({ input }) => (
+                        <StyledTextArea
+                          {...input}
+                          rows="3"
+                          placeholder="Add your comment.."
+                          maxLength="2000"
+                        />
+                      )}
+                    </Field>
+                    {values.content && (
+                      <SubmitButton
+                        type="submit"
+                        value="Submit Post"
+                        color="greenOutline"
                       />
                     )}
-                  </Field>
-                  {values.content && (
-                    <SubmitButton
-                      type="submit"
-                      value="Submit Post"
-                      color="greenOutline"
-                    />
-                  )}
-                </form>
-              )}
-            </Form>
-          </PostWrapper>
+                  </form>
+                )}
+              </Form>
+            </PostWrapper>
+          )}
+
+          <div>{this.renderPagination()}</div>
         </ContainerDiv>
       );
     }
@@ -181,6 +255,7 @@ Thread.propTypes = {
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
+      count: PropTypes.number,
       results: PropTypes.array,
     }).isRequired,
     errors: PropTypes.object.isRequired,

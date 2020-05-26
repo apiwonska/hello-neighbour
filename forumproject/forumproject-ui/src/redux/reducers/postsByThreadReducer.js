@@ -35,7 +35,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       count = state.data.count + 1;
       results = [...state.data.results, action.payload];
       data = { ...state.data, count, results };
-      return { ...state, data, errors: null };
+      return { ...state, data, errors: {} };
 
     case CREATE_POST_ERRORS:
       return { ...state, errors: action.payload };

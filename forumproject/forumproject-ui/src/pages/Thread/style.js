@@ -13,7 +13,7 @@ export const NavLink = styled(Link)`
   text-decoration: underline;
 `;
 
-export const FirstPostWrapper = styled.div`
+export const ThreadWrapper = styled.div`
   background-color: ${theme.colors.neutralExtraLight};
   padding: 10px;
   margin-bottom: 20px;
