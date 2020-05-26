@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { Field, Form } from 'react-final-form';
 import PropTypes from 'prop-types';
 
 // import { renderPageError, DefaultError } from 'components/errors';
@@ -15,7 +14,9 @@ import {
   createPost as createPost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import formatTime from 'utils/timeFormat';
+import { formatTime } from 'utils';
+import CreatePostForm from './CreatePostForm';
+import GoToCreatePostFormButton from './GoToCreatePostFormButton';
 import {
   LinkWrapper,
   NavLink,
@@ -27,8 +28,6 @@ import {
   UserLink,
   ThreadTitle,
   Content,
-  StyledTextArea,
-  SubmitButton,
 } from './style';
 
 class Thread extends React.Component {
@@ -56,7 +55,7 @@ class Thread extends React.Component {
     // if items number changed, updates state.pages
     const { posts } = this.props;
     const { count: itemsTotal } = posts.data;
-    const pagesCurrent = Math.ceil(itemsTotal / this.itemsPerPage);
+    const pagesCurrent = Math.ceil(itemsTotal / this.itemsPerPage) || 1;
     const { pages: pagesPrev } = this.state;
 
     if (pagesCurrent !== pagesPrev) {
@@ -72,6 +71,8 @@ class Thread extends React.Component {
     const threadId = Number(match.params.threadId);
     const data = { ...values, user: userId, thread: threadId };
     await createPost(data);
+
+    // update page number (pages) and move to next page if page was appended
     const pageAppended = this.setPages();
     if (pageAppended) this.handleMoveUserToEnd();
   };
@@ -133,6 +134,9 @@ class Thread extends React.Component {
     const { thread, posts, match } = this.props;
     const { categoryId } = match.params;
     const { currentPage, pages } = this.state;
+    // const viewportHeight =
+    //   window.innerHeight || document.documentElement.clientHeight;
+    // const documentHeight = document.body.clientHeight;
 
     if (thread.fetching || posts.fetching) {
       return <Spinner />;
@@ -154,9 +158,9 @@ class Thread extends React.Component {
           </LinkWrapper>
 
           <div>
-            <button type="button" onClick={this.handleMoveUserToEnd}>
+            <GoToCreatePostFormButton onClick={this.handleMoveUserToEnd}>
               Add post
-            </button>
+            </GoToCreatePostFormButton>
           </div>
 
           {currentPage === 1 && (
@@ -180,41 +184,13 @@ class Thread extends React.Component {
 
           {this.renderPosts()}
 
-          {/* create post form */}
           {currentPage === pages && (
             <PostWrapper
               ref={(el) => {
                 this.messagesEnd = el;
               }}
             >
-              <Form onSubmit={this.handleCreatePost}>
-                {({ handleSubmit, values, form }) => (
-                  <form
-                    onSubmit={async (event) => {
-                      await handleSubmit(event);
-                      form.reset();
-                    }}
-                  >
-                    <Field name="content">
-                      {({ input }) => (
-                        <StyledTextArea
-                          {...input}
-                          rows="3"
-                          placeholder="Add your comment.."
-                          maxLength="2000"
-                        />
-                      )}
-                    </Field>
-                    {values.content && (
-                      <SubmitButton
-                        type="submit"
-                        value="Submit Post"
-                        color="greenOutline"
-                      />
-                    )}
-                  </form>
-                )}
-              </Form>
+              <CreatePostForm onSubmit={this.handleCreatePost} />
             </PostWrapper>
           )}
 
@@ -263,7 +239,7 @@ Thread.propTypes = {
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
-  deletePost: PropTypes.func.isRequired,
+  // deletePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

@@ -1,37 +1,40 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es6": true
+  env: {
+    browser: true,
+    es6: true,
   },
-  "extends": ["airbnb", "prettier", "prettier/react"],
-  "plugins": ["react", "jsx-a11y", "import", "prettier"],
-  "parserOptions": {
-    "ecmaVersion": 2018
+  extends: ['airbnb', 'prettier', 'prettier/react'],
+  plugins: ['react', 'jsx-a11y', 'import', 'prettier', 'react-hooks'],
+  parserOptions: {
+    ecmaVersion: 2018,
   },
-  "parser": "babel-eslint",
-  "rules": {
-    "prettier/prettier": [
-      "warn",
+  parser: 'babel-eslint',
+  rules: {
+    'prettier/prettier': [
+      'warn',
       {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "printWidth": 80
-      }
+        trailingComma: 'es5',
+        singleQuote: true,
+        printWidth: 80,
+      },
     ],
-    "react/jsx-filename-extension": [1, {
-      "extensions": [".js", ".jsx"]
-    }],
-    "react/jsx-props-no-spreading": "off",
-    "react/prop-types": "error",
-    "import/prefer-default-export": "error",
-    "no-nested-ternary": "error"
+    'react/jsx-filename-extension': [
+      1,
+      {
+        extensions: ['.js', '.jsx'],
+      },
+    ],
+    'react/jsx-props-no-spreading': 'off',
+    'react/prop-types': 'error',
+    'import/prefer-default-export': 'error',
+    'no-nested-ternary': 'error',
   },
   // accept absolute imports from src folder
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"]
-      }
-    }
-  }
-}
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+      },
+    },
+  },
+};
