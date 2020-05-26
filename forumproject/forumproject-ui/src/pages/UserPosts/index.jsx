@@ -6,7 +6,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { renderPageError } from 'components/errors';
-import { Spinner } from 'layout';
+import { Pagination, Spinner } from 'layout';
 import { ContainerDiv } from 'components/styledDivs';
 import {
   fetchPostsByUser as fetchPostsByUser_,
@@ -29,14 +29,16 @@ class UserPosts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentPage: 1,
       editingPost: null,
     };
+    this.itemsPerPage = 10;
   }
 
   componentDidMount = () => {
     const { auth, fetchPostsByUser } = this.props;
-    const userId = String(auth.user.id);
-    fetchPostsByUser(userId);
+    const userId = auth.user.id;
+    fetchPostsByUser(userId, this.itemsPerPage);
   };
 
   handleDeletePost = (postId) => {
@@ -47,7 +49,7 @@ class UserPosts extends React.Component {
   handleUpdatePost = async (values) => {
     const { editingPost } = this.state;
     const { updatePost } = this.props;
-    await updatePost(values, String(editingPost));
+    await updatePost(values, editingPost);
     this.setState({ editingPost: null });
   };
 
@@ -57,6 +59,14 @@ class UserPosts extends React.Component {
 
   handleHideUpdateForm = () => {
     this.setState({ editingPost: null });
+  };
+
+  handleChangePage = async (event, page) => {
+    const { auth, fetchPostsByUser } = this.props;
+    const userId = auth.user.id;
+    const offset = (page - 1) * this.itemsPerPage;
+    await fetchPostsByUser(userId, this.itemsPerPage, offset);
+    this.setState({ currentPage: page });
   };
 
   renderPostList = () => {
@@ -134,6 +144,24 @@ class UserPosts extends React.Component {
     return postsList;
   };
 
+  renderPagination() {
+    const { posts } = this.props;
+    const { count: itemsTotal } = posts.data;
+    const { currentPage } = this.state;
+    const pages = Math.ceil(itemsTotal / this.itemsPerPage);
+
+    if (pages > 1) {
+      return (
+        <Pagination
+          count={pages}
+          page={currentPage}
+          onChange={this.handleChangePage}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     const { posts } = this.props;
 
@@ -146,7 +174,12 @@ class UserPosts extends React.Component {
     }
 
     if (posts.fetched) {
-      return <ContainerDiv>{this.renderPostList()}</ContainerDiv>;
+      return (
+        <ContainerDiv>
+          {this.renderPostList()}
+          <div>{this.renderPagination()}</div>
+        </ContainerDiv>
+      );
     }
 
     return null;
@@ -163,6 +196,7 @@ UserPosts.propTypes = {
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
+      count: PropTypes.number,
       results: PropTypes.array,
     }).isRequired,
     errors: PropTypes.object.isRequired,
