@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, Form as FinalForm } from 'react-final-form';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
@@ -13,17 +11,7 @@ import {
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import formatTime from 'utils/timeFormat';
-import { required } from 'utils/validators';
-import {
-  PostWrapper,
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
-  Content,
-  Footer,
-  StyledTextArea,
-} from './style';
+import PostList from './PostList';
 
 class UserPosts extends React.Component {
   constructor(props) {
@@ -40,7 +28,7 @@ class UserPosts extends React.Component {
     const { auth, fetchPostsByUser } = this.props;
     const userId = auth.user.id;
     await fetchPostsByUser(userId, this.itemsPerPage);
-    this.setState({ pageCount: this.getPageNumber() });
+    this.setState({ pageCount: this.countPageNumber() });
   };
 
   handleDeletePost = async (postId) => {
@@ -59,6 +47,7 @@ class UserPosts extends React.Component {
         currentPage: pageCountChange.count,
       });
     }
+    // eslint-disable-next-line react/destructuring-assignment
     this.handleChangePage(null, this.state.currentPage);
   };
 
@@ -85,14 +74,8 @@ class UserPosts extends React.Component {
     this.setState({ currentPage: page });
   };
 
-  getPageNumber() {
-    const { posts } = this.props;
-    const { count: itemsTotal } = posts.data;
-    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
-  }
-
   setStatePageCount = () => {
-    const pageCountCurrent = this.getPageNumber();
+    const pageCountCurrent = this.countPageNumber();
     const { pageCount: pageCountPrev } = this.state;
     this.setState({ pageCount: pageCountCurrent });
     return {
@@ -101,84 +84,15 @@ class UserPosts extends React.Component {
     };
   };
 
-  renderPostList = () => {
-    const { editingPost } = this.state;
+  countPageNumber() {
     const { posts } = this.props;
-    const renderHeader = (post) => (
-      <PostHeader>
-        <PostHeaderInnerWrapper>
-          <Link
-            to={`/categories/${post.thread.category}/threads/${post.thread.id}`}
-          >
-            {post.thread.title}
-          </Link>
-          <DateSpan>{formatTime.main(post.created)}</DateSpan>
-        </PostHeaderInnerWrapper>
-      </PostHeader>
-    );
-
-    const postsList = posts.data.results.map((post) => {
-      // renders the update post form
-      if (editingPost === post.id) {
-        return (
-          <PostWrapper key={post.id}>
-            {renderHeader(post)}
-            <FinalForm
-              onSubmit={this.handleUpdatePost}
-              initialValues={{ content: post.content }}
-            >
-              {({ handleSubmit, hasValidationErrors }) => (
-                <form onSubmit={handleSubmit}>
-                  <>
-                    <Field name="content" validate={required}>
-                      {({ input }) => (
-                        <StyledTextArea {...input} rows="3" maxLength="2000" />
-                      )}
-                    </Field>
-                    <Footer>
-                      <button type="button" onClick={this.handleHideUpdateForm}>
-                        Cancel
-                      </button>
-                      <button type="submit" disabled={hasValidationErrors}>
-                        Update
-                      </button>
-                    </Footer>
-                  </>
-                </form>
-              )}
-            </FinalForm>
-          </PostWrapper>
-        );
-      }
-
-      // renders regular post by default
-      return (
-        <PostWrapper key={post.id}>
-          {renderHeader(post)}
-          <Content>{post.content}</Content>
-          <Footer>
-            <button
-              type="button"
-              onClick={() => this.handleShowUpdateForm(post.id)}
-            >
-              Update
-            </button>
-            <button
-              type="button"
-              onClick={() => this.handleDeletePost(post.id)}
-            >
-              Delete
-            </button>
-          </Footer>
-        </PostWrapper>
-      );
-    });
-    return postsList;
-  };
+    const { count: itemsTotal } = posts.data;
+    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+  }
 
   render() {
     const { posts } = this.props;
-    const { pageCount, currentPage } = this.state;
+    const { pageCount, currentPage, editingPost } = this.state;
 
     if (posts.fetching) {
       return <Spinner />;
@@ -191,7 +105,13 @@ class UserPosts extends React.Component {
     if (posts.fetched) {
       return (
         <ContainerDiv>
-          {this.renderPostList()}
+          <PostList
+            editingPost={editingPost}
+            handleUpdatePost={this.handleUpdatePost}
+            handleDeletePost={this.handleDeletePost}
+            handleShowUpdateForm={this.handleShowUpdateForm}
+            handleHideUpdateForm={this.handleHideUpdateForm}
+          />
           <div>
             <Pagination
               count={pageCount}
