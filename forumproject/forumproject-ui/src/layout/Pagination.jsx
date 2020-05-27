@@ -1,3 +1,10 @@
-import Pagination from '@material-ui/lab/Pagination';
+import React from 'react';
+import PaginationMUI from '@material-ui/lab/Pagination';
 
-export default Pagination;
+// count - number of pages to display
+export default (props) => {
+  if (props.count > 1) {
+    return <PaginationMUI {...props} />;
+  }
+  return null;
+};

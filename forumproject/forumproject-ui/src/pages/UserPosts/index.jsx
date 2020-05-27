@@ -30,20 +30,36 @@ class UserPosts extends React.Component {
     super(props);
     this.state = {
       currentPage: 1,
+      pageCount: 1,
       editingPost: null,
     };
     this.itemsPerPage = 10;
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const { auth, fetchPostsByUser } = this.props;
     const userId = auth.user.id;
-    fetchPostsByUser(userId, this.itemsPerPage);
+    await fetchPostsByUser(userId, this.itemsPerPage);
+    this.setState({ pageCount: this.getPageNumber() });
   };
 
-  handleDeletePost = (postId) => {
+  handleDeletePost = async (postId) => {
     const { deletePost } = this.props;
-    deletePost(postId);
+    const { currentPage } = this.state;
+    await deletePost(postId);
+
+    /** deleting post affect pagination
+     * update page count
+     * update current page if it's bigger then current page count value
+     * fetch current page
+     */
+    const pageCountChange = this.setStatePageCount();
+    if (currentPage > pageCountChange.count) {
+      this.setState({
+        currentPage: pageCountChange.count,
+      });
+    }
+    this.handleChangePage(null, this.state.currentPage);
   };
 
   handleUpdatePost = async (values) => {
@@ -67,6 +83,22 @@ class UserPosts extends React.Component {
     const offset = (page - 1) * this.itemsPerPage;
     await fetchPostsByUser(userId, this.itemsPerPage, offset);
     this.setState({ currentPage: page });
+  };
+
+  getPageNumber() {
+    const { posts } = this.props;
+    const { count: itemsTotal } = posts.data;
+    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+  }
+
+  setStatePageCount = () => {
+    const pageCountCurrent = this.getPageNumber();
+    const { pageCount: pageCountPrev } = this.state;
+    this.setState({ pageCount: pageCountCurrent });
+    return {
+      diff: pageCountCurrent - pageCountPrev,
+      count: pageCountCurrent,
+    };
   };
 
   renderPostList = () => {
@@ -144,26 +176,9 @@ class UserPosts extends React.Component {
     return postsList;
   };
 
-  renderPagination() {
-    const { posts } = this.props;
-    const { count: itemsTotal } = posts.data;
-    const { currentPage } = this.state;
-    const pages = Math.ceil(itemsTotal / this.itemsPerPage);
-
-    if (pages > 1) {
-      return (
-        <Pagination
-          count={pages}
-          page={currentPage}
-          onChange={this.handleChangePage}
-        />
-      );
-    }
-    return null;
-  }
-
   render() {
     const { posts } = this.props;
+    const { pageCount, currentPage } = this.state;
 
     if (posts.fetching) {
       return <Spinner />;
@@ -177,7 +192,13 @@ class UserPosts extends React.Component {
       return (
         <ContainerDiv>
           {this.renderPostList()}
-          <div>{this.renderPagination()}</div>
+          <div>
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={this.handleChangePage}
+            />
+          </div>
         </ContainerDiv>
       );
     }

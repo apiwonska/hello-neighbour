@@ -29,11 +29,12 @@ class ThreadList extends React.Component {
     super(props);
     this.state = {
       currentPage: 1,
+      pageCount: 1,
     };
     this.itemsPerPage = 10;
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const {
       categories,
       fetchCategories,
@@ -43,10 +44,11 @@ class ThreadList extends React.Component {
     const { categoryId } = match.params;
 
     if (!categories.fetched) {
-      fetchCategories();
+      await fetchCategories();
     }
-    fetchThreadsByCategory(categoryId, this.itemsPerPage);
-  }
+    await fetchThreadsByCategory(categoryId, this.itemsPerPage);
+    this.setState({ pageCount: this.getPageNumber() });
+  };
 
   handleChangePage = async (event, page) => {
     const { match, fetchThreadsByCategory } = this.props;
@@ -55,6 +57,12 @@ class ThreadList extends React.Component {
     await fetchThreadsByCategory(categoryId, this.itemsPerPage, offset);
     this.setState({ currentPage: page });
   };
+
+  getPageNumber() {
+    const { threads } = this.props;
+    const { count: itemsTotal } = threads.data;
+    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+  }
 
   renderThreadList() {
     const { threads, match } = this.props;
@@ -93,24 +101,6 @@ class ThreadList extends React.Component {
     return null;
   }
 
-  renderPagination() {
-    const { threads } = this.props;
-    const { count: itemsTotal } = threads.data;
-    const { currentPage } = this.state;
-    const pages = Math.ceil(itemsTotal / this.itemsPerPage);
-
-    if (pages > 1) {
-      return (
-        <Pagination
-          count={pages}
-          page={currentPage}
-          onChange={this.handleChangePage}
-        />
-      );
-    }
-    return null;
-  }
-
   render() {
     const { categories, match } = this.props;
     const { categoryId } = match.params;
@@ -132,6 +122,8 @@ class ThreadList extends React.Component {
     }
 
     if (categories.fetched && category) {
+      const { currentPage, pageCount } = this.state;
+
       return (
         <ContainerDiv>
           <CategoryHeader>{category.name}</CategoryHeader>
@@ -144,7 +136,13 @@ class ThreadList extends React.Component {
             </LinkButton>
           </div>
           <div>{this.renderThreadList()}</div>
-          <div>{this.renderPagination()}</div>
+          <div>
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={this.handleChangePage}
+            />
+          </div>
         </ContainerDiv>
       );
     }

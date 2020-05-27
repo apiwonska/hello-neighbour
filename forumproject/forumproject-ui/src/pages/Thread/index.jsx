@@ -35,7 +35,7 @@ class Thread extends React.Component {
     super(props);
     this.state = {
       currentPage: 1,
-      pages: null,
+      pageCount: 1,
     };
     this.itemsPerPage = 10;
   }
@@ -51,20 +51,6 @@ class Thread extends React.Component {
     this.setPages();
   };
 
-  setPages() {
-    // if items number changed, updates state.pages
-    const { posts } = this.props;
-    const { count: itemsTotal } = posts.data;
-    const pagesCurrent = Math.ceil(itemsTotal / this.itemsPerPage) || 1;
-    const { pages: pagesPrev } = this.state;
-
-    if (pagesCurrent !== pagesPrev) {
-      this.setState({ pages: pagesCurrent });
-      return true;
-    }
-    return false;
-  }
-
   handleCreatePost = async (values) => {
     const { auth, createPost, match } = this.props;
     const userId = auth.user.id;
@@ -72,9 +58,11 @@ class Thread extends React.Component {
     const data = { ...values, user: userId, thread: threadId };
     await createPost(data);
 
-    // update page number (pages) and move to next page if page was appended
-    const pageAppended = this.setPages();
-    if (pageAppended) this.handleMoveUserToEnd();
+    // update page count and move to next page if page was appended
+    const pageCountChange = this.setStatePages();
+    if (pageCountChange.diff) {
+      this.handleChangePage(null, pageCountChange.count);
+    }
   };
 
   handleChangePage = async (event, page) => {
@@ -86,11 +74,27 @@ class Thread extends React.Component {
   };
 
   handleMoveUserToEnd = async () => {
-    const { currentPage, pages: lastPage } = this.state;
+    const { currentPage, pageCount: lastPage } = this.state;
     if (currentPage !== lastPage) {
       await this.handleChangePage(null, lastPage);
     }
     this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  getPageNumber = () => {
+    const { posts } = this.props;
+    const { count: itemsTotal } = posts.data;
+    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+  };
+
+  setStatePageCount = () => {
+    const pageCountCurrent = this.getPageNumber();
+    const { pageCount: pageCountPrev } = this.state;
+    this.setState({ pageCount: pageCountCurrent });
+    return {
+      diff: pageCountCurrent - pageCountPrev,
+      count: pageCountCurrent,
+    };
   };
 
   renderPosts() {
@@ -115,28 +119,10 @@ class Thread extends React.Component {
     return postsList;
   }
 
-  renderPagination() {
-    const { currentPage, pages } = this.state;
-
-    if (pages > 1) {
-      return (
-        <Pagination
-          count={pages}
-          page={currentPage}
-          onChange={this.handleChangePage}
-        />
-      );
-    }
-    return null;
-  }
-
   render() {
     const { thread, posts, match } = this.props;
     const { categoryId } = match.params;
-    const { currentPage, pages } = this.state;
-    // const viewportHeight =
-    //   window.innerHeight || document.documentElement.clientHeight;
-    // const documentHeight = document.body.clientHeight;
+    const { currentPage, pageCount } = this.state;
 
     if (thread.fetching || posts.fetching) {
       return <Spinner />;
@@ -184,7 +170,7 @@ class Thread extends React.Component {
 
           {this.renderPosts()}
 
-          {currentPage === pages && (
+          {currentPage === pageCount && (
             <PostWrapper
               ref={(el) => {
                 this.messagesEnd = el;
@@ -194,7 +180,13 @@ class Thread extends React.Component {
             </PostWrapper>
           )}
 
-          <div>{this.renderPagination()}</div>
+          <div>
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={this.handleChangePage}
+            />
+          </div>
         </ContainerDiv>
       );
     }
