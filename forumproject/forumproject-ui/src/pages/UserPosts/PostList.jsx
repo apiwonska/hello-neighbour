@@ -96,11 +96,15 @@ const PostList = ({
 };
 
 PostList.propTypes = {
-  editingPost: PropTypes.number.isRequired,
+  editingPost: PropTypes.number,
   handleUpdatePost: PropTypes.func.isRequired,
   handleDeletePost: PropTypes.func.isRequired,
   handleShowUpdateForm: PropTypes.func.isRequired,
   handleHideUpdateForm: PropTypes.func.isRequired,
+};
+
+PostList.defaultProps = {
+  editingPost: null,
 };
 
 export default PostList;

@@ -7,28 +7,17 @@ import PropTypes from 'prop-types';
 // import { renderPageError, DefaultError } from 'components/errors';
 import { Pagination, Spinner } from 'layout';
 import { ContainerDiv } from 'components/styledDivs';
-import { AvatarThumbnail } from 'components/styledImages';
 import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
   createPost as createPost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import { formatTime } from 'utils';
 import CreatePostForm from './CreatePostForm';
 import GoToCreatePostFormButton from './GoToCreatePostFormButton';
-import {
-  LinkWrapper,
-  NavLink,
-  ThreadWrapper,
-  PostWrapper,
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
-  UserLink,
-  ThreadTitle,
-  Content,
-} from './style';
+import PostList from './PostList';
+import ThreadSubject from './ThreadSubject';
+import { LinkWrapper, NavLink, PostWrapper } from './style';
 
 class Thread extends React.Component {
   constructor(props) {
@@ -48,7 +37,7 @@ class Thread extends React.Component {
       fetchThread(threadId);
     }
     await fetchPostsByThread(threadId, this.itemsPerPage);
-    this.setPages();
+    this.setStatePageCount();
   };
 
   handleCreatePost = async (values) => {
@@ -59,7 +48,7 @@ class Thread extends React.Component {
     await createPost(data);
 
     // update page count and move to next page if page was appended
-    const pageCountChange = this.setStatePages();
+    const pageCountChange = this.setStatePageCount();
     if (pageCountChange.diff) {
       this.handleChangePage(null, pageCountChange.count);
     }
@@ -97,28 +86,6 @@ class Thread extends React.Component {
     };
   };
 
-  renderPosts() {
-    const { posts } = this.props;
-    const postsList = posts.data.results.map((post) => (
-      <PostWrapper key={post.id}>
-        <PostHeader>
-          <AvatarThumbnail
-            src={post.user.avatar_thumbnail}
-            alt="Avatar thumbnail"
-          />
-          <PostHeaderInnerWrapper>
-            <UserLink to={`/profile/${post.user.id}`}>
-              {post.user.username}
-            </UserLink>
-            <DateSpan>{formatTime.main(post.created)}</DateSpan>
-          </PostHeaderInnerWrapper>
-        </PostHeader>
-        <Content>{post.content}</Content>
-      </PostWrapper>
-    ));
-    return postsList;
-  }
-
   render() {
     const { thread, posts, match } = this.props;
     const { categoryId } = match.params;
@@ -144,31 +111,15 @@ class Thread extends React.Component {
           </LinkWrapper>
 
           <div>
-            <GoToCreatePostFormButton onClick={this.handleMoveUserToEnd}>
-              Add post
-            </GoToCreatePostFormButton>
+            <GoToCreatePostFormButton
+              onClick={this.handleMoveUserToEnd}
+              children="Add post"
+            />
           </div>
 
-          {currentPage === 1 && (
-            <ThreadWrapper>
-              <PostHeader>
-                <AvatarThumbnail
-                  src={thread.data.user.avatar_thumbnail}
-                  alt="Avatar thumbnail"
-                />
-                <PostHeaderInnerWrapper>
-                  <UserLink to={`/profile/${thread.data.user.id}`}>
-                    {thread.data.user.username}
-                  </UserLink>
-                  <DateSpan>{formatTime.main(thread.data.created)}</DateSpan>
-                </PostHeaderInnerWrapper>
-              </PostHeader>
-              <ThreadTitle>{thread.data.title}</ThreadTitle>
-              <Content>{thread.data.subject}</Content>
-            </ThreadWrapper>
-          )}
+          {currentPage === 1 && <ThreadSubject />}
 
-          {this.renderPosts()}
+          <PostList />
 
           {currentPage === pageCount && (
             <PostWrapper
@@ -208,14 +159,6 @@ Thread.propTypes = {
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       id: PropTypes.number,
-      user: PropTypes.shape({
-        id: PropTypes.number,
-        username: PropTypes.string,
-        avatar_thumbnail: PropTypes.string,
-      }),
-      title: PropTypes.string,
-      subject: PropTypes.string,
-      created: PropTypes.string,
     }).isRequired,
     errors: PropTypes.object.isRequired,
   }).isRequired,
@@ -224,9 +167,7 @@ Thread.propTypes = {
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       count: PropTypes.number,
-      results: PropTypes.array,
     }).isRequired,
-    errors: PropTypes.object.isRequired,
   }).isRequired,
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
