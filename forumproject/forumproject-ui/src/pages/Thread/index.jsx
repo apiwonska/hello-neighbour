@@ -14,7 +14,6 @@ import {
   deletePost as deletePost_,
 } from 'redux/actions';
 import CreatePostForm from './CreatePostForm';
-import GoToCreatePostFormButton from './GoToCreatePostFormButton';
 import PostList from './PostList';
 import ThreadSubject from './ThreadSubject';
 import { LinkWrapper, NavLink, PostWrapper } from './style';
@@ -111,10 +110,9 @@ class Thread extends React.Component {
           </LinkWrapper>
 
           <div>
-            <GoToCreatePostFormButton
-              onClick={this.handleMoveUserToEnd}
-              children="Add post"
-            />
+            <button type="button" onClick={this.handleMoveUserToEnd}>
+              Add post
+            </button>
           </div>
 
           {currentPage === 1 && <ThreadSubject />}
