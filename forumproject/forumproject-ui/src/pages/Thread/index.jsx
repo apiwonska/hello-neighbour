@@ -81,14 +81,14 @@ class Thread extends React.Component {
     this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   };
 
-  getPageNumber = () => {
+  countPageNumber = () => {
     const { posts } = this.props;
     const { count: itemsTotal } = posts.data;
     return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
   };
 
   setStatePageCount = () => {
-    const pageCountCurrent = this.getPageNumber();
+    const pageCountCurrent = this.countPageNumber();
     const { pageCount: pageCountPrev } = this.state;
     this.setState({ pageCount: pageCountCurrent });
     return {

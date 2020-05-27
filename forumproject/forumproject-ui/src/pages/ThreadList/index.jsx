@@ -47,7 +47,7 @@ class ThreadList extends React.Component {
       await fetchCategories();
     }
     await fetchThreadsByCategory(categoryId, this.itemsPerPage);
-    this.setState({ pageCount: this.getPageNumber() });
+    this.setState({ pageCount: this.countPageNumber() });
   };
 
   handleChangePage = async (event, page) => {
@@ -58,7 +58,7 @@ class ThreadList extends React.Component {
     this.setState({ currentPage: page });
   };
 
-  getPageNumber() {
+  countPageNumber() {
     const { threads } = this.props;
     const { count: itemsTotal } = threads.data;
     return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
