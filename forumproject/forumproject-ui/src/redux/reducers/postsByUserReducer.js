@@ -35,14 +35,14 @@ const reducer = (state = INITIAL_STATE, action) => {
       results = [...state.data.results];
       _.remove(results, { id: action.payload });
       data = { ...state.data, count, results };
-      return { ...state, data, errors: null };
+      return { ...state, data, errors: {} };
 
     case UPDATE_POST_FULFILLED:
       results = [...state.data.results];
       index = results.findIndex((el) => el.id === action.payload.id);
       results.splice(index, 1, action.payload);
       data = { ...state.data, results };
-      return { ...state, data, errors: null };
+      return { ...state, data, errors: {} };
 
     default:
       return state;
