@@ -40,6 +40,8 @@ export const PostHeaderInnerWrapper = styled.div`
   margin-left: 15px;
 `;
 
+export const Footer = styled.div``;
+
 export const UserLink = styled(Link)`
   font-weight: 600;
   color: ${theme.colors.black};
