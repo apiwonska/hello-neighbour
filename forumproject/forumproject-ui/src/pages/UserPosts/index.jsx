@@ -1,17 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
+import PostList from 'components/EditablePostList';
 import { renderPageError } from 'components/errors';
 import { Pagination, Spinner } from 'layout';
 import { ContainerDiv } from 'components/styledDivs';
+import formatTime from 'utils/timeFormat';
 import {
   fetchPostsByUser as fetchPostsByUser_,
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import PostList from './PostList';
+import { PostHeader, PostHeaderInnerWrapper, DateSpan } from './style';
 
 class UserPosts extends React.Component {
   constructor(props) {
@@ -33,22 +36,18 @@ class UserPosts extends React.Component {
 
   handleDeletePost = async (postId) => {
     const { deletePost } = this.props;
-    const { currentPage } = this.state;
+    let { currentPage } = this.state;
     await deletePost(postId);
 
     /** deleting post affect pagination
      * update page count
      * update current page if it's bigger then current page count value
-     * fetch current page
+     * fetch current page (handlePageChange updates state.currentPage)
      */
     const pageCountChange = this.setStatePageCount();
-    if (currentPage > pageCountChange.count) {
-      this.setState({
-        currentPage: pageCountChange.count,
-      });
-    }
-    // eslint-disable-next-line react/destructuring-assignment
-    this.handleChangePage(null, this.state.currentPage);
+    currentPage =
+      currentPage > pageCountChange.count ? pageCountChange.count : currentPage;
+    this.handleChangePage(null, currentPage);
   };
 
   handleUpdatePost = async (values) => {
@@ -90,6 +89,19 @@ class UserPosts extends React.Component {
     return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
   }
 
+  renderPostHeader = (post) => (
+    <PostHeader>
+      <PostHeaderInnerWrapper>
+        <Link
+          to={`/categories/${post.thread.category}/threads/${post.thread.id}`}
+        >
+          {post.thread.title}
+        </Link>
+        <DateSpan>{formatTime.main(post.created)}</DateSpan>
+      </PostHeaderInnerWrapper>
+    </PostHeader>
+  );
+
   render() {
     const { posts } = this.props;
     const { pageCount, currentPage, editingPost } = this.state;
@@ -106,6 +118,7 @@ class UserPosts extends React.Component {
       return (
         <ContainerDiv>
           <PostList
+            renderPostHeader={this.renderPostHeader}
             editingPost={editingPost}
             handleUpdatePost={this.handleUpdatePost}
             handleDeletePost={this.handleDeletePost}
@@ -149,7 +162,7 @@ UserPosts.propTypes = {
 
 const mapsToProps = (state) => ({
   auth: state.auth,
-  posts: state.postsByUser,
+  posts: state.posts,
 });
 
 export default connect(mapsToProps, {
