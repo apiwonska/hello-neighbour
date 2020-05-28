@@ -11,13 +11,23 @@ import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
   createPost as createPost_,
+  updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
 import CreatePostForm from './CreatePostForm';
-import GoToCreatePostFormButton from './GoToCreatePostFormButton';
-import PostList from './PostList';
+import PostList from 'components/EditablePostList';
+import { formatTime } from 'utils';
+import { AvatarThumbnail } from 'components/styledImages';
 import ThreadSubject from './ThreadSubject';
-import { LinkWrapper, NavLink, PostWrapper } from './style';
+import {
+  LinkWrapper,
+  NavLink,
+  PostWrapper,
+  PostHeader,
+  PostHeaderInnerWrapper,
+  DateSpan,
+  UserLink,
+} from './style';
 
 class Thread extends React.Component {
   constructor(props) {
@@ -25,8 +35,9 @@ class Thread extends React.Component {
     this.state = {
       currentPage: 1,
       pageCount: 1,
+      editingPost: null,
     };
-    this.itemsPerPage = 10;
+    this.itemsPerPage = 2;
   }
 
   componentDidMount = async () => {
@@ -52,6 +63,37 @@ class Thread extends React.Component {
     if (pageCountChange.diff) {
       this.handleChangePage(null, pageCountChange.count);
     }
+  };
+
+  handleUpdatePost = async (values) => {
+    const { editingPost } = this.state;
+    const { updatePost } = this.props;
+    await updatePost(values, editingPost);
+    this.setState({ editingPost: null });
+  };
+
+  handleDeletePost = async (postId) => {
+    const { deletePost } = this.props;
+    let { currentPage } = this.state;
+    await deletePost(postId);
+
+    /** deleting post affect pagination
+     * update page count
+     * update current page if it's bigger then current page count value
+     * fetch current page (handlePageChange updates state.currentPage)
+     */
+    const pageCountChange = this.setStatePageCount();
+    currentPage =
+      currentPage > pageCountChange.count ? pageCountChange.count : currentPage;
+    this.handleChangePage(null, currentPage);
+  };
+
+  handleShowUpdateForm = (postId) => {
+    this.setState({ editingPost: postId });
+  };
+
+  handleHideUpdateForm = () => {
+    this.setState({ editingPost: null });
   };
 
   handleChangePage = async (event, page) => {
@@ -86,10 +128,25 @@ class Thread extends React.Component {
     };
   };
 
+  renderPostHeader = (post) => (
+    <PostHeader>
+      <AvatarThumbnail
+        src={post.user.avatar_thumbnail}
+        alt="Avatar thumbnail"
+      />
+      <PostHeaderInnerWrapper>
+        <UserLink to={`/profile/${post.user.id}`}>
+          {post.user.username}
+        </UserLink>
+        <DateSpan>{formatTime.main(post.created)}</DateSpan>
+      </PostHeaderInnerWrapper>
+    </PostHeader>
+  );
+
   render() {
     const { thread, posts, match } = this.props;
     const { categoryId } = match.params;
-    const { currentPage, pageCount } = this.state;
+    const { currentPage, pageCount, editingPost } = this.state;
 
     if (thread.fetching || posts.fetching) {
       return <Spinner />;
@@ -111,15 +168,21 @@ class Thread extends React.Component {
           </LinkWrapper>
 
           <div>
-            <GoToCreatePostFormButton
-              onClick={this.handleMoveUserToEnd}
-              children="Add post"
-            />
+            <button type="button" onClick={this.handleMoveUserToEnd}>
+              Add post
+            </button>
           </div>
 
           {currentPage === 1 && <ThreadSubject />}
 
-          <PostList />
+          <PostList
+            renderPostHeader={this.renderPostHeader}
+            editingPost={editingPost}
+            handleUpdatePost={this.handleUpdatePost}
+            handleDeletePost={this.handleDeletePost}
+            handleShowUpdateForm={this.handleShowUpdateForm}
+            handleHideUpdateForm={this.handleHideUpdateForm}
+          />
 
           {currentPage === pageCount && (
             <PostWrapper
@@ -178,12 +241,13 @@ Thread.propTypes = {
 const mapStateToProps = (state) => ({
   auth: state.auth,
   thread: state.thread,
-  posts: state.postsByThread,
+  posts: state.posts,
 });
 
 export default connect(mapStateToProps, {
   fetchThread: fetchThread_,
   fetchPostsByThread: fetchPostsByThread_,
   createPost: createPost_,
+  updatePost: updatePost_,
   deletePost: deletePost_,
 })(Thread);

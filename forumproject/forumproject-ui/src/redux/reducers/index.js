@@ -5,8 +5,7 @@ import passwordResetReducer from './passwordResetReducer';
 import categoriesReducer from './categoriesReducer';
 import threadsByCategoryReducer from './threadsByCategoryReducer';
 import threadReducer from './threadReducer';
-import postsByThreadReducer from './postsByThreadReducer';
-import postsByUserReducer from './postsByUserReducer';
+import postsReducer from './postsReducer';
 import userReducer from './userReducer';
 
 const reducers = combineReducers({
@@ -15,8 +14,7 @@ const reducers = combineReducers({
   categories: categoriesReducer,
   threadsByCategory: threadsByCategoryReducer,
   thread: threadReducer,
-  postsByThread: postsByThreadReducer,
-  postsByUser: postsByUserReducer,
+  posts: postsReducer,
   user: userReducer,
 });
 

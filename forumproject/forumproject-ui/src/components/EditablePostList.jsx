@@ -1,45 +1,39 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { Field, Form as FinalForm } from 'react-final-form';
-import { Link } from 'react-router-dom';
-import formatTime from 'utils/timeFormat';
+
 import { required } from 'utils/validators';
 import {
   PostWrapper,
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
   Content,
   Footer,
   StyledTextArea,
-} from './style';
+} from 'pages/Thread/style';
 
 const PostList = ({
+  renderPostHeader,
   editingPost,
   handleUpdatePost,
   handleDeletePost,
   handleShowUpdateForm,
   handleHideUpdateForm,
 }) => {
-  const posts = useSelector((state) => state.postsByUser);
+  const ownerId = useSelector((state) => state.auth.user.id);
+  const posts = useSelector((state) => state.posts);
 
-  const renderPostHeader = (post) => (
-    <PostHeader>
-      <PostHeaderInnerWrapper>
-        <Link
-          to={`/categories/${post.thread.category}/threads/${post.thread.id}`}
-        >
-          {post.thread.title}
-        </Link>
-        <DateSpan>{formatTime.main(post.created)}</DateSpan>
-      </PostHeaderInnerWrapper>
-    </PostHeader>
-  );
-
-  const renderPostList = () => {
+  const renderPosts = () => {
     const postsList = posts.data.results.map((post) => {
+      // if the logged in user is not post author, no option to edit post
+      if (post.user.id !== ownerId) {
+        return (
+          <PostWrapper key={post.id}>
+            {renderPostHeader(post)}
+            <Content>{post.content}</Content>
+          </PostWrapper>
+        );
+      }
+
       // renders the update post form
       if (editingPost === post.id) {
         return (
@@ -73,7 +67,7 @@ const PostList = ({
         );
       }
 
-      // renders regular post by default
+      // renders post by default
       return (
         <PostWrapper key={post.id}>
           {renderPostHeader(post)}
@@ -92,7 +86,7 @@ const PostList = ({
     return postsList;
   };
 
-  return <>{renderPostList()}</>;
+  return <>{renderPosts()}</>;
 };
 
 PostList.propTypes = {
