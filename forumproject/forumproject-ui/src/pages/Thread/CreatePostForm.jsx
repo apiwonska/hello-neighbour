@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import { StyledTextArea, SubmitButton } from './style';
 
-const CreatePostForm = ({ onSubmit }) => {
+const CreatePostForm = React.forwardRef((props, ref) => {
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={props.onSubmit}>
       {({ handleSubmit, values, form }) => (
         <form
           onSubmit={async (event) => {
@@ -18,6 +18,7 @@ const CreatePostForm = ({ onSubmit }) => {
             {({ input }) => (
               <StyledTextArea
                 {...input}
+                ref={ref}
                 rows="3"
                 placeholder="Add your comment.."
                 maxLength="2000"
@@ -35,7 +36,7 @@ const CreatePostForm = ({ onSubmit }) => {
       )}
     </Form>
   );
-};
+});
 
 CreatePostForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
