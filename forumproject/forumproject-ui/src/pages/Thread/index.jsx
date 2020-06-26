@@ -38,6 +38,7 @@ class Thread extends React.Component {
       editingPost: null,
     };
     this.itemsPerPage = 2;
+    this.postFormRef = React.createRef();
   }
 
   componentDidMount = async () => {
@@ -109,7 +110,8 @@ class Thread extends React.Component {
     if (currentPage !== lastPage) {
       await this.handleChangePage(null, lastPage);
     }
-    this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+    this.postFormRef.current.scrollIntoView({ behavior: 'smooth' });
+    this.postFormRef.current.focus();
   };
 
   countPageNumber = () => {
@@ -185,12 +187,11 @@ class Thread extends React.Component {
           />
 
           {currentPage === pageCount && (
-            <PostWrapper
-              ref={(el) => {
-                this.messagesEnd = el;
-              }}
-            >
-              <CreatePostForm onSubmit={this.handleCreatePost} />
+            <PostWrapper>
+              <CreatePostForm
+                ref={this.postFormRef}
+                onSubmit={this.handleCreatePost}
+              />
             </PostWrapper>
           )}
 
