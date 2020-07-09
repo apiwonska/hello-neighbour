@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import theme from '../theme';
+import theme from 'layout/theme';
 
 const StyledFooter = styled.footer`
   margin-top: auto;
