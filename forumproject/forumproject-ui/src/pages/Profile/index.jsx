@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContainerDiv } from 'components/styledDivs';
-import { LinkButtonSmall as Button } from 'components/styledButtons';
+import { ContentWrapper, Spinner, TopBeam } from 'layout';
 import { renderPageError } from 'components/errors';
-import { Spinner } from 'layout';
 import { fetchUser as fetchUser_ } from 'redux/actions';
 import {
-  ImageWrapper,
+  Button,
+  GroupWrapper,
   Avatar,
   DataGroup,
   Label,
@@ -67,7 +66,7 @@ class Profile extends React.Component {
       <DataWrapper>
         <DataGroup>
           <Label> Username: </Label>
-          <Data> {user.data.username} </Data>
+          <Data>{user.data.username}</Data>
         </DataGroup>
         {isOwner && (
           <DataGroup>
@@ -84,7 +83,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, history } = this.props;
     const { isOwner } = this.state;
 
     if (this.checkNeedFetchUser()) {
@@ -101,25 +100,29 @@ class Profile extends React.Component {
 
     if (user.fetched) {
       return (
-        <ContainerDiv>
-          <ImageWrapper>
-            <Avatar src={user.data.avatar} alt="User avatar" />
-          </ImageWrapper>
-          {this.renderUserData()}
-          {isOwner && (
-            <>
-              <Button to="/profile/edit" color="greenOutline">
-                Edit Profile
-              </Button>
-              <Button to="/profile/password-change" color="greenOutline">
-                Change Password
-              </Button>
-              <Button to="/profile/posts" color="greenOutline">
-                Your posts
-              </Button>
-            </>
-          )}
-        </ContainerDiv>
+        <>
+          <TopBeam />
+          <ContentWrapper>
+            <GroupWrapper>
+              <Avatar src={user.data.avatar} alt="User avatar" />
+            </GroupWrapper>
+            <GroupWrapper>
+              {this.renderUserData()}
+              {isOwner && (
+                <>
+                  <Button onClick={() => history.push('/profile/edit')}>
+                    Edit Profile
+                  </Button>
+                  <Button
+                    onClick={() => history.push('/profile/password-change')}
+                  >
+                    Change Password
+                  </Button>
+                </>
+              )}
+            </GroupWrapper>
+          </ContentWrapper>
+        </>
       );
     }
     return null;

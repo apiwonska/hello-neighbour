@@ -1,5 +1,9 @@
 import React from 'react';
 
-const Home = () => <div>Home</div>;
+import { Wrapper } from './style';
+
+const Home = () => {
+  return <Wrapper>Home</Wrapper>;
+};
 
 export default Home;
