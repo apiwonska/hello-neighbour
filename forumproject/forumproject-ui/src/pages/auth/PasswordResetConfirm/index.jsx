@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
-  Input,
+  Modal,
+  ModalButton as Button,
+  ModalContentGroup as ContentGroup,
+  ModalFormWrapper as FormWrapper,
+  ModalInput as Input,
+  ModalLabel as Label,
+  ModalLink as Link,
+  ModalParagraph as Paragraph,
   FormGroup,
-  Label,
   FormError,
-  FormWrapper,
-} from 'components/styledForms';
-import { SubmitButtonSmall } from 'components/styledButtons';
+} from 'layout';
 import { confirmPasswordReset as confirmPasswordReset_ } from 'redux/actions';
 import {
   required,
@@ -57,24 +60,28 @@ class PasswordResetConfirm extends React.Component {
   };
 
   render() {
-    // a value to ensure form input id uniqueness
-    const id = 'prc';
+    const formId = 'prc';
     const { passwordChanged, emailSent } = this.state;
+    const { history } = this.props;
 
     if (passwordChanged) {
       return (
-        <div>
-          Password was changed. You can <Link to="/auth">log in</Link> now.
-        </div>
+        <ContentGroup>
+          <Paragraph>
+            Password was changed. You can <Link to="/auth">Log In</Link> now.
+          </Paragraph>
+        </ContentGroup>
       );
     }
 
     return (
-      <>
-        <h2>Password Reset Confirm</h2>
-        <div>
+      <Modal
+        title="Password Reset Confirm"
+        handleDismiss={() => history.push('/')}
+      >
+        <Paragraph>
           {emailSent && 'The confirmation token was sent to your email.'}
-        </div>
+        </Paragraph>
 
         <FinalForm onSubmit={this.onSubmit}>
           {({
@@ -93,7 +100,7 @@ class PasswordResetConfirm extends React.Component {
               );
             }
             return (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} id={formId}>
                 <FormWrapper>
                   <FormGroup>
                     <FormError>
@@ -105,8 +112,8 @@ class PasswordResetConfirm extends React.Component {
                   <Field name="token" validate={required}>
                     {({ input, meta: { touched, error, submitError } }) => (
                       <FormGroup>
-                        <Label htmlFor={`token-${id}`}>Token:</Label>
-                        <Input {...input} id={`token-${id}`} type="text" />
+                        <Label htmlFor={`token-${formId}`}>Token:</Label>
+                        <Input {...input} id={`token-${formId}`} type="text" />
                         <FormError>
                           {touched && (error || submitError)}
                         </FormError>
@@ -116,10 +123,12 @@ class PasswordResetConfirm extends React.Component {
                   <Field name="password" validate={passwordValidator}>
                     {({ input, meta: { touched, error, submitError } }) => (
                       <FormGroup>
-                        <Label htmlFor={`password-${id}`}>New password:</Label>
+                        <Label htmlFor={`password-${formId}`}>
+                          New password:
+                        </Label>
                         <Input
                           {...input}
-                          id={`password-${id}`}
+                          id={`password-${formId}`}
                           type="password"
                         />
                         <FormError>
@@ -134,29 +143,27 @@ class PasswordResetConfirm extends React.Component {
                   >
                     {({ input, meta: { touched, error } }) => (
                       <FormGroup>
-                        <Label htmlFor={`password2-${id}`}>
+                        <Label htmlFor={`password2-${formId}`}>
                           Confirm password:
                         </Label>
                         <Input
                           {...input}
-                          id={`password2-${id}`}
+                          id={`password2-${formId}`}
                           type="password"
                         />
                         <FormError>{touched && error}</FormError>
                       </FormGroup>
                     )}
                   </Field>
-                  <SubmitButtonSmall
-                    type="submit"
-                    value="Change Password"
-                    disable={pristine || hasValidationErrors}
-                  />
+                  <Button type="submit" color="yellow" size="L">
+                    Change Password
+                  </Button>
                 </FormWrapper>
               </form>
             );
           }}
         </FinalForm>
-      </>
+      </Modal>
     );
   }
 }

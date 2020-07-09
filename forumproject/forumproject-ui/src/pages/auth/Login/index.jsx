@@ -1,17 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {
-  Input,
+  Modal,
+  ModalButton as Button,
+  ModalContentGroup as ContentGroup,
+  ModalFormWrapper as FormWrapper,
+  ModalInput as Input,
+  ModalLabel as Label,
+  ModalLink as Link,
+  ModalParagraph as Paragraph,
   FormGroup,
-  Label,
   FormError,
-  FormWrapper,
-} from 'components/styledForms';
-import { SubmitButtonSmall } from 'components/styledButtons';
+} from 'layout';
 import { logIn as logIn_ } from 'redux/actions';
 import { required } from 'utils/validators';
 
@@ -27,14 +30,13 @@ class LogIn extends React.Component {
   };
 
   render() {
-    // a value to ensure input id uniqueness
-    const id = 'login';
+    const formId = 'login';
+    const { history } = this.props;
     return (
-      <div>
-        <h2>Log In</h2>
+      <Modal title="Log In" handleDismiss={() => history.push('/')}>
         <FinalForm onSubmit={this.onSubmit}>
           {({ handleSubmit, pristine, hasValidationErrors, submitErrors }) => (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id={formId}>
               <FormWrapper>
                 <FormGroup>
                   <FormError>
@@ -44,8 +46,8 @@ class LogIn extends React.Component {
                 <Field name="username" validate={required}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`username-${id}`}>Username:</Label>
-                      <Input {...input} id={`username-${id}`} type="text" />
+                      <Label htmlFor={`username-${formId}`}>Username:</Label>
+                      <Input {...input} id={`username-${formId}`} type="text" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
@@ -53,33 +55,35 @@ class LogIn extends React.Component {
                 <Field name="password" validate={required}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`password-${id}`}>Password:</Label>
-                      <Input {...input} id={`password-${id}`} type="password" />
+                      <Label htmlFor={`password-${formId}`}>Password:</Label>
+                      <Input
+                        {...input}
+                        id={`password-${formId}`}
+                        type="password"
+                      />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
                 </Field>
-                <SubmitButtonSmall
-                  type="submit"
-                  value="Log In"
-                  disable={pristine || hasValidationErrors}
-                />
+                <Button type="submit" color="yellow" size="L">
+                  Log In{' '}
+                </Button>
               </FormWrapper>
             </form>
           )}
         </FinalForm>
-        <div>
-          <p>
+        <ContentGroup>
+          <Paragraph>
             If you don&apos;t have an account&nbsp;
             <Link to="/register">register here</Link>
-          </p>
-          <p>
+          </Paragraph>
+          <Paragraph>
             Did you forget your login or password? Click&nbsp;
             <Link to="/password-reset">this</Link>&nbsp;to restore your
             credentials
-          </p>
-        </div>
-      </div>
+          </Paragraph>
+        </ContentGroup>
+      </Modal>
     );
   }
 }

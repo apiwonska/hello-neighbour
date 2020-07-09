@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
-  Input,
+  Modal,
+  ModalButton as Button,
+  ModalContentGroup as ContentGroup,
+  ModalFormWrapper as FormWrapper,
+  ModalInput as Input,
+  ModalLabel as Label,
+  ModalLink as Link,
+  ModalParagraph as Paragraph,
   FormGroup,
-  Label,
   FormError,
-  FormWrapper,
-} from 'components/styledForms';
-import { SubmitButtonSmall } from 'components/styledButtons';
+} from 'layout';
 import { resetPassword as resetPassword_ } from 'redux/actions';
 import { emailValidator } from 'utils/validators';
 
@@ -33,14 +36,15 @@ class PasswordReset extends React.Component {
   };
 
   render() {
-    // a value to ensure input id uniqueness
-    const id = 'pr';
+    const { history } = this.props;
+    const formId = 'pr';
     return (
-      <div>
-        <h2>Password Reset</h2>
-
-        <div>We will send you an authentication token to your email.</div>
-
+      <Modal title="Password Reset" handleDismiss={() => history.push('/')}>
+        <ContentGroup>
+          <Paragraph>
+            We will send you an authentication token to your email.
+          </Paragraph>
+        </ContentGroup>
         <FinalForm onSubmit={this.onSubmit}>
           {({ handleSubmit, pristine, hasValidationErrors }) => (
             <form onSubmit={handleSubmit}>
@@ -48,32 +52,26 @@ class PasswordReset extends React.Component {
                 <Field name="email" validate={emailValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`email-${id}`}>Email:</Label>
-                      <Input
-                        {...input}
-                        id={`email-${id}`}
-                        type="email"
-                        placeholder="Enter your email"
-                      />
+                      <Label htmlFor={`email-${formId}`}>Email:</Label>
+                      <Input {...input} id={`email-${formId}`} type="email" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
                 </Field>
-                <SubmitButtonSmall
-                  type="submit"
-                  value="Reset Password"
-                  disable={pristine || hasValidationErrors}
-                />
+                <Button type="submit" color="yellow" size="L">
+                  Reset Password
+                </Button>
               </FormWrapper>
             </form>
           )}
         </FinalForm>
-
-        <div>
-          If you already have a token click this{' '}
-          <Link to="/password-reset/confirm">link</Link>.
-        </div>
-      </div>
+        <ContentGroup>
+          <Paragraph>
+            If you already have a token click this{' '}
+            <Link to="/password-reset/confirm">link</Link>.
+          </Paragraph>
+        </ContentGroup>
+      </Modal>
     );
   }
 }

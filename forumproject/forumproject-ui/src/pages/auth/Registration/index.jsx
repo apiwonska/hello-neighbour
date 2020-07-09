@@ -4,13 +4,14 @@ import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
 
 import {
-  Input,
+  Modal,
+  ModalButton as Button,
+  ModalFormWrapper as FormWrapper,
+  ModalInput as Input,
+  ModalLabel as Label,
   FormGroup,
-  Label,
   FormError,
-  FormWrapper,
-} from 'components/styledForms';
-import { SubmitButtonSmall } from 'components/styledButtons';
+} from 'layout';
 import { register as register_ } from 'redux/actions';
 import {
   usernameValidator,
@@ -31,22 +32,20 @@ class Registration extends React.Component {
   };
 
   render() {
-    // a value to ensure form input id uniqueness
-    const id = 'reg';
+    const { history } = this.props;
+    const formId = 'reg';
 
     return (
-      <div>
-        <h2>Register</h2>
-
+      <Modal title="Register" handleDismiss={() => history.push('/')}>
         <FinalForm onSubmit={this.onSubmit}>
-          {({ handleSubmit, pristine, hasValidationErrors, values }) => (
+          {({ handleSubmit, values }) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <Field name="username" validate={usernameValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`username-${id}`}>Username:</Label>
-                      <Input {...input} id={`username-${id}`} type="text" />
+                      <Label htmlFor={`username-${formId}`}>Username:</Label>
+                      <Input {...input} id={`username-${formId}`} type="text" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
@@ -54,8 +53,8 @@ class Registration extends React.Component {
                 <Field name="email" validate={emailValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`email-${id}`}>Email:</Label>
-                      <Input {...input} id={`email-${id}`} type="email" />
+                      <Label htmlFor={`email-${formId}`}>Email:</Label>
+                      <Input {...input} id={`email-${formId}`} type="email" />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
@@ -63,8 +62,12 @@ class Registration extends React.Component {
                 <Field name="password" validate={passwordValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`password-${id}`}>Password:</Label>
-                      <Input {...input} id={`password-${id}`} type="password" />
+                      <Label htmlFor={`password-${formId}`}>Password:</Label>
+                      <Input
+                        {...input}
+                        id={`password-${formId}`}
+                        type="password"
+                      />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
@@ -75,28 +78,26 @@ class Registration extends React.Component {
                 >
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
-                      <Label htmlFor={`password2-${id}`}>
+                      <Label htmlFor={`password2-${formId}`}>
                         Confirm Password:
                       </Label>
                       <Input
                         {...input}
-                        id={`password2-${id}`}
+                        id={`password2-${formId}`}
                         type="password"
                       />
                       <FormError>{touched && (error || submitError)}</FormError>
                     </FormGroup>
                   )}
                 </Field>
-                <SubmitButtonSmall
-                  type="submit"
-                  value="Register"
-                  disable={pristine || hasValidationErrors}
-                />
+                <Button type="submit" color="yellow" size="L">
+                  Register
+                </Button>
               </FormWrapper>
             </form>
           )}
         </FinalForm>
-      </div>
+      </Modal>
     );
   }
 }
