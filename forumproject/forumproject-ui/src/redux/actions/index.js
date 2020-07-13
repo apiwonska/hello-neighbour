@@ -22,3 +22,9 @@ export {
   deletePost,
 } from './postsActions';
 export { fetchUser, updateUser, uploadAvatar } from './usersActions';
+export {
+  closeSideDrawer,
+  openSideDrawer,
+  showSideNavbar,
+  hideSideNavbar,
+} from './layoutActions';

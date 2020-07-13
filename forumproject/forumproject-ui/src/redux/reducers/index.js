@@ -7,6 +7,7 @@ import threadsByCategoryReducer from './threadsByCategoryReducer';
 import threadReducer from './threadReducer';
 import postsReducer from './postsReducer';
 import userReducer from './userReducer';
+import layoutReducer from './layoutReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
@@ -16,6 +17,7 @@ const reducers = combineReducers({
   thread: threadReducer,
   posts: postsReducer,
   user: userReducer,
+  layout: layoutReducer,
 });
 
 export default reducers;
