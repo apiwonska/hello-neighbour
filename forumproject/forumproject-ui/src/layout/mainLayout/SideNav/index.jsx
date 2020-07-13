@@ -1,9 +1,14 @@
 import React from 'react';
 
-import { Section } from './style';
+import SideNavContent from '../SideNavContent';
+import Section from './style';
 
-const SideNav = ({ children }) => {
-  return <Section>{children}</Section>;
+const SideNav = () => {
+  return (
+    <Section>
+      <SideNavContent />
+    </Section>
+  );
 };
 
 export default SideNav;

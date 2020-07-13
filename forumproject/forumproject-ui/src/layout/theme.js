@@ -1,6 +1,6 @@
 const breakpoints = {
-  toggleNavAuth: 1024,
-  toggleNavUnauth: 400,
+  navAuth: 1024,
+  navUnauth: 400,
 };
 
 const theme = {
@@ -25,11 +25,11 @@ const theme = {
     sm: '5px',
     bg: '8px',
   },
-  breakpoints: breakpoints,
+  breakpoints,
   pageMinWidth: '300px',
   media: {
-    breakpointToggleNavAuth: `@media (min-width: ${breakpoints.toggleNavAuth}px)`,
-    breakpointToggleNavUnauth: `@media (min-width: ${breakpoints.toggleNavUnauth}px)`,
+    breakpointNavAuth: `@media (min-width: ${breakpoints.navAuth}px)`,
+    breakpointNavUnauth: `@media (min-width: ${breakpoints.navUnauth}px)`,
     minLandscapePhone: '@media (min-width: 576px)',
     minTablet: '@media (min-width: 728px)',
     minDesktop: '@media (min-width: 1024px)',

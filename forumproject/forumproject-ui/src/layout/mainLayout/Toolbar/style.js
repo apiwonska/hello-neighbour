@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -5,14 +7,30 @@ import theme from 'layout/theme';
 
 const navbarHeight = '6rem';
 
-export const NavSection = styled.section`
+const AuthNavSection = styled.section`
   height: ${navbarHeight};
   width: 100%;
-  background-color: ${({ auth }) =>
-    auth ? theme.colors.white : 'transparent'};
-  ${({ auth }) => (auth ? 'box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);' : '')}
-  z-index: 1;
+  background-color: ${theme.colors.white};
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
 `;
+
+const UnauthNavSection = styled(AuthNavSection)`
+  background-color: transparent;
+  box-shadow: none;
+`;
+
+export const NavSection = ({ auth, children }) => {
+  return auth ? (
+    <AuthNavSection>{children}</AuthNavSection>
+  ) : (
+    <UnauthNavSection>{children}</UnauthNavSection>
+  );
+};
+
+NavSection.propTypes = {
+  auth: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 export const NavContainerDiv = styled.div`
   margin: 0 2rem;
@@ -23,18 +41,38 @@ export const BrandDiv = styled.div`
   height: ${navbarHeight};
 `;
 
-export const ProjectName = styled.span`
+const AuthProjectName = styled.span`
   font-family: ${theme.fonts.special};
   font-size: 2.4rem;
   font-weight: 700;
   color: ${theme.colors.black};
 `;
 
+const UnauthProjectName = styled(AuthProjectName)`
+  color: ${theme.colors.white};
+
+  &:hover {
+    color: ${theme.colors.black};
+  }
+`;
+
+export const ProjectName = ({ auth, ...passThroughProps }) => {
+  return auth ? (
+    <AuthProjectName {...passThroughProps} />
+  ) : (
+    <UnauthProjectName {...passThroughProps} />
+  );
+};
+
+ProjectName.propTypes = {
+  auth: PropTypes.bool.isRequired,
+};
+
 export const Nav = styled.nav`
   margin-left: auto;
 `;
 
-export const NavToggleButton = styled.button`
+const AuthNavToggleButton = styled.button`
   color: ${theme.colors.black};
   background-color: ${theme.colors.white};
   border: 0;
@@ -46,26 +84,48 @@ export const NavToggleButton = styled.button`
   align-self: center;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background-color: ${theme.colors.secondary};
   }
 
-  ${({ auth }) => {
-    return auth
-      ? theme.media.breakpointToggleNavAuth
-      : theme.media.breakpointToggleNavUnauth;
-  }} {
+  ${theme.media.breakpointNavAuth} {
     display: none;
   }
 `;
+
+const UnauthNavToggleButton = styled(AuthNavToggleButton)`
+  color: ${theme.colors.white};
+  background-color: transparent;
+
+  &:hover {
+    color: ${theme.colors.black};
+    background-color: ${theme.colors.white};
+  }
+
+  ${theme.media.breakpointNavUnauth} {
+    display: none;
+  }
+`;
+
+export const NavToggleButton = ({ auth, ...passThroughProps }) => {
+  return auth ? (
+    <AuthNavToggleButton {...passThroughProps} />
+  ) : (
+    <UnauthNavToggleButton {...passThroughProps} />
+  );
+};
+
+NavToggleButton.propTypes = {
+  auth: PropTypes.bool.isRequired,
+};
 
 export const NavUl = styled.ul`
   display: none;
 
   ${({ auth }) => {
     return auth
-      ? theme.media.breakpointToggleNavAuth
-      : theme.media.breakpointToggleNavUnauth;
+      ? theme.media.breakpointNavAuth
+      : theme.media.breakpointNavUnauth;
   }} {
     display: flex;
     list-style: none;
@@ -79,12 +139,11 @@ export const NavLi = styled.li`
 
   :hover {
     color: ${theme.colors.black};
-    background-color: ${theme.colors.neutralLight};
     cursor: pointer;
   }
 `;
 
-export const NavLink = styled(Link)`
+const AuthNavLink = styled(Link)`
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -93,3 +152,22 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   font-size: 1.6rem;
 `;
+
+const UnauthNavLink = styled(AuthNavLink)`
+  color: ${theme.colors.white};
+  &:hover {
+    color: ${theme.colors.black};
+  }
+`;
+
+export const NavLink = ({ auth, ...passThroughProps }) => {
+  return auth ? (
+    <AuthNavLink {...passThroughProps} />
+  ) : (
+    <UnauthNavLink {...passThroughProps} />
+  );
+};
+
+NavLink.propTypes = {
+  auth: PropTypes.bool.isRequired,
+};

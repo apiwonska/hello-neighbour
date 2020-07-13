@@ -1,69 +1,70 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
+import { logOut, fetchCategories, closeSideDrawer } from 'redux/actions';
 import { NavUl, NavLi, NavUlInner, NavLiInner, NavLink } from './style';
-import {
-  logOut as logOut_,
-  fetchCategories as fetchCategories_,
-} from 'redux/actions';
 
-const renderCategoryLinks = (categories, closeSideDrawer) => {
-  const CategoryLinks = categories.data.map((category) => (
-    <NavLiInner key={category.id}>
-      <NavLink to={`/categories/${category.id}`} onClick={closeSideDrawer}>
-        {category.name}
-      </NavLink>
-    </NavLiInner>
-  ));
-  return CategoryLinks;
-};
+const SideNavContent = () => {
+  const auth = useSelector((state) => !!state.auth.authenticated);
+  const userId = useSelector((state) => state.auth.user.id);
+  const categories = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const boundFetchCategories = () => dispatch(fetchCategories());
+  const boundCloseSideDrawer = () => dispatch(closeSideDrawer());
+  const location = useLocation();
 
-const SideNavContent = ({
-  auth,
-  userId,
-  logOut,
-  categories,
-  closeSideDrawer,
-  fetchCategories,
-}) => {
   useEffect(() => {
     if (auth && !categories.fetched) {
-      fetchCategories();
+      boundFetchCategories();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
+
+  const NavLinkWithProps = (navLinkProps) => (
+    <NavLink
+      onClick={boundCloseSideDrawer}
+      path={location.pathname}
+      {...navLinkProps}
+    />
+  );
+
+  const renderCategoryLinks = () => {
+    const CategoryLinks = categories.data.map((category) => (
+      <NavLiInner key={category.id}>
+        <NavLinkWithProps to={`/categories/${category.id}`}>
+          {category.name}
+        </NavLinkWithProps>
+      </NavLiInner>
+    ));
+    return CategoryLinks;
+  };
 
   if (auth) {
     return (
       <nav>
         <NavUl>
           <NavLi>
-            <NavLink to="/" onClick={closeSideDrawer}>
-              All Categories
-            </NavLink>
+            <NavLinkWithProps to="/">All Categories</NavLinkWithProps>
           </NavLi>
-          <NavUlInner>
-            {renderCategoryLinks(categories, closeSideDrawer)}
-          </NavUlInner>
+          <NavUlInner>{renderCategoryLinks(categories)}</NavUlInner>
           <NavLi>
-            <NavLink to={`/profile/${userId}`} onClick={closeSideDrawer}>
+            <NavLinkWithProps to={`/profile/${userId}`}>
               Profile
-            </NavLink>
+            </NavLinkWithProps>
           </NavLi>
           <NavLi>
-            <NavLink to="/profile/posts" onClick={closeSideDrawer}>
-              Your Posts
-            </NavLink>
+            <NavLinkWithProps to="/profile/posts">Your Posts</NavLinkWithProps>
           </NavLi>
           <NavLi>
-            <NavLink
+            <NavLinkWithProps
               onClick={() => {
-                logOut();
-                closeSideDrawer();
+                dispatch(logOut());
+                dispatch(closeSideDrawer());
               }}
             >
               Logout
-            </NavLink>
+            </NavLinkWithProps>
           </NavLi>
         </NavUl>
       </nav>
@@ -73,49 +74,14 @@ const SideNavContent = ({
     <nav>
       <NavUl>
         <NavLi>
-          <NavLink to="/auth" onClick={closeSideDrawer}>
-            Log In
-          </NavLink>
+          <NavLinkWithProps to="/auth">Log In</NavLinkWithProps>
         </NavLi>
         <NavLi>
-          <NavLink to="/register" onClick={closeSideDrawer}>
-            Register
-          </NavLink>
+          <NavLinkWithProps to="/register">Register</NavLinkWithProps>
         </NavLi>
       </NavUl>
     </nav>
   );
 };
 
-SideNavContent.propTypes = {
-  auth: PropTypes.bool,
-  userId: PropTypes.number,
-  // categories: PropTypes.shape({
-  //   data: PropTypes.shape({
-  //     id: PropTypes.number,
-  //     name: PropTypes.string,
-  //   }),
-  // }),
-  logOut: PropTypes.func.isRequired,
-  closeSideDrawer: PropTypes.func,
-};
-
-SideNavContent.defaultProps = {
-  auth: false,
-  userId: null,
-  // categories: { data: [] },
-  closeSideDrawer: () => {},
-};
-
-const mapStateToProps = (state) => {
-  return {
-    auth: !!state.auth.authenticated,
-    userId: state.auth.user.id,
-    categories: state.categories,
-  };
-};
-
-export default connect(mapStateToProps, {
-  logOut: logOut_,
-  fetchCategories: fetchCategories_,
-})(SideNavContent);
+export default SideNavContent;

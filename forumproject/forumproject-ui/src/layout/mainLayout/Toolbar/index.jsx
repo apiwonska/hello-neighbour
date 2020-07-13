@@ -1,9 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
 
+import { openSideDrawer } from 'redux/actions';
 import {
   NavSection,
   NavContainerDiv,
@@ -16,7 +16,11 @@ import {
   NavToggleButton,
 } from './style';
 
-const Toolbar = ({ auth, sideDrawerIsOpen, toggleSideDrawer }) => {
+const Toolbar = () => {
+  const auth = useSelector((state) => !!state.auth.authenticated);
+  const dispatch = useDispatch();
+  const boundOpenSideDrawer = () => dispatch(openSideDrawer());
+
   const renderMenu = () => {
     if (!auth) {
       return (
@@ -30,17 +34,18 @@ const Toolbar = ({ auth, sideDrawerIsOpen, toggleSideDrawer }) => {
         </>
       );
     }
+    return null;
   };
 
   return (
     <NavSection auth={auth}>
       <NavContainerDiv>
-        <NavToggleButton auth={auth} onClick={toggleSideDrawer}>
+        <NavToggleButton auth={auth} onClick={boundOpenSideDrawer}>
           <FontAwesomeIcon icon={faBars} />
         </NavToggleButton>
         <BrandDiv>
           <NavLink to="/">
-            <ProjectName>Forum</ProjectName>
+            <ProjectName auth={auth}>Forum</ProjectName>
           </NavLink>
         </BrandDiv>
         <Nav>
@@ -51,18 +56,4 @@ const Toolbar = ({ auth, sideDrawerIsOpen, toggleSideDrawer }) => {
   );
 };
 
-Toolbar.propTypes = {
-  auth: PropTypes.bool,
-};
-
-Toolbar.defaultProps = {
-  auth: false,
-};
-
-const mapStateToProps = (state) => {
-  return {
-    auth: !!state.auth.authenticated,
-  };
-};
-
-export default connect(mapStateToProps)(Toolbar);
+export default Toolbar;

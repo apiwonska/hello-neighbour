@@ -3,23 +3,16 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import LayoutSetup from 'layout/LayoutSetup';
-import { PageWrapper, MainContentWrapper } from './style';
 import theme from 'layout/theme';
-import Toolbar from '../Toolbar';
-import SideDrawer from '../SideDrawer';
-import SideNav from '../SideNav';
-import SideNavContent from '../SideNavContent';
-import Footer from '../Footer';
+import {
+  closeSideDrawer as closeSideDrawer_,
+  showSideNavbar as showSideNavbar_,
+  hideSideNavbar as hideSideNavbar_,
+} from 'redux/actions';
+import AuthLayout from '../AuthLayout';
+import UnauthLayout from '../UnauthLayout';
 
 class Layout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sideNavIsRendered: false,
-      sideDrawerIsOpen: false,
-    };
-  }
-
   componentDidMount() {
     this.updateSideNavIsRendered();
     window.addEventListener('resize', this.handleResetDrawerState);
@@ -36,111 +29,60 @@ class Layout extends React.Component {
     window.removeEventListener('resize', this.updateSideNavIsRendered);
   }
 
-  toggleSideDrawer = () => {
-    this.setState((prevState) => ({
-      sideDrawerIsOpen: !prevState.sideDrawerIsOpen,
-    }));
-  };
-
-  closeSideDrawer = () => {
-    this.setState({ sideDrawerIsOpen: false });
-  };
-
   handleResetDrawerState = () => {
-    const { auth } = this.props;
-    const { sideNavIsRendered } = this.state;
-    if (sideNavIsRendered) {
-      this.setState(({ sideDrawerIsOpen }) => {
-        if (sideDrawerIsOpen) {
-          return {
-            sideDrawerIsOpen: false,
-          };
-        }
-      });
-    }
-    if (!auth && window.innerWidth > theme.breakpoints.toggleNavUnauth) {
-      this.setState(({ sideDrawerIsOpen }) => {
-        if (sideDrawerIsOpen) {
-          return {
-            sideDrawerIsOpen: false,
-          };
-        }
-      });
+    const { auth, sideNavIsRendered, closeSideDrawer } = this.props;
+
+    if (sideNavIsRendered) closeSideDrawer();
+    else if (!auth && window.innerWidth > theme.breakpoints.navUnauth) {
+      closeSideDrawer();
     }
   };
 
   updateSideNavIsRendered = () => {
-    const { auth } = this.props;
-    if (auth && window.innerWidth > theme.breakpoints.toggleNavAuth) {
-      this.setState(({ sideNavIsRendered }) => {
-        if (!sideNavIsRendered) {
-          return {
-            sideNavIsRendered: true,
-          };
-        }
-      });
-    } else {
-      this.setState(({ sideNavIsRendered }) => {
-        if (sideNavIsRendered) {
-          return {
-            sideNavIsRendered: false,
-          };
-        }
-      });
-    }
+    const {
+      auth,
+      sideNavIsRendered,
+      showSideNavbar,
+      hideSideNavbar,
+    } = this.props;
+
+    if (auth && window.innerWidth > theme.breakpoints.navAuth) {
+      if (!sideNavIsRendered) showSideNavbar();
+    } else if (sideNavIsRendered) hideSideNavbar();
   };
 
-  renderSideNavigation() {
-    const { sideDrawerIsOpen, sideNavIsRendered } = this.state;
-    if (sideNavIsRendered) {
-      return (
-        <SideNav>
-          <SideNavContent />
-        </SideNav>
-      );
-    } else {
-      return (
-        <SideDrawer
-          sideDrawerIsOpen={sideDrawerIsOpen}
-          closeSideDrawer={this.closeSideDrawer}
-        >
-          <SideNavContent closeSideDrawer={this.closeSideDrawer} />
-        </SideDrawer>
-      );
-    }
-  }
-
   render() {
-    const { sideDrawerIsOpen } = this.state;
-    const { children } = this.props;
+    const { auth, children } = this.props;
     return (
       <LayoutSetup>
-        <Toolbar
-          sideDrawerIsOpen={sideDrawerIsOpen}
-          toggleSideDrawer={this.toggleSideDrawer}
-        />
-        <PageWrapper>
-          {this.renderSideNavigation()}
-          <MainContentWrapper>{children}</MainContentWrapper>
-        </PageWrapper>
-        <Footer />
+        {auth ? (
+          <AuthLayout>{children}</AuthLayout>
+        ) : (
+          <UnauthLayout>{children}</UnauthLayout>
+        )}
       </LayoutSetup>
     );
   }
 }
 
 Layout.propTypes = {
-  auth: PropTypes.bool,
-};
-
-Layout.defaultProps = {
-  auth: false,
+  auth: PropTypes.bool.isRequired,
+  sideNavIsRendered: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  closeSideDrawer: PropTypes.func.isRequired,
+  showSideNavbar: PropTypes.func.isRequired,
+  hideSideNavbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     auth: !!state.auth.authenticated,
+    sideNavIsRendered: state.layout.sideNavIsRendered,
   };
 };
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps, {
+  closeSideDrawer: closeSideDrawer_,
+  showSideNavbar: showSideNavbar_,
+  hideSideNavbar: hideSideNavbar_,
+})(Layout);

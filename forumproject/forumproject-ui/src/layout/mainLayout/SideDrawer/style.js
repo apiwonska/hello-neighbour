@@ -16,6 +16,7 @@ export const Section = styled.section`
 
   ${({ show }) => {
     if (show) return 'transform: translateX(0);';
+    return '';
   }}
 `;
 
@@ -30,6 +31,7 @@ export const Overlay = styled.div`
 
   ${({ show }) => {
     if (!show) return 'display: none;';
+    return null;
   }}
 `;
 
@@ -62,9 +64,10 @@ export const NavToggleButton = styled.button`
   border-radius: 50%;
   align-self: center;
   cursor: pointer;
+  transition: 0.5s;
 
   :hover {
-    color: ${theme.colors.main};
+    color: ${theme.colors.black};
     background-color: ${theme.colors.white};
   }
 `;
@@ -78,6 +81,11 @@ export const ProjectName = styled.span`
   font-size: 2.4rem;
   font-weight: 700;
   color: ${theme.colors.white};
+  transition: 0.3s;
+
+  &:hover {
+    color: ${theme.colors.black};
+  }
 `;
 
 export const NavLink = styled(Link)`

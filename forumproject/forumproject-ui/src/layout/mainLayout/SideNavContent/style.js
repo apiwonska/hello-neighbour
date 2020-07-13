@@ -22,30 +22,15 @@ export const NavLi = styled.li`
 export const NavLiInner = styled(NavLi)``;
 
 export const NavLink = styled(Link)`
-  /* position: relative; */
   color: ${theme.colors.white};
   line-height: 1.2;
   text-decoration: none;
-  /* transition: 1s; */
+  transition: 0.5s;
 
-  /* :after {
-    position: absolute;
-    bottom: 0.4rem;
-    left: 0;
-    width: 0;
-    height: 1.4rem;
-    background-color: ${theme.colors.white};
-    content: '';
-    transition: 1s;
-  } */
-
-  :hover {
+  &:hover {
     font-weight: 600;
-    /* padding-left: 1rem; */
-    color: ${theme.colors.white};
-
-    /* :after {
-      width: 0.5rem;
-    } */
+    color: ${theme.colors.black};
   }
+
+  ${({ to, path }) => (to === path ? `color:${theme.colors.black};` : '')}
 `;
