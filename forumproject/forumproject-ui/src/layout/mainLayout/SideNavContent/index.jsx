@@ -21,13 +21,16 @@ const SideNavContent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
-  const NavLinkWithProps = (navLinkProps) => (
-    <NavLink
-      onClick={boundCloseSideDrawer}
-      path={location.pathname}
-      {...navLinkProps}
-    />
-  );
+  const NavLinkWithProps = (props) => {
+    const { to } = props;
+    return (
+      <NavLink
+        onClick={boundCloseSideDrawer}
+        active={to === location.pathname ? 'active' : ''}
+        {...props}
+      />
+    );
+  };
 
   const renderCategoryLinks = () => {
     const CategoryLinks = categories.data.map((category) => (
@@ -47,7 +50,7 @@ const SideNavContent = () => {
           <NavLi>
             <NavLinkWithProps to="/">All Categories</NavLinkWithProps>
           </NavLi>
-          <NavUlInner>{renderCategoryLinks(categories)}</NavUlInner>
+          <NavUlInner>{categories.fetched && renderCategoryLinks()}</NavUlInner>
           <NavLi>
             <NavLinkWithProps to={`/profile/${userId}`}>
               Profile
@@ -58,6 +61,7 @@ const SideNavContent = () => {
           </NavLi>
           <NavLi>
             <NavLinkWithProps
+              to=""
               onClick={() => {
                 dispatch(logOut());
                 dispatch(closeSideDrawer());

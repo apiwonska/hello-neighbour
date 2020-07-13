@@ -28,9 +28,11 @@ export const NavSection = ({ auth, children }) => {
 };
 
 NavSection.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  auth: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
+
+NavSection.defaultProps = { auth: false };
 
 export const NavContainerDiv = styled.div`
   margin: 0 2rem;
@@ -65,8 +67,10 @@ export const ProjectName = ({ auth, ...passThroughProps }) => {
 };
 
 ProjectName.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  auth: PropTypes.bool,
 };
+
+ProjectName.defaultProps = { auth: false };
 
 export const Nav = styled.nav`
   margin-left: auto;
@@ -169,5 +173,7 @@ export const NavLink = ({ auth, ...passThroughProps }) => {
 };
 
 NavLink.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  auth: PropTypes.bool,
 };
+
+NavLink.defaultProps = { auth: false };

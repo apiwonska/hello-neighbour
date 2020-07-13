@@ -185,6 +185,7 @@ class EditProfile extends React.Component {
 }
 
 EditProfile.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   ownerId: PropTypes.number.isRequired,
   user: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
@@ -196,8 +197,8 @@ EditProfile.propTypes = {
       avatar: PropTypes.string,
       description: PropTypes.string,
     }).isRequired,
-    updateErrors: PropTypes.object,
-    uploadErrors: PropTypes.object,
+    updateErrors: PropTypes.shape({}),
+    uploadErrors: PropTypes.shape({ avatar: PropTypes.string }),
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
   updateUser: PropTypes.func.isRequired,

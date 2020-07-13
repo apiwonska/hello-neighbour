@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Button } from 'layout';
+import Button from '../buttons/Button';
 
 export default styled(Button)`
   display: block;

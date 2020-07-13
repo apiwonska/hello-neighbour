@@ -32,5 +32,5 @@ export const NavLink = styled(Link)`
     color: ${theme.colors.black};
   }
 
-  ${({ to, path }) => (to === path ? `color:${theme.colors.black};` : '')}
+  ${({ active }) => (active ? `color:${theme.colors.black};` : '')}
 `;

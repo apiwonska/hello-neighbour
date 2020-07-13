@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import PostList from 'components/EditablePostList';
-import { renderPageError } from 'components/errors';
-import { Pagination, Spinner } from 'layout';
-import { ContainerDiv } from 'components/styledDivs';
+import PostList from 'shared/EditablePostList';
+import { renderPageError } from 'shared/errors';
+import { Pagination, Spinner, ContentWrapper } from 'layout';
 import formatTime from 'utils/timeFormat';
 import {
   fetchPostsByUser as fetchPostsByUser_,
@@ -116,7 +115,7 @@ class UserPosts extends React.Component {
 
     if (posts.fetched) {
       return (
-        <ContainerDiv>
+        <ContentWrapper>
           <PostList
             renderPostHeader={this.renderPostHeader}
             editingPost={editingPost}
@@ -132,7 +131,7 @@ class UserPosts extends React.Component {
               onChange={this.handleChangePage}
             />
           </div>
-        </ContainerDiv>
+        </ContentWrapper>
       );
     }
 
@@ -151,9 +150,9 @@ UserPosts.propTypes = {
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       count: PropTypes.number,
-      results: PropTypes.array,
+      results: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchPostsByUser: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,

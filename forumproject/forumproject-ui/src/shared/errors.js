@@ -1,10 +1,12 @@
 import React from 'react';
-// import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-// import theme from '../layout/utils/theme';
+export const Error = ({ message }) => {
+  return <h2>{message}</h2>;
+};
 
-export const Error = (props) => {
-  return <h2>{props.message}</h2>;
+Error.propTypes = {
+  message: PropTypes.string.isRequired,
 };
 
 export const DefaultError = () => {
@@ -17,7 +19,9 @@ export const NotFound = () => {
 
 export const renderPageError = (err) => {
   if (err) {
-    const errorMessage = err.hasOwnProperty('message') && err.message;
+    // eslint-disable-next-line no-prototype-builtins
+    const hasMessageProperty = Object.prototype.hasOwnProperty(err, 'message');
+    const errorMessage = hasMessageProperty && err.message;
     const error404 =
       typeof errorMessage === 'string' && errorMessage.includes('404');
 
@@ -26,4 +30,5 @@ export const renderPageError = (err) => {
     }
     return <DefaultError />;
   }
+  return null;
 };

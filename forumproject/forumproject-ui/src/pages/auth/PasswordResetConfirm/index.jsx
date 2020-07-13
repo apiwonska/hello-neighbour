@@ -84,15 +84,7 @@ class PasswordResetConfirm extends React.Component {
         </Paragraph>
 
         <FinalForm onSubmit={this.onSubmit}>
-          {({
-            handleSubmit,
-            pristine,
-            hasValidationErrors,
-            submitErrors,
-            form,
-            submitSucceeded,
-            values,
-          }) => {
+          {({ handleSubmit, submitErrors, form, submitSucceeded, values }) => {
             if (submitSucceeded) {
               form.reset();
               Object.keys(values).forEach((field) =>
@@ -169,13 +161,16 @@ class PasswordResetConfirm extends React.Component {
 }
 
 PasswordResetConfirm.propTypes = {
-  history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   location: PropTypes.shape({
     state: PropTypes.shape({ emailSent: PropTypes.bool }),
   }).isRequired,
   confirmPasswordReset: PropTypes.func.isRequired,
   passwordReset: PropTypes.shape({
-    resetErrors: PropTypes.object.isRequired,
+    resetErrors: PropTypes.shape({}).isRequired,
     resetPasswordConfirmed: PropTypes.bool.isRequired,
   }).isRequired,
 };

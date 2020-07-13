@@ -169,9 +169,10 @@ PasswordChange.propTypes = {
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
     }).isRequired,
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   changePassword: PropTypes.func.isRequired,
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state) => ({

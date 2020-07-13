@@ -104,7 +104,8 @@ class Registration extends React.Component {
 
 Registration.propTypes = {
   register: PropTypes.func.isRequired,
-  auth: PropTypes.shape({ errors: PropTypes.object.isRequired }).isRequired,
+  auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state) => ({

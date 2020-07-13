@@ -3,14 +3,7 @@ import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
 
-import {
-  Input,
-  FormGroup,
-  Label,
-  FormError,
-  FormWrapper,
-} from 'components/styledForms';
-import { ContainerDiv } from 'components/styledDivs';
+import { Input, FormGroup, Label, FormError, ContentWrapper } from 'layout';
 import { createThread as createThread_ } from 'redux/actions';
 import { titleValidator, subjectValidator } from 'utils/validators';
 import { SubmitButton, Button, FormGroupButtons } from './style';
@@ -43,13 +36,13 @@ class CreateThread extends React.Component {
     // a value to ensure form input id uniqueness
     const id = 'ct';
     return (
-      <ContainerDiv>
+      <ContentWrapper>
         <h2>CreateThread</h2>
 
         <FinalForm onSubmit={this.handleCreateThread}>
           {({ handleSubmit, pristine, hasValidationErrors }) => (
             <form onSubmit={handleSubmit}>
-              <FormWrapper>
+              <div>
                 <Field name="title" validate={titleValidator}>
                   {({ input, meta: { touched, error, submitError } }) => (
                     <FormGroup>
@@ -88,11 +81,11 @@ class CreateThread extends React.Component {
                   />
                   <Button onClick={this.handleCancel}>Cancel</Button>
                 </FormGroupButtons>
-              </FormWrapper>
+              </div>
             </form>
           )}
         </FinalForm>
-      </ContainerDiv>
+      </ContentWrapper>
     );
   }
 }

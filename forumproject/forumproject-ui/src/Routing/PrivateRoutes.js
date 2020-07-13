@@ -32,7 +32,6 @@ const PrivateRoutes = () => {
       <Route path="/profile/edit" exact component={EditProfile} />
       <Route path="/profile/:userId" exact component={Profile} />
       <Route path="*" component={NotFound} />
-      {/* <Route path="*" render={() => <Redirect to="/" />} /> */}
     </Switch>
   );
 };

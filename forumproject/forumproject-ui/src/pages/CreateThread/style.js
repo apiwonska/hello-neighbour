@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-import { SubmitButtonSmall, ButtonSmall } from '../../components/styledButtons';
+// import { Button as Button_ } from 'layout';
 
-export const Button = styled(ButtonSmall)`
+export const Button = styled.button`
   width: 150px;
   margin: 0 10px;
 `;
 
-export const SubmitButton = styled(SubmitButtonSmall)`
+export const SubmitButton = styled.button`
   width: auto;
   margin: 0 10px;
 `;

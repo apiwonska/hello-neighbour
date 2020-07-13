@@ -5,9 +5,8 @@ import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { NotFound, DefaultError } from 'components/errors';
-import { Pagination, Spinner } from 'layout';
-import { ContainerDiv } from 'components/styledDivs';
+import { NotFound, DefaultError } from 'shared/errors';
+import { Pagination, Spinner, ContentWrapper } from 'layout';
 import {
   fetchCategories as fetchCategories_,
   fetchThreadsByCategory as fetchThreadsByCategory_,
@@ -123,15 +122,11 @@ class ThreadList extends React.Component {
 
     if (categories.fetched && category) {
       const { currentPage, pageCount } = this.state;
-
       return (
-        <ContainerDiv>
+        <ContentWrapper>
           <CategoryHeader>{category.name}</CategoryHeader>
           <div>
-            <LinkButton
-              to={`/categories/${categoryId}/threads/new/`}
-              color="green"
-            >
+            <LinkButton to={`/categories/${categoryId}/threads/new/`}>
               Add Thread
             </LinkButton>
           </div>
@@ -143,7 +138,7 @@ class ThreadList extends React.Component {
               onChange={this.handleChangePage}
             />
           </div>
-        </ContainerDiv>
+        </ContentWrapper>
       );
     }
     return null;
@@ -152,19 +147,23 @@ class ThreadList extends React.Component {
 
 ThreadList.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.object.isRequired,
+    params: PropTypes.shape({ categoryId: PropTypes.string.isRequired })
+      .isRequired,
   }).isRequired,
   categories: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    data: PropTypes.array.isRequired,
-    errors: PropTypes.object.isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   threads: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    data: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired,
+    data: PropTypes.shape({
+      count: PropTypes.number,
+      results: PropTypes.arrayOf(PropTypes.shape({})),
+    }).isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchCategories: PropTypes.func.isRequired,
   fetchThreadsByCategory: PropTypes.func.isRequired,
@@ -172,7 +171,7 @@ ThreadList.propTypes = {
 
 const mapStateToProps = (state) => ({
   categories: state.categories,
-  threads: state.threadsByCategory,
+  threads: state.threadList,
 });
 
 export default connect(mapStateToProps, {

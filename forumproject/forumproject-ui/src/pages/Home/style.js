@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { theme } from 'layout';
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -15,3 +15,5 @@ export const Wrapper = styled.div`
   align-items: center;
   z-index: -1;
 `;
+
+export default Wrapper;

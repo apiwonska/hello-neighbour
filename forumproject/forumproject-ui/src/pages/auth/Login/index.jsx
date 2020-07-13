@@ -35,7 +35,7 @@ class LogIn extends React.Component {
     return (
       <Modal title="Log In" handleDismiss={() => history.push('/')}>
         <FinalForm onSubmit={this.onSubmit}>
-          {({ handleSubmit, pristine, hasValidationErrors, submitErrors }) => (
+          {({ handleSubmit, submitErrors }) => (
             <form onSubmit={handleSubmit} id={formId}>
               <FormWrapper>
                 <FormGroup>
@@ -90,7 +90,8 @@ class LogIn extends React.Component {
 
 LogIn.propTypes = {
   logIn: PropTypes.func.isRequired,
-  auth: PropTypes.shape({ errors: PropTypes.object.isRequired }).isRequired,
+  auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state) => ({

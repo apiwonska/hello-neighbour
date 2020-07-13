@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { theme } from '../../layout';
-import { SubmitButtonSmall } from '../../components/styledButtons';
+import { theme } from 'layout';
 
 export const LinkWrapper = styled.div`
   margin-bottom: 20px;
@@ -76,11 +75,15 @@ export const StyledTextArea = styled.textarea`
   margin-bottom: 10px;
 `;
 
-export const SubmitButton = styled(SubmitButtonSmall)`
+export const SubmitButton = styled.button`
   width: auto;
   margin: 0 0 0 auto;
   font-family: ${theme.fonts.default};
-  /* &:hover {
-    cursor: pointer;
-  } */
+`;
+
+export const AvatarThumbnail = styled.img`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin: 10 px;
 `;

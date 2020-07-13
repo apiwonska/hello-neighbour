@@ -95,6 +95,7 @@ PostList.propTypes = {
   handleDeletePost: PropTypes.func.isRequired,
   handleShowUpdateForm: PropTypes.func.isRequired,
   handleHideUpdateForm: PropTypes.func.isRequired,
+  renderPostHeader: PropTypes.func.isRequired,
 };
 
 PostList.defaultProps = {

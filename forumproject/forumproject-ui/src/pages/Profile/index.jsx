@@ -4,7 +4,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { ContentWrapper, Spinner, TopBeam } from 'layout';
-import { renderPageError } from 'components/errors';
+import { renderPageError } from 'shared/errors';
 import { fetchUser as fetchUser_ } from 'redux/actions';
 import {
   Button,
@@ -130,8 +130,9 @@ class Profile extends React.Component {
 }
 
 Profile.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   match: PropTypes.shape({
-    params: PropTypes.object.isRequired,
+    params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   }).isRequired,
   owner: PropTypes.shape({
     id: PropTypes.number,
@@ -146,7 +147,7 @@ Profile.propTypes = {
       email: PropTypes.string,
       avatar: PropTypes.string,
     }).isRequired,
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
 };

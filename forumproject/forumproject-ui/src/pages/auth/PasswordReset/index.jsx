@@ -46,7 +46,7 @@ class PasswordReset extends React.Component {
           </Paragraph>
         </ContentGroup>
         <FinalForm onSubmit={this.onSubmit}>
-          {({ handleSubmit, pristine, hasValidationErrors }) => (
+          {({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <Field name="email" validate={emailValidator}>
@@ -80,7 +80,7 @@ PasswordReset.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   resetPassword: PropTypes.func.isRequired,
   passwordReset: PropTypes.shape({
-    emailErrors: PropTypes.object.isRequired,
+    emailErrors: PropTypes.shape({}).isRequired,
     emailSent: PropTypes.bool.isRequired,
   }).isRequired,
 };

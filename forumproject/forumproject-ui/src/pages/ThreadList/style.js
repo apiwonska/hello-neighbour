@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { theme } from '../../layout';
-import { LinkButtonSmall } from '../../components/styledButtons';
 
-export const LinkButton = styled(LinkButtonSmall)`
+export const LinkButton = styled(Link)`
   width: 200px;
   margin: 0 0 20px auto;
 `;

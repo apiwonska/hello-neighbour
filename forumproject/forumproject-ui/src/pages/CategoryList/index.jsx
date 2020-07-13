@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
-import { Spinner } from 'layout';
-import { ContentWrapper, PageTitle, TopBeam } from 'layout';
+import { Spinner, ContentWrapper, PageTitle, TopBeam } from 'layout';
+
 import {
   CategoryCard,
   MainContent,
@@ -83,7 +83,7 @@ CategoryList.propTypes = {
   categories: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    data: PropTypes.array.isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchCategories: PropTypes.func.isRequired,

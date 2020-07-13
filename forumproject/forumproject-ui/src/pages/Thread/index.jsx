@@ -5,8 +5,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 
 // import { renderPageError, DefaultError } from 'components/errors';
-import { Pagination, Spinner } from 'layout';
-import { ContainerDiv } from 'components/styledDivs';
+import { Pagination, Spinner, ContentWrapper } from 'layout';
 import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
@@ -14,10 +13,9 @@ import {
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import CreatePostForm from './CreatePostForm';
-import PostList from 'components/EditablePostList';
+import PostList from 'shared/EditablePostList';
 import { formatTime } from 'utils';
-import { AvatarThumbnail } from 'components/styledImages';
+import CreatePostForm from './CreatePostForm';
 import ThreadSubject from './ThreadSubject';
 import {
   LinkWrapper,
@@ -27,6 +25,7 @@ import {
   PostHeaderInnerWrapper,
   DateSpan,
   UserLink,
+  AvatarThumbnail,
 } from './style';
 
 class Thread extends React.Component {
@@ -160,7 +159,7 @@ class Thread extends React.Component {
 
     if (thread.fetched && posts.fetched) {
       return (
-        <ContainerDiv>
+        <ContentWrapper>
           <LinkWrapper>
             <FontAwesomeIcon icon={faArrowLeft} />
             &nbsp;
@@ -202,7 +201,7 @@ class Thread extends React.Component {
               onChange={this.handleChangePage}
             />
           </div>
-        </ContainerDiv>
+        </ContentWrapper>
       );
     }
     return null;
@@ -211,7 +210,10 @@ class Thread extends React.Component {
 
 Thread.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.object.isRequired,
+    params: PropTypes.shape({
+      threadId: PropTypes.string.isRequired,
+      categoryId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   auth: PropTypes.shape({
     user: PropTypes.shape({
@@ -224,7 +226,7 @@ Thread.propTypes = {
     data: PropTypes.shape({
       id: PropTypes.number,
     }).isRequired,
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   posts: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
@@ -236,7 +238,8 @@ Thread.propTypes = {
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
-  // deletePost: PropTypes.func.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
