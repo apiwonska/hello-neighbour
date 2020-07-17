@@ -6,7 +6,6 @@ export const ModalBackground = styled.div`
   position: absolute;
   width: 100%;
   min-width: ${theme.pageMinWidth};
-  min-height: 100%;
   left: 0;
   top: 0;
   display: flex;
@@ -17,9 +16,7 @@ export const ModalBackground = styled.div`
 `;
 
 export const ModalBody = styled.div`
-  position: relative;
   max-width: 50rem;
-  margin: 2rem auto;
   width: 95%;
   background-color: ${theme.colors.white};
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
@@ -47,7 +44,7 @@ export const CloseButton = styled.button`
   color: ${theme.colors.neutralMidDark};
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 0.7rem;
   width: 3rem;
   height: 3rem;
   display: flex;

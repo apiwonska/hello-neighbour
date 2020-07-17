@@ -13,7 +13,7 @@ import {
   ModalLabel as Label,
   ModalLink as Link,
   ModalParagraph as Paragraph,
-  FormGroup,
+  ModalInputGroup as InputGroup,
   FormError,
 } from 'layout';
 import { resetPassword as resetPassword_ } from 'redux/actions';
@@ -50,17 +50,20 @@ class PasswordReset extends React.Component {
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <Field name="email" validate={emailValidator}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`email-${formId}`}>Email:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`email-${formId}`} dirty={dirty}>
+                        Email:
+                      </Label>
                       <Input {...input} id={`email-${formId}`} type="email" />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
-                <Button type="submit" color="yellow" size="L">
-                  Reset Password
-                </Button>
+                <Button type="submit">Reset Password</Button>
               </FormWrapper>
             </form>
           )}

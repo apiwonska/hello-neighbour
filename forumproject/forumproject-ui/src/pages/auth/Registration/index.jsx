@@ -9,7 +9,7 @@ import {
   ModalFormWrapper as FormWrapper,
   ModalInput as Input,
   ModalLabel as Label,
-  FormGroup,
+  ModalInputGroup as InputGroup,
   FormError,
 } from 'layout';
 import { register as register_ } from 'redux/actions';
@@ -42,43 +42,61 @@ class Registration extends React.Component {
             <form onSubmit={handleSubmit}>
               <FormWrapper>
                 <Field name="username" validate={usernameValidator}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`username-${formId}`}>Username:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`username-${formId}`} dirty={dirty}>
+                        Username:
+                      </Label>
                       <Input {...input} id={`username-${formId}`} type="text" />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
                 <Field name="email" validate={emailValidator}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`email-${formId}`}>Email:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`email-${formId}`} dirty={dirty}>
+                        Email:
+                      </Label>
                       <Input {...input} id={`email-${formId}`} type="email" />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
                 <Field name="password" validate={passwordValidator}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`password-${formId}`}>Password:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`password-${formId}`} dirty={dirty}>
+                        Password:
+                      </Label>
                       <Input
                         {...input}
                         id={`password-${formId}`}
                         type="password"
                       />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
                 <Field
                   name="password2"
                   validate={password2Validator(values.password)}
                 >
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`password2-${formId}`}>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`password2-${formId}`} dirty={dirty}>
                         Confirm Password:
                       </Label>
                       <Input
@@ -87,12 +105,10 @@ class Registration extends React.Component {
                         type="password"
                       />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
-                <Button type="submit" color="yellow" size="L">
-                  Register
-                </Button>
+                <Button type="submit">Register</Button>
               </FormWrapper>
             </form>
           )}

@@ -12,6 +12,7 @@ import {
   ModalLabel as Label,
   ModalLink as Link,
   ModalParagraph as Paragraph,
+  ModalInputGroup as InputGroup,
   FormGroup,
   FormError,
 } from 'layout';
@@ -44,30 +45,38 @@ class LogIn extends React.Component {
                   </FormError>
                 </FormGroup>
                 <Field name="username" validate={required}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`username-${formId}`}>Username:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`username-${formId}`} dirty={dirty}>
+                        Username:
+                      </Label>
                       <Input {...input} id={`username-${formId}`} type="text" />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
                 <Field name="password" validate={required}>
-                  {({ input, meta: { touched, error, submitError } }) => (
-                    <FormGroup>
-                      <Label htmlFor={`password-${formId}`}>Password:</Label>
+                  {({
+                    input,
+                    meta: { touched, error, submitError, dirty },
+                  }) => (
+                    <InputGroup>
+                      <Label htmlFor={`password-${formId}`} dirty={dirty}>
+                        Password:
+                      </Label>
                       <Input
                         {...input}
                         id={`password-${formId}`}
                         type="password"
                       />
                       <FormError>{touched && (error || submitError)}</FormError>
-                    </FormGroup>
+                    </InputGroup>
                   )}
                 </Field>
-                <Button type="submit" color="yellow" size="L">
-                  Log In{' '}
-                </Button>
+                <Button type="submit">Log In </Button>
               </FormWrapper>
             </form>
           )}

@@ -13,6 +13,7 @@ import {
   ModalLabel as Label,
   ModalLink as Link,
   ModalParagraph as Paragraph,
+  ModalInputGroup as InputGroup,
   FormGroup,
   FormError,
 } from 'layout';
@@ -102,20 +103,28 @@ class PasswordResetConfirm extends React.Component {
                     </FormError>
                   </FormGroup>
                   <Field name="token" validate={required}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`token-${formId}`}>Token:</Label>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`token-${formId}`} dirty={dirty}>
+                          Token:
+                        </Label>
                         <Input {...input} id={`token-${formId}`} type="text" />
                         <FormError>
                           {touched && (error || submitError)}
                         </FormError>
-                      </FormGroup>
+                      </InputGroup>
                     )}
                   </Field>
                   <Field name="password" validate={passwordValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`password-${formId}`}>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`password-${formId}`} dirty={dirty}>
                           New password:
                         </Label>
                         <Input
@@ -126,16 +135,16 @@ class PasswordResetConfirm extends React.Component {
                         <FormError>
                           {touched && (error || submitError)}
                         </FormError>
-                      </FormGroup>
+                      </InputGroup>
                     )}
                   </Field>
                   <Field
                     name="password2"
                     validate={password2Validator(values.password)}
                   >
-                    {({ input, meta: { touched, error } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`password2-${formId}`}>
+                    {({ input, meta: { touched, error, dirty } }) => (
+                      <InputGroup>
+                        <Label htmlFor={`password2-${formId}`} dirty={dirty}>
                           Confirm password:
                         </Label>
                         <Input
@@ -144,12 +153,10 @@ class PasswordResetConfirm extends React.Component {
                           type="password"
                         />
                         <FormError>{touched && error}</FormError>
-                      </FormGroup>
+                      </InputGroup>
                     )}
                   </Field>
-                  <Button type="submit" color="yellow" size="L">
-                    Change Password
-                  </Button>
+                  <Button type="submit">Change Password</Button>
                 </FormWrapper>
               </form>
             );
