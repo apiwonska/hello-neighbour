@@ -1,9 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { openSideDrawer } from 'redux/actions';
+import { SVGIcon } from 'layout';
 import {
   NavSection,
   NavContainerDiv,
@@ -14,6 +13,8 @@ import {
   NavLi,
   NavLink,
   NavToggleButton,
+  BubbleIcon,
+  UserIcon,
 } from './style';
 
 const Toolbar = () => {
@@ -26,10 +27,16 @@ const Toolbar = () => {
       return (
         <>
           <NavLi>
-            <NavLink to="/auth">Log In</NavLink>
+            <NavLink to="/auth">
+              <UserIcon name="user" />
+              Log In
+            </NavLink>
           </NavLi>
           <NavLi>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/register">
+              <UserIcon name="add_user" />
+              Register
+            </NavLink>
           </NavLi>
         </>
       );
@@ -41,11 +48,14 @@ const Toolbar = () => {
     <NavSection auth={auth}>
       <NavContainerDiv>
         <NavToggleButton auth={auth} onClick={boundOpenSideDrawer}>
-          <FontAwesomeIcon icon={faBars} />
+          <SVGIcon name="menu" />
         </NavToggleButton>
         <BrandDiv>
           <NavLink to="/">
-            <ProjectName auth={auth}>Forum</ProjectName>
+            <ProjectName auth={auth}>
+              <BubbleIcon name="speach_bubble" />
+              Forum
+            </ProjectName>
           </NavLink>
         </BrandDiv>
         <Nav>

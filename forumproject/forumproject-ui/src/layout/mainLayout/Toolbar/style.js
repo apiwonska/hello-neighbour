@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import theme from 'layout/theme';
+import { SVGIcon } from 'layout';
 
 const navbarHeight = '6rem';
 
@@ -44,10 +45,13 @@ export const BrandDiv = styled.div`
 `;
 
 const AuthProjectName = styled.span`
+  display: flex;
+  align-items: center;
   font-family: ${theme.fonts.special};
   font-size: 2.4rem;
   font-weight: 700;
   color: ${theme.colors.black};
+  transition: 0.4s;
 `;
 
 const UnauthProjectName = styled(AuthProjectName)`
@@ -81,12 +85,13 @@ const AuthNavToggleButton = styled.button`
   background-color: ${theme.colors.white};
   border: 0;
   margin: 0 -0.5rem 0 0;
-  padding: 0;
+  padding: 0.7rem;
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
   align-self: center;
   cursor: pointer;
+  transition: 0.4s;
 
   &:hover {
     background-color: ${theme.colors.secondary};
@@ -155,6 +160,7 @@ const AuthNavLink = styled(Link)`
   color: ${theme.colors.black};
   text-decoration: none;
   font-size: 1.6rem;
+  transition: 0.4s;
 `;
 
 const UnauthNavLink = styled(AuthNavLink)`
@@ -177,3 +183,14 @@ NavLink.propTypes = {
 };
 
 NavLink.defaultProps = { auth: false };
+
+export const BubbleIcon = styled(SVGIcon)`
+  width: 2.2rem;
+  margin-right: 0.5rem;
+  transform: scaleX(-1);
+`;
+
+export const UserIcon = styled(SVGIcon)`
+  width: 1.6rem;
+  margin-right: 0.5rem;
+`;

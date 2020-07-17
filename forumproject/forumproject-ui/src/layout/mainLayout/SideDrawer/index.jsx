@@ -1,10 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { closeSideDrawer } from 'redux/actions';
 import SideNavContent from '../SideNavContent';
+import { SVGIcon } from 'layout';
 import {
   Section,
   Overlay,
@@ -13,6 +12,7 @@ import {
   BrandDiv,
   NavLink,
   ProjectName,
+  BubbleIcon,
 } from './style';
 
 const SideDrawer = () => {
@@ -28,11 +28,14 @@ const SideDrawer = () => {
       <Section show={sideDrawerIsOpen}>
         <DrawerHeader>
           <NavToggleButton onClick={boundCloseSideDrawer}>
-            <FontAwesomeIcon icon={faBars} />
+            <SVGIcon name="menu" />
           </NavToggleButton>
           <BrandDiv>
             <NavLink to="/" onClick={boundCloseSideDrawer}>
-              <ProjectName>Forum</ProjectName>
+              <ProjectName>
+                <BubbleIcon name="speach_bubble" />
+                Forum
+              </ProjectName>
             </NavLink>
           </BrandDiv>
         </DrawerHeader>

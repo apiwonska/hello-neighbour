@@ -1,6 +1,6 @@
 const breakpoints = {
   navAuth: 1024,
-  navUnauth: 400,
+  navUnauth: 450,
 };
 
 const theme = {

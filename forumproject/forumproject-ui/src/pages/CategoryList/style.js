@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link as Link_ } from 'react-router-dom';
 
 import { theme } from '../../layout';
 
@@ -8,7 +9,6 @@ export const CategoryCard = styled.div`
   margin-bottom: 3rem;
   padding: 2rem;
   border: 0.5rem solid ${theme.colors.black};
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
   border-radius: 15rem 1rem/ 1rem 20rem;
 
   ${theme.media.minTablet} {
@@ -80,4 +80,27 @@ export const StatsTitle = styled.span`
 
 export const StatsNum = styled.span`
   font-size: 1.2rem;
+`;
+
+export const IconWrapper = styled.div`
+  width: 4rem;
+  height: 4rem;
+  margin: 0 0 0 auto;
+  padding: 0.7rem;
+  border-radius: 50%;
+  background-color: ${theme.colors.white};
+  transition: 0.4s;
+
+  &:hover {
+    background-color: ${theme.colors.secondary};
+    cursor: pointer;
+  }
+`;
+
+export const Link = styled(Link_)`
+  color: ${theme.colors.black};
+
+  &:visited {
+    color: ${theme.colors.black};
+  }
 `;

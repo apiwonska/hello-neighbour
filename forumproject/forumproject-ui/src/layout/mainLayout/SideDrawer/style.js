@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import theme from 'layout/theme';
+import { SVGIcon } from 'layout';
 
 export const Section = styled.section`
   position: fixed;
@@ -58,7 +59,7 @@ export const NavToggleButton = styled.button`
   background-color: ${theme.colors.main};
   border: 0;
   margin: 0 -0.5rem 0 0;
-  padding: 0;
+  padding: 0.7rem;
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -77,6 +78,8 @@ export const BrandDiv = styled.div`
 `;
 
 export const ProjectName = styled.span`
+  display: flex;
+  align-items: center;
   font-family: ${theme.fonts.special};
   font-size: 2.4rem;
   font-weight: 700;
@@ -96,4 +99,10 @@ export const NavLink = styled(Link)`
   color: ${theme.colors.black};
   text-decoration: none;
   font-size: 1.6rem;
+`;
+
+export const BubbleIcon = styled(SVGIcon)`
+  width: 2.2rem;
+  margin-right: 0.5rem;
+  transform: scaleX(-1);
 `;

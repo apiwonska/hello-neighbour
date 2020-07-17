@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
-import { Spinner, ContentWrapper, PageTitle, TopBeam } from 'layout';
+import { Spinner, ContentWrapper, PageTitle, TopBeam, SVGIcon } from 'layout';
 
 import {
   CategoryCard,
@@ -15,7 +15,8 @@ import {
   StatsGroup,
   StatsTitle,
   StatsNum,
-  // CategoryLink,
+  IconWrapper,
+  Link,
 } from './style';
 // import { DefaultError } from 'components/errors';
 
@@ -46,7 +47,11 @@ class CategoryList extends React.Component {
             <StatsTitle>Posts:</StatsTitle>
             <StatsNum>{category.posts}</StatsNum>
           </StatsGroup>
-          {/* <CategoryLink to={`/categories/${category.id}`}>-></CategoryLink> */}
+          <IconWrapper>
+            <Link to={`/categories/${category.id}`}>
+              <SVGIcon name="fat_arrow_right" />
+            </Link>
+          </IconWrapper>
         </SideInfo>
       </CategoryCard>
     ));
