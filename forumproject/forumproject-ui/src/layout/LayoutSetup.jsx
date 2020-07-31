@@ -1,11 +1,12 @@
 import React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ThemeProvider as ZenDeskGardenThemeProvider } from '@zendeskgarden/react-theming';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Raleway:wght@400;600;700&display=swap');
   
   html {
     font-family: ${theme.fonts.default};
@@ -31,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
 
   h2 { font-size: 2.4rem}
 
-  h3 { font-size: 1.9rem}
+  h3 { font-size: 1.8rem}
 
   h4 { font-size: 1.6rem}
   
@@ -52,10 +53,16 @@ const StyledWrapper = styled.div`
 
 const LayoutSetup = ({ children }) => (
   <ThemeProvider theme={theme}>
-    <>
+    <ZenDeskGardenThemeProvider>
       <GlobalStyle />
+      <Helmet>
+        <link
+          href="https://fonts.googleapis.com/css?family=Open+Sans:400,600, 700|Raleway&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <StyledWrapper>{children}</StyledWrapper>
-    </>
+    </ZenDeskGardenThemeProvider>
   </ThemeProvider>
 );
 
