@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link as Link_ } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import SVGIcon from 'layout/icons/SVGIcon';
 import theme from 'layout/theme';
@@ -34,6 +35,11 @@ const Anchor = ({ href, children }) => {
       </Arrow>
     </>
   );
+};
+
+Anchor.propTypes = {
+  href: PropTypes.string.isRequired,
+  children: PropTypes.instanceOf(Element).isRequired,
 };
 
 export default Anchor;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import theme from 'layout/theme';
 
@@ -21,6 +22,10 @@ const Breadcrumb = ({ children }) => {
       <Ul>{children}</Ul>
     </nav>
   );
+};
+
+Breadcrumb.propTypes = {
+  children: PropTypes.instanceOf(Element).isRequired,
 };
 
 export default Breadcrumb;

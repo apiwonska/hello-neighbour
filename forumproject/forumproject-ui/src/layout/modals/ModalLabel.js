@@ -14,5 +14,6 @@ export default styled.label`
 
   ${({ dirty }) => {
     if (dirty) return 'transform: translateY(-100%);';
+    return '';
   }}
 `;

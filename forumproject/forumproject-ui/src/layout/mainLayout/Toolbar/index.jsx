@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { openSideDrawer } from 'redux/actions';
-import { SVGIcon } from 'layout';
+import SVGIcon from '../../icons/SVGIcon';
 import {
   NavSection,
   NavContainerDiv,

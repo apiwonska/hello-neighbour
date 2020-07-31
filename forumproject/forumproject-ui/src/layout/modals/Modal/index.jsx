@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import SVGIcon from '../../icons/SVGIcon';
 import {
   ModalBackground,
   ModalBody,
@@ -9,7 +10,6 @@ import {
   CloseButton,
   Content,
 } from './style';
-import { SVGIcon } from 'layout';
 
 export default ({ title, children, handleDismiss }) => {
   return ReactDOM.createPortal(

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { closeSideDrawer } from 'redux/actions';
 import SideNavContent from '../SideNavContent';
-import { SVGIcon } from 'layout';
+import SVGIcon from '../../icons/SVGIcon';
 import {
   Section,
   Overlay,

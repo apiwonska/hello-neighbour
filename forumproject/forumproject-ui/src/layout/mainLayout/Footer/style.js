@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import theme from 'layout/theme';
+import theme from '../../theme';
 
 const AuthFooter = styled.footer`
   margin-top: auto;

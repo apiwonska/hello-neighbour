@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from 'layout/theme';
-import { SVGIcon } from 'layout';
+import theme from '../../theme';
+import SVGIcon from '../../icons/SVGIcon';
 
 const navbarHeight = '6rem';
 

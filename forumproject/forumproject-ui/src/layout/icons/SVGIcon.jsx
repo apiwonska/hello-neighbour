@@ -12,16 +12,22 @@ const SVGIcon = ({ name, fill, className }) => (
     viewBox={ICONS[name].viewBox || '0 0 24 24'}
     width="100%"
     height="100%"
-    fill={fill || 'currentColor'}
+    fill={fill}
     className={className}
   >
-    <path d={ICONS[name].path}></path>
+    <path d={ICONS[name].path} />
   </Svg>
 );
 
 SVGIcon.propTypes = {
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   fill: PropTypes.string,
+  className: PropTypes.string,
+};
+
+SVGIcon.defaultProps = {
+  fill: 'currentColor',
+  className: '',
 };
 
 export default SVGIcon;

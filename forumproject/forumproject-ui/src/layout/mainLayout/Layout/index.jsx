@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import LayoutSetup from 'layout/LayoutSetup';
-import theme from 'layout/theme';
 import {
   closeSideDrawer as closeSideDrawer_,
   showSideNavbar as showSideNavbar_,
   hideSideNavbar as hideSideNavbar_,
 } from 'redux/actions';
+import LayoutSetup from '../../LayoutSetup';
+import theme from '../../theme';
 import AuthLayout from '../AuthLayout';
 import UnauthLayout from '../UnauthLayout';
 

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import theme from 'layout/theme';
-import { SVGIcon } from 'layout';
+import theme from '../../theme';
+import SVGIcon from '../../icons/SVGIcon';
 
 export const Section = styled.section`
   position: fixed;
