@@ -51,7 +51,8 @@
     "./src/*.{js,jsx,ts,tsx}": [
       "npx prettier --write",
       "eslint src/*.js --fix-dry-run"
-    ]
+    ],
+    "*.{js,jsx}": "eslint --cache --fix"
   },
   "browserslist": {
     "production": [

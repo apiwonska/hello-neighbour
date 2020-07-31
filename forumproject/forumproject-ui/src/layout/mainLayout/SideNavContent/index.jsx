@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { logOut, fetchCategories, closeSideDrawer } from 'redux/actions';
-import { NavUl, NavLi, NavUlInner, NavLiInner, NavLink } from './style';
+import { Nav, NavUl, NavLi, NavUlInner, NavLiInner, NavLink } from './style';
 
 const SideNavContent = () => {
   const auth = useSelector((state) => !!state.auth.authenticated);
@@ -23,13 +24,18 @@ const SideNavContent = () => {
 
   const NavLinkWithProps = (props) => {
     const { to } = props;
+    const path = location.pathname.replace(/\/threads\/.*/, '');
     return (
       <NavLink
         onClick={boundCloseSideDrawer}
-        active={to === location.pathname ? 'active' : ''}
+        active={path === to ? 'active' : ''}
         {...props}
       />
     );
+  };
+
+  NavLinkWithProps.propTypes = {
+    to: PropTypes.string.isRequired,
   };
 
   const renderCategoryLinks = () => {
@@ -45,7 +51,7 @@ const SideNavContent = () => {
 
   if (auth) {
     return (
-      <nav>
+      <Nav>
         <NavUl>
           <NavLi>
             <NavLinkWithProps to="/">All Categories</NavLinkWithProps>
@@ -71,7 +77,7 @@ const SideNavContent = () => {
             </NavLinkWithProps>
           </NavLi>
         </NavUl>
-      </nav>
+      </Nav>
     );
   }
   return (
