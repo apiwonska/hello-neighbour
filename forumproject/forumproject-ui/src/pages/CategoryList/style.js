@@ -3,13 +3,16 @@ import { Link as Link_ } from 'react-router-dom';
 
 import { theme } from '../../layout';
 
+export const InnerContentWrapper = styled.div`
+  margin: 5rem 0;
+`;
+
 export const CategoryCard = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 3rem;
   padding: 2rem;
-  border: 0.5rem solid ${theme.colors.black};
-  border-radius: 15rem 1rem/ 1rem 20rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
 
   ${theme.media.minTablet} {
     flex-direction: row;
@@ -31,20 +34,38 @@ export const CardTitle = styled.h3`
   margin-top: 0;
   margin-bottom: 2.5rem;
 
-  :before {
+  &:before {
     position: absolute;
     bottom: -0.8rem;
     left: 0;
     content: '';
-    width: 20rem;
+    width: 10rem;
+    max-width: 80%;
     height: 0.3rem;
     background-color: ${theme.colors.secondary};
+    transition: 0.4s;
+  }
+
+  &:hover {
+    &:before {
+      width: 25rem;
+    }
   }
 `;
 
 export const CardText = styled.p`
   font-size: 1.4rem;
   margin: 0%;
+`;
+
+export const CategoryLink = styled(Link_)`
+  color: ${theme.colors.black};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:visited {
+    color: ${theme.colors.black};
+  }
 `;
 
 export const SideInfo = styled.div`
@@ -80,21 +101,6 @@ export const StatsTitle = styled.span`
 
 export const StatsNum = styled.span`
   font-size: 1.2rem;
-`;
-
-export const IconWrapper = styled.div`
-  width: 4rem;
-  height: 4rem;
-  margin: 0 0 0 auto;
-  padding: 0.7rem;
-  border-radius: 50%;
-  background-color: ${theme.colors.white};
-  transition: 0.4s;
-
-  &:hover {
-    background-color: ${theme.colors.secondary};
-    cursor: pointer;
-  }
 `;
 
 export const Link = styled(Link_)`

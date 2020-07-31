@@ -1,15 +1,9 @@
 import styled from 'styled-components';
 
-import {
-  BasicButton,
-  Input as Input_,
-  Label as Label_,
-  TextArea as TextArea_,
-  theme,
-} from 'layout';
+import { Button as Button_, Label as Label_, theme } from 'layout';
 
-export const Button = styled(BasicButton)`
-  margin: 0 0.8rem 1.5rem;
+export const UploadButton = styled(Button_)`
+  margin: 1rem 0.8rem;
   flex-grow: 1;
 
   ${theme.media.minLandscapePhone} {
@@ -17,22 +11,30 @@ export const Button = styled(BasicButton)`
   }
 `;
 
+export const Button = styled(Button_)`
+  width: 100%;
+  margin: 1rem 0;
+`;
+
 export const ButtonGroupWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-items: space-evenly;
+  justify-content: center;
+`;
+
+export const InnerContentWrapper = styled.div`
+  ${theme.media.minTablet} {
+    max-width: 60rem;
+    margin: 4rem auto 5rem;
+  }
 `;
 
 export const Avatar = styled.img`
   display: block;
   width: 20rem;
   border-radius: 50%;
-  border: 0.5rem ${theme.colors.white} solid;
-  margin: -8rem auto 0;
-
-  ${theme.media.minLandscapePhone} {
-    margin-left: 0;
-  }
+  margin: 0 auto;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
 `;
 
 export const FileInput = styled.input`
@@ -41,25 +43,27 @@ export const FileInput = styled.input`
 `;
 
 export const FileInputLabel = styled.label`
-  height: 3rem;
+  height: 3.5rem;
   font-size: 1.6rem;
   padding: 0 2rem;
+  margin: 1rem 0.8rem;
   background-color: ${theme.colors.white};
-  color: ${theme.colors.main};
-  border-color: ${theme.colors.main};
+  color: #374350;
+  border-color: #4d5863;
   border-style: solid;
   border-width: 0.2rem;
-  transition: 0.5s;
+  box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
   cursor: pointer;
-  margin: 0 0.8rem 1.5rem;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    background-color: ${theme.colors.main};
-    color: ${theme.colors.white};
+    color: #000;
+    border-color: ${theme.colors.black};
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
   }
 
   ${theme.media.minLandscapePhone} {
@@ -67,18 +71,18 @@ export const FileInputLabel = styled.label`
   }
 `;
 
-export const Input = styled(Input_)`
-  border-color: ${theme.colors.main};
-`;
-
 export const Label = styled(Label_)`
-  color: ${theme.colors.main};
-`;
-
-export const TextArea = styled(TextArea_)`
-  border-color: ${theme.colors.main};
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  color: ${theme.colors.neutralMidLight};
+  font-weight: 600;
+  margin: 0.5rem 0;
 `;
 
 export const FormWrapper = styled.div`
   margin-bottom: 4rem;
+`;
+
+export const FormButtonsWrapper = styled.div`
+  margin-top: 3rem;
 `;

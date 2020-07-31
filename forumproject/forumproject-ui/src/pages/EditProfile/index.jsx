@@ -17,17 +17,24 @@ import {
   GroupWrapper,
   Spinner,
   TopBeam,
+  PageTitle,
+  TextArea,
+  Input,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
 } from 'layout';
 import {
   Button,
+  UploadButton,
   FileInput,
   FileInputLabel,
   ButtonGroupWrapper,
   Avatar,
-  Input,
   Label,
-  TextArea,
   FormWrapper,
+  FormButtonsWrapper,
+  InnerContentWrapper,
 } from './style';
 
 class EditProfile extends React.Component {
@@ -85,97 +92,126 @@ class EditProfile extends React.Component {
       const userData = { username, email, description };
       return (
         <>
-          <TopBeam />
+          <TopBeam>
+            <PageTitle>Edit Your Profile</PageTitle>
+          </TopBeam>
           <ContentWrapper>
-            <GroupWrapper>
-              <Avatar src={user.data.avatar} alt="User avatar" />
-            </GroupWrapper>
-            <ButtonGroupWrapper>
-              <FileInputLabel for="file-upload">Choose Image...</FileInputLabel>
-              <FileInput
-                type="file"
-                id="file-upload"
-                onChange={this.handleFileSelect}
-              />
-              <Button type="button" onClick={this.handleFileUpload}>
-                Upload
-              </Button>
-            </ButtonGroupWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <Anchor href={`/profile/${ownerId}`}>Your Profile</Anchor>
+              <span>Edit Profile</span>
+            </Breadcrumb>
+            <InnerContentWrapper>
+              <GroupWrapper>
+                <Avatar src={user.data.avatar} alt="User avatar" />
+              </GroupWrapper>
+              <ButtonGroupWrapper>
+                <FileInputLabel for="file-upload">
+                  Choose Image...
+                </FileInputLabel>
+                <FileInput
+                  type="file"
+                  id="file-upload"
+                  onChange={this.handleFileSelect}
+                />
+                <UploadButton
+                  type="button"
+                  onClick={this.handleFileUpload}
+                  color="blue"
+                >
+                  Upload
+                </UploadButton>
+              </ButtonGroupWrapper>
 
-            {user.updateErrors && user.uploadErrors.avatar && (
-              <FormError>{user.uploadErrors.avatar}</FormError>
-            )}
+              {user.updateErrors && user.uploadErrors.avatar && (
+                <FormError>{user.uploadErrors.avatar}</FormError>
+              )}
 
-            <GroupWrapper>
-              <FinalForm
-                onSubmit={this.handleUpdateInfo}
-                initialValues={userData}
-              >
-                {({
-                  handleSubmit,
-                  pristine,
-                  hasValidationErrors,
-                  initialValues,
-                }) => (
-                  <form onSubmit={handleSubmit}>
-                    <FormWrapper>
-                      <FormGroup>
-                        <Label htmlFor={`username-${id}`}>Username:</Label>
-                        <Input
-                          id={`username-${id}`}
-                          value={initialValues.username}
-                          disabled
-                          type="text"
-                        />
-                      </FormGroup>
-                      <Field name="email" validate={emailValidator}>
-                        {({ input, meta: { touched, error, submitError } }) => (
-                          <FormGroup>
-                            <Label htmlFor={`email-${id}`}>Email:</Label>
-                            <Input {...input} id={`email-${id}`} type="email" />
-                            <FormError>
-                              {touched && (error || submitError)}
-                            </FormError>
-                          </FormGroup>
-                        )}
-                      </Field>
-                      <Field name="description">
-                        {({ input, meta: { touched, error, submitError } }) => (
-                          <FormGroup>
-                            <Label htmlFor={`description-${id}`}>
-                              Description:
-                            </Label>
-                            <TextArea
-                              {...input}
-                              id={`description-${id}`}
-                              rows="1"
-                              maxLength="500"
-                              placeholder="Tell us about yourself"
-                            />
-                            <FormError>
-                              {touched && (error || submitError)}
-                            </FormError>
-                          </FormGroup>
-                        )}
-                      </Field>
-                      <ButtonGroupWrapper>
-                        <Button
-                          onClick={() => history.push(`/profile/${ownerId}`)}
-                        >
-                          Your Profile
-                        </Button>
-                        <Button
-                          type="submit"
-                          disabled={pristine || hasValidationErrors}
-                        >
-                          Update Profile Information
-                        </Button>
-                      </ButtonGroupWrapper>
-                    </FormWrapper>
-                  </form>
-                )}
-              </FinalForm>
-            </GroupWrapper>
+              <GroupWrapper>
+                <FinalForm
+                  onSubmit={this.handleUpdateInfo}
+                  initialValues={userData}
+                >
+                  {({
+                    handleSubmit,
+                    pristine,
+                    hasValidationErrors,
+                    initialValues,
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <FormWrapper>
+                        <FormGroup>
+                          <Label htmlFor={`username-${id}`}>Username:</Label>
+                          <Input
+                            id={`username-${id}`}
+                            value={initialValues.username}
+                            disabled
+                            type="text"
+                          />
+                        </FormGroup>
+                        <Field name="email" validate={emailValidator}>
+                          {({
+                            input,
+                            meta: { touched, error, submitError },
+                          }) => (
+                            <FormGroup>
+                              <Label htmlFor={`email-${id}`}>Email:</Label>
+                              <Input
+                                {...input}
+                                id={`email-${id}`}
+                                type="email"
+                              />
+                              {touched && (error || submitError) && (
+                                <FormError>{error || submitError}</FormError>
+                              )}
+                            </FormGroup>
+                          )}
+                        </Field>
+                        <Field name="description">
+                          {({
+                            input,
+                            meta: { touched, error, submitError },
+                          }) => (
+                            <FormGroup>
+                              <Label htmlFor={`description-${id}`}>
+                                Description:
+                              </Label>
+                              <TextArea
+                                {...input}
+                                id={`description-${id}`}
+                                rows="1"
+                                maxLength="500"
+                                placeholder="Tell us about yourself"
+                              />
+                              {touched && (error || submitError) && (
+                                <FormError>{error || submitError}</FormError>
+                              )}
+                            </FormGroup>
+                          )}
+                        </Field>
+                        <FormButtonsWrapper>
+                          <Button
+                            type="submit"
+                            disabled={pristine || hasValidationErrors}
+                            color="blue"
+                          >
+                            Update Profile Information
+                          </Button>
+                          <Button
+                            onClick={() => history.push(`/profile/${ownerId}`)}
+                          >
+                            Go To Your Profile
+                          </Button>
+                        </FormButtonsWrapper>
+                      </FormWrapper>
+                    </form>
+                  )}
+                </FinalForm>
+              </GroupWrapper>
+            </InnerContentWrapper>
           </ContentWrapper>
         </>
       );

@@ -25,7 +25,7 @@ const Breadcrumb = ({ children }) => {
 };
 
 Breadcrumb.propTypes = {
-  children: PropTypes.instanceOf(Element).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Breadcrumb;

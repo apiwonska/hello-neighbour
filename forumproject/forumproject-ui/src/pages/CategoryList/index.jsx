@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
-import { Spinner, ContentWrapper, PageTitle, TopBeam, SVGIcon } from 'layout';
-
+import {
+  Spinner,
+  ContentWrapper,
+  PageTitle,
+  TopBeam,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
 import {
   CategoryCard,
   MainContent,
@@ -15,8 +20,8 @@ import {
   StatsGroup,
   StatsTitle,
   StatsNum,
-  IconWrapper,
-  Link,
+  CategoryLink,
+  InnerContentWrapper,
 } from './style';
 // import { DefaultError } from 'components/errors';
 
@@ -35,7 +40,9 @@ class CategoryList extends React.Component {
     const categoryList = categories.data.map((category) => (
       <CategoryCard key={category.id}>
         <MainContent>
-          <CardTitle>{category.name}</CardTitle>
+          <CategoryLink to={`/categories/${category.id}`}>
+            <CardTitle>{category.name}</CardTitle>
+          </CategoryLink>
           <CardText>{category.description}</CardText>
         </MainContent>
         <SideInfo>
@@ -47,11 +54,6 @@ class CategoryList extends React.Component {
             <StatsTitle>Posts:</StatsTitle>
             <StatsNum>{category.posts}</StatsNum>
           </StatsGroup>
-          <IconWrapper>
-            <Link to={`/categories/${category.id}`}>
-              <SVGIcon name="fat_arrow_right" />
-            </Link>
-          </IconWrapper>
         </SideInfo>
       </CategoryCard>
     ));
@@ -75,7 +77,18 @@ class CategoryList extends React.Component {
           <TopBeam>
             <PageTitle>Welcome to our Forum!</PageTitle>
           </TopBeam>
-          <ContentWrapper>{this.renderCategoryList()}</ContentWrapper>
+          <ContentWrapper>
+            <Breadcrumb>
+              <span>
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </span>
+            </Breadcrumb>
+
+            <InnerContentWrapper>
+              {this.renderCategoryList()}
+            </InnerContentWrapper>
+          </ContentWrapper>
         </>
       );
     }

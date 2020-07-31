@@ -1,11 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 
 // import { renderPageError, DefaultError } from 'components/errors';
-import { Pagination, Spinner, ContentWrapper } from 'layout';
+import {
+  Spinner,
+  ContentWrapper,
+  TopBeam,
+  Pagination,
+  PaginationWrapper,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
 import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
@@ -18,14 +25,14 @@ import { formatTime } from 'utils';
 import CreatePostForm from './CreatePostForm';
 import ThreadSubject from './ThreadSubject';
 import {
-  LinkWrapper,
-  NavLink,
-  PostWrapper,
+  Button,
   PostHeader,
   PostHeaderInnerWrapper,
   DateSpan,
   UserLink,
   AvatarThumbnail,
+  PageTitle,
+  ButtonWrapper,
 } from './style';
 
 class Thread extends React.Component {
@@ -33,11 +40,11 @@ class Thread extends React.Component {
     super(props);
     this.state = {
       currentPage: 1,
-      pageCount: 1,
+      totalPages: 1,
       editingPost: null,
     };
-    this.itemsPerPage = 2;
-    this.postFormRef = React.createRef();
+    this.postsPerPage = 10;
+    this.createPostInputRef = React.createRef();
   }
 
   componentDidMount = async () => {
@@ -47,8 +54,8 @@ class Thread extends React.Component {
     if (!thread.fetched || String(thread.data.id) !== threadId) {
       fetchThread(threadId);
     }
-    await fetchPostsByThread(threadId, this.itemsPerPage);
-    this.setStatePageCount();
+    await fetchPostsByThread(threadId, this.postsPerPage);
+    this.setStateTotalPages();
   };
 
   handleCreatePost = async (values) => {
@@ -58,10 +65,10 @@ class Thread extends React.Component {
     const data = { ...values, user: userId, thread: threadId };
     await createPost(data);
 
-    // update page count and move to next page if page was appended
-    const pageCountChange = this.setStatePageCount();
-    if (pageCountChange.diff) {
-      this.handleChangePage(null, pageCountChange.count);
+    // update total pages and move to next page if page was appended
+    const totalPagesChange = this.setStateTotalPages();
+    if (totalPagesChange.diff) {
+      this.handleChangePage(totalPagesChange.count);
     }
   };
 
@@ -82,10 +89,12 @@ class Thread extends React.Component {
      * update current page if it's bigger then current page count value
      * fetch current page (handlePageChange updates state.currentPage)
      */
-    const pageCountChange = this.setStatePageCount();
+    const totalPagesChange = this.setStateTotalPages();
     currentPage =
-      currentPage > pageCountChange.count ? pageCountChange.count : currentPage;
-    this.handleChangePage(null, currentPage);
+      currentPage > totalPagesChange.count
+        ? totalPagesChange.count
+        : currentPage;
+    this.handleChangePage(currentPage);
   };
 
   handleShowUpdateForm = (postId) => {
@@ -96,40 +105,40 @@ class Thread extends React.Component {
     this.setState({ editingPost: null });
   };
 
-  handleChangePage = async (event, page) => {
+  handleChangePage = async (page) => {
     const { match, fetchPostsByThread } = this.props;
     const { threadId } = match.params;
-    const offset = (page - 1) * this.itemsPerPage;
-    await fetchPostsByThread(threadId, this.itemsPerPage, offset);
+    const offset = (page - 1) * this.postsPerPage;
+    await fetchPostsByThread(threadId, this.postsPerPage, offset);
     this.setState({ currentPage: page });
   };
 
   handleMoveUserToEnd = async () => {
-    const { currentPage, pageCount: lastPage } = this.state;
+    const { currentPage, totalPages: lastPage } = this.state;
     if (currentPage !== lastPage) {
-      await this.handleChangePage(null, lastPage);
+      await this.handleChangePage(lastPage);
     }
-    this.postFormRef.current.scrollIntoView({ behavior: 'smooth' });
-    this.postFormRef.current.focus();
+    this.createPostInputRef.current.focus();
+    this.createPostInputRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   countPageNumber = () => {
     const { posts } = this.props;
     const { count: itemsTotal } = posts.data;
-    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+    return Math.ceil(itemsTotal / this.postsPerPage) || 1;
   };
 
-  setStatePageCount = () => {
-    const pageCountCurrent = this.countPageNumber();
-    const { pageCount: pageCountPrev } = this.state;
-    this.setState({ pageCount: pageCountCurrent });
+  setStateTotalPages = () => {
+    const totalPagesCurrent = this.countPageNumber();
+    const { totalPages: totalPagesPrev } = this.state;
+    this.setState({ totalPages: totalPagesCurrent });
     return {
-      diff: pageCountCurrent - pageCountPrev,
-      count: pageCountCurrent,
+      diff: totalPagesCurrent - totalPagesPrev,
+      count: totalPagesCurrent,
     };
   };
 
-  renderPostHeader = (post) => (
+  renderPostHeader = (post, dropdown) => (
     <PostHeader>
       <AvatarThumbnail
         src={post.user.avatar_thumbnail}
@@ -141,13 +150,27 @@ class Thread extends React.Component {
         </UserLink>
         <DateSpan>{formatTime.main(post.created)}</DateSpan>
       </PostHeaderInnerWrapper>
+      {dropdown}
     </PostHeader>
   );
 
+  renderPagination = () => {
+    const { currentPage, totalPages } = this.state;
+    return (
+      <PaginationWrapper>
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onChange={this.handleChangePage}
+        />
+      </PaginationWrapper>
+    );
+  };
+
   render() {
-    const { thread, posts, match } = this.props;
+    const { thread, posts, categories, match } = this.props;
+    const { currentPage, totalPages, editingPost } = this.state;
     const { categoryId } = match.params;
-    const { currentPage, pageCount, editingPost } = this.state;
 
     if (thread.fetching || posts.fetching) {
       return <Spinner />;
@@ -157,51 +180,53 @@ class Thread extends React.Component {
     // return renderPageError(thread.errors) || renderPageError(posts.errors);
     // }
 
-    if (thread.fetched && posts.fetched) {
+    if (categories.fetched && thread.fetched && posts.fetched) {
+      const category = categories.data.find(
+        (el) => String(el.id) === categoryId
+      );
       return (
-        <ContentWrapper>
-          <LinkWrapper>
-            <FontAwesomeIcon icon={faArrowLeft} />
-            &nbsp;
-            <NavLink to={`/categories/${categoryId}`}>
-              Back to all threads
-            </NavLink>
-          </LinkWrapper>
+        <>
+          <TopBeam>
+            <PageTitle>{thread.data.title}</PageTitle>
+          </TopBeam>
+          <ContentWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <Anchor href={`/categories/${categoryId}`}>
+                {category.name}
+              </Anchor>
+              <span>{thread.data.title}</span>
+            </Breadcrumb>
+            <ButtonWrapper>
+              <Button type="button" onClick={this.handleMoveUserToEnd}>
+                Add Post
+              </Button>
+            </ButtonWrapper>
+            {this.renderPagination()}
+            {currentPage === 1 && <ThreadSubject />}
 
-          <div>
-            <button type="button" onClick={this.handleMoveUserToEnd}>
-              Add post
-            </button>
-          </div>
+            <PostList
+              renderPostHeader={this.renderPostHeader}
+              editingPost={editingPost}
+              handleUpdatePost={this.handleUpdatePost}
+              handleDeletePost={this.handleDeletePost}
+              handleShowUpdateForm={this.handleShowUpdateForm}
+              handleHideUpdateForm={this.handleHideUpdateForm}
+            />
 
-          {currentPage === 1 && <ThreadSubject />}
-
-          <PostList
-            renderPostHeader={this.renderPostHeader}
-            editingPost={editingPost}
-            handleUpdatePost={this.handleUpdatePost}
-            handleDeletePost={this.handleDeletePost}
-            handleShowUpdateForm={this.handleShowUpdateForm}
-            handleHideUpdateForm={this.handleHideUpdateForm}
-          />
-
-          {currentPage === pageCount && (
-            <PostWrapper>
+            {currentPage === totalPages && (
               <CreatePostForm
-                ref={this.postFormRef}
+                ref={this.createPostInputRef}
                 onSubmit={this.handleCreatePost}
               />
-            </PostWrapper>
-          )}
+            )}
 
-          <div>
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={this.handleChangePage}
-            />
-          </div>
-        </ContentWrapper>
+            {this.renderPagination()}
+          </ContentWrapper>
+        </>
       );
     }
     return null;
@@ -225,6 +250,7 @@ Thread.propTypes = {
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       id: PropTypes.number,
+      title: PropTypes.string,
     }).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
@@ -234,6 +260,11 @@ Thread.propTypes = {
     data: PropTypes.shape({
       count: PropTypes.number,
     }).isRequired,
+  }).isRequired,
+  categories: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   }).isRequired,
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
@@ -246,6 +277,7 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   thread: state.thread,
   posts: state.posts,
+  categories: state.categories,
 });
 
 export default connect(mapStateToProps, {

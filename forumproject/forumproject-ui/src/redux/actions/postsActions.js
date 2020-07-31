@@ -46,7 +46,7 @@ export const fetchPostsByUser = (userId, itemsPerPage, offset = 0) => async (
   });
   try {
     const response = await forum().get(
-      `/api/posts/?user=${userId}&limit=${itemsPerPage}&offset=${offset}`
+      `/api/posts/?user=${userId}&ordering=-created&limit=${itemsPerPage}&offset=${offset}`
     );
     dispatch({
       type: FETCH_POSTS_BY_USER_FULFILLED,

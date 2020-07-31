@@ -1,26 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { NotFound, DefaultError } from 'shared/errors';
-import { Pagination, Spinner, ContentWrapper } from 'layout';
+import {
+  ContentWrapper,
+  PageTitle,
+  TopBeam,
+  Pagination,
+  Spinner,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
 import {
   fetchCategories as fetchCategories_,
   fetchThreadsByCategory as fetchThreadsByCategory_,
 } from 'redux/actions';
 import formatTime from 'utils/timeFormat';
 import {
-  CategoryHeader,
+  LinkButton,
+  LinkWrapper,
+  ThreadListWrapper,
   ThreadWrapper,
-  TitleRowWrapper,
+  ThreadHeader,
+  ThreadTitle,
   ThreadLink,
   ThreadLengthSpan,
-  DateWrapper,
-  SecondaryText,
-  LinkButton,
+  FooterWrapper,
+  GroupFooter,
+  FooterSpan,
+  PaginationWrapper,
+  SpeachBubbleIcon,
+  ThreadIcon,
+  NoResultsInfo,
 } from './style';
 
 class ThreadList extends React.Component {
@@ -28,7 +42,7 @@ class ThreadList extends React.Component {
     super(props);
     this.state = {
       currentPage: 1,
-      pageCount: 1,
+      totalPages: 1,
     };
     this.itemsPerPage = 10;
   }
@@ -46,10 +60,22 @@ class ThreadList extends React.Component {
       await fetchCategories();
     }
     await fetchThreadsByCategory(categoryId, this.itemsPerPage);
-    this.setState({ pageCount: this.countPageNumber() });
+    this.setState({ totalPages: this.countPageNumber() });
   };
 
-  handleChangePage = async (event, page) => {
+  componentDidUpdate = async (prevProps) => {
+    const { fetchThreadsByCategory, match } = this.props;
+    const { categoryId: prevCategoryId } = prevProps.match.params;
+    const { categoryId: currentCategoryId } = match.params;
+
+    if (prevCategoryId !== currentCategoryId) {
+      await fetchThreadsByCategory(currentCategoryId, this.itemsPerPage);
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ totalPages: this.countPageNumber() });
+    }
+  };
+
+  handleChangePage = async (page) => {
     const { match, fetchThreadsByCategory } = this.props;
     const { categoryId } = match.params;
     const offset = (page - 1) * this.itemsPerPage;
@@ -72,33 +98,55 @@ class ThreadList extends React.Component {
     }
 
     if (threads.fetched) {
+      if (threads.data.results.length === 0) {
+        return (
+          <NoResultsInfo>
+            There are no threads yet in this category. Create the first one!
+          </NoResultsInfo>
+        );
+      }
       const threadsList = threads.data.results.map((thread) => (
         <ThreadWrapper key={thread.id}>
-          <TitleRowWrapper>
+          <ThreadHeader>
             <ThreadLink to={`/categories/${categoryId}/threads/${thread.id}`}>
-              {thread.title}
+              <ThreadIcon name="double_speach_bubble" />
+              <ThreadTitle>{thread.title} </ThreadTitle>
             </ThreadLink>
+          </ThreadHeader>
+          <FooterWrapper>
+            <GroupFooter>
+              <FooterSpan>Added:</FooterSpan>
+              <FooterSpan>{formatTime.main(thread.created)}</FooterSpan>
+            </GroupFooter>
+            <GroupFooter>
+              <FooterSpan>Last post:</FooterSpan>
+              <FooterSpan>{formatTime.main(thread.updated)}</FooterSpan>
+            </GroupFooter>
             <ThreadLengthSpan>
-              <FontAwesomeIcon icon={faCommentAlt} />
+              <SpeachBubbleIcon name="speach_bubble" />
+              <FooterSpan>Posts in thread:</FooterSpan>
               {thread.posts}
             </ThreadLengthSpan>
-          </TitleRowWrapper>
-          <DateWrapper>
-            <SecondaryText>
-              Added:
-              {formatTime.main(thread.created)}
-            </SecondaryText>
-            <SecondaryText>
-              Last post:
-              {formatTime.main(thread.updated)}
-            </SecondaryText>
-          </DateWrapper>
+          </FooterWrapper>
         </ThreadWrapper>
       ));
       return threadsList;
     }
     return null;
   }
+
+  renderPagination = () => {
+    const { currentPage, totalPages } = this.state;
+    return (
+      <PaginationWrapper>
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onChange={this.handleChangePage}
+        />
+      </PaginationWrapper>
+    );
+  };
 
   render() {
     const { categories, match } = this.props;
@@ -121,24 +169,31 @@ class ThreadList extends React.Component {
     }
 
     if (categories.fetched && category) {
-      const { currentPage, pageCount } = this.state;
       return (
-        <ContentWrapper>
-          <CategoryHeader>{category.name}</CategoryHeader>
-          <div>
-            <LinkButton to={`/categories/${categoryId}/threads/new/`}>
-              Add Thread
-            </LinkButton>
-          </div>
-          <div>{this.renderThreadList()}</div>
-          <div>
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={this.handleChangePage}
-            />
-          </div>
-        </ContentWrapper>
+        <>
+          <TopBeam>
+            <PageTitle>{category.name}</PageTitle>
+          </TopBeam>
+          <ContentWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <span>{category.name}</span>
+            </Breadcrumb>
+            <LinkWrapper>
+              <LinkButton to={`/categories/${categoryId}/threads/new/`}>
+                Add Thread
+              </LinkButton>
+            </LinkWrapper>
+            <ThreadListWrapper>
+              {this.renderPagination()}
+              {this.renderThreadList()}
+              {this.renderPagination()}
+            </ThreadListWrapper>
+          </ContentWrapper>
+        </>
       );
     }
     return null;

@@ -3,17 +3,25 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContentWrapper, Spinner, TopBeam } from 'layout';
+import {
+  ContentWrapper,
+  Spinner,
+  TopBeam,
+  PageTitle,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
 import { renderPageError } from 'shared/errors';
 import { fetchUser as fetchUser_ } from 'redux/actions';
 import {
   Button,
-  GroupWrapper,
   Avatar,
   DataGroup,
   Label,
   Data,
   DataWrapper,
+  InnerContentWrapper,
 } from './style';
 
 class Profile extends React.Component {
@@ -101,16 +109,26 @@ class Profile extends React.Component {
     if (user.fetched) {
       return (
         <>
-          <TopBeam />
+          <TopBeam>
+            <PageTitle>User Profile</PageTitle>
+          </TopBeam>
           <ContentWrapper>
-            <GroupWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <span>User Profile</span>
+            </Breadcrumb>
+            <InnerContentWrapper>
               <Avatar src={user.data.avatar} alt="User avatar" />
-            </GroupWrapper>
-            <GroupWrapper>
               {this.renderUserData()}
               {isOwner && (
                 <>
-                  <Button onClick={() => history.push('/profile/edit')}>
+                  <Button
+                    onClick={() => history.push('/profile/edit')}
+                    color="blue"
+                  >
                     Edit Profile
                   </Button>
                   <Button
@@ -120,7 +138,7 @@ class Profile extends React.Component {
                   </Button>
                 </>
               )}
-            </GroupWrapper>
+            </InnerContentWrapper>
           </ContentWrapper>
         </>
       );

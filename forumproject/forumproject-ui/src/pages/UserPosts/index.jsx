@@ -1,36 +1,50 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import PostList from 'shared/EditablePostList';
 import { renderPageError } from 'shared/errors';
-import { Pagination, Spinner, ContentWrapper } from 'layout';
+import {
+  Spinner,
+  ContentWrapper,
+  TopBeam,
+  PageTitle,
+  Pagination,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+  PaginationWrapper,
+} from 'layout';
 import formatTime from 'utils/timeFormat';
 import {
   fetchPostsByUser as fetchPostsByUser_,
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import { PostHeader, PostHeaderInnerWrapper, DateSpan } from './style';
+import {
+  PostHeader,
+  PostHeaderInnerWrapper,
+  DateSpan,
+  ThreadLink,
+} from './style';
 
 class UserPosts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPage: 1,
-      pageCount: 1,
+      totalPages: 1,
       editingPost: null,
     };
-    this.itemsPerPage = 10;
+    this.postsPerPage = 10;
   }
 
   componentDidMount = async () => {
     const { auth, fetchPostsByUser } = this.props;
     const userId = auth.user.id;
-    await fetchPostsByUser(userId, this.itemsPerPage);
-    this.setState({ pageCount: this.countPageNumber() });
+    await fetchPostsByUser(userId, this.postsPerPage);
+    this.setState({ totalPages: this.countPageNumber() });
   };
 
   handleDeletePost = async (postId) => {
@@ -64,18 +78,18 @@ class UserPosts extends React.Component {
     this.setState({ editingPost: null });
   };
 
-  handleChangePage = async (event, page) => {
+  handleChangePage = async (page) => {
     const { auth, fetchPostsByUser } = this.props;
     const userId = auth.user.id;
-    const offset = (page - 1) * this.itemsPerPage;
-    await fetchPostsByUser(userId, this.itemsPerPage, offset);
+    const offset = (page - 1) * this.postsPerPage;
+    await fetchPostsByUser(userId, this.postsPerPage, offset);
     this.setState({ currentPage: page });
   };
 
   setStatePageCount = () => {
     const pageCountCurrent = this.countPageNumber();
-    const { pageCount: pageCountPrev } = this.state;
-    this.setState({ pageCount: pageCountCurrent });
+    const { totalPages: pageCountPrev } = this.state;
+    this.setState({ totalPages: pageCountCurrent });
     return {
       diff: pageCountCurrent - pageCountPrev,
       count: pageCountCurrent,
@@ -85,25 +99,39 @@ class UserPosts extends React.Component {
   countPageNumber() {
     const { posts } = this.props;
     const { count: itemsTotal } = posts.data;
-    return Math.ceil(itemsTotal / this.itemsPerPage) || 1;
+    return Math.ceil(itemsTotal / this.postsPerPage) || 1;
   }
 
-  renderPostHeader = (post) => (
+  renderPostHeader = (post, dropdown) => (
     <PostHeader>
       <PostHeaderInnerWrapper>
-        <Link
+        <ThreadLink
           to={`/categories/${post.thread.category}/threads/${post.thread.id}`}
         >
           {post.thread.title}
-        </Link>
+        </ThreadLink>
         <DateSpan>{formatTime.main(post.created)}</DateSpan>
       </PostHeaderInnerWrapper>
+      {dropdown}
     </PostHeader>
   );
 
+  renderPagination = () => {
+    const { currentPage, totalPages } = this.state;
+    return (
+      <PaginationWrapper>
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onChange={this.handleChangePage}
+        />
+      </PaginationWrapper>
+    );
+  };
+
   render() {
     const { posts } = this.props;
-    const { pageCount, currentPage, editingPost } = this.state;
+    const { editingPost } = this.state;
 
     if (posts.fetching) {
       return <Spinner />;
@@ -115,23 +143,33 @@ class UserPosts extends React.Component {
 
     if (posts.fetched) {
       return (
-        <ContentWrapper>
-          <PostList
-            renderPostHeader={this.renderPostHeader}
-            editingPost={editingPost}
-            handleUpdatePost={this.handleUpdatePost}
-            handleDeletePost={this.handleDeletePost}
-            handleShowUpdateForm={this.handleShowUpdateForm}
-            handleHideUpdateForm={this.handleHideUpdateForm}
-          />
-          <div>
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={this.handleChangePage}
+        <>
+          <TopBeam>
+            <PageTitle>Your Posts</PageTitle>
+          </TopBeam>
+          <ContentWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <span>Your Posts</span>
+            </Breadcrumb>
+
+            {this.renderPagination()}
+
+            <PostList
+              renderPostHeader={this.renderPostHeader}
+              editingPost={editingPost}
+              handleUpdatePost={this.handleUpdatePost}
+              handleDeletePost={this.handleDeletePost}
+              handleShowUpdateForm={this.handleShowUpdateForm}
+              handleHideUpdateForm={this.handleHideUpdateForm}
             />
-          </div>
-        </ContentWrapper>
+
+            {this.renderPagination()}
+          </ContentWrapper>
+        </>
       );
     }
 

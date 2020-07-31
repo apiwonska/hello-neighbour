@@ -9,11 +9,13 @@ import {
   ContentWrapper,
   PageTitle,
   TopBeam,
-  GroupWrapper,
   Input,
   FormGroup,
   Label,
   FormError,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
 } from 'layout';
 import {
   required,
@@ -21,7 +23,12 @@ import {
   password2Validator,
 } from 'utils/validators';
 import { changePassword as changePassword_ } from 'redux/actions';
-import { ButtonGroupWrapper, Button, FormWrapper } from './style';
+import {
+  ButtonGroupWrapper,
+  Button,
+  FormWrapper,
+  InnerContentWrapper,
+} from './style';
 
 class PasswordChange extends React.Component {
   constructor(props) {
@@ -68,7 +75,15 @@ class PasswordChange extends React.Component {
           <PageTitle>Password Change</PageTitle>
         </TopBeam>
         <ContentWrapper>
-          <GroupWrapper>
+          <Breadcrumb>
+            <Anchor href="/">
+              <BreadcrumbIcon name="home" />
+              Home Page
+            </Anchor>
+            <Anchor href={`/profile/${ownerId}`}>Your Profile</Anchor>
+            <span>Change Password</span>
+          </Breadcrumb>
+          <InnerContentWrapper>
             <FinalForm onSubmit={this.onSubmit}>
               {({
                 handleSubmit,
@@ -142,22 +157,23 @@ class PasswordChange extends React.Component {
                     </FormWrapper>
                     <ButtonGroupWrapper>
                       <Button
-                        type="submit"
-                        disable={pristine || hasValidationErrors}
-                      >
-                        Change Password
-                      </Button>
-                      <Button
                         onClick={() => history.push(`/profile/${ownerId}`)}
                       >
                         Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        disable={pristine || hasValidationErrors}
+                        color="blue"
+                      >
+                        Change Password
                       </Button>
                     </ButtonGroupWrapper>
                   </form>
                 );
               }}
             </FinalForm>
-          </GroupWrapper>
+          </InnerContentWrapper>
         </ContentWrapper>
       </>
     );

@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field, Form as FinalForm } from 'react-final-form';
 
 import { required } from 'utils/validators';
-import {
-  PostWrapper,
-  Content,
-  Footer,
-  StyledTextArea,
-} from 'pages/Thread/style';
+import { MenuDropdown } from 'layout';
+import { PostWrapper, Content, Footer, TextArea, Button } from './style';
 
 const PostList = ({
   renderPostHeader,
@@ -21,10 +17,37 @@ const PostList = ({
 }) => {
   const ownerId = useSelector((state) => state.auth.user.id);
   const posts = useSelector((state) => state.posts);
+  const textareaRef = useRef();
+
+  useEffect(() => {
+    if (editingPost) {
+      textareaRef.current.focus();
+      textareaRef.current.value += ' ';
+    }
+  }, [editingPost]);
+
+  const renderDropdown = (postId) => (
+    <MenuDropdown
+      dropdownOptions={[
+        {
+          label: 'Edit',
+          onClick: () => {
+            handleShowUpdateForm(postId);
+          },
+          icon: 'edit',
+        },
+        {
+          label: 'Delete',
+          onClick: () => handleDeletePost(postId),
+          icon: 'trash',
+        },
+      ]}
+    />
+  );
 
   const renderPosts = () => {
     const postsList = posts.data.results.map((post) => {
-      // if the logged in user is not post author, no option to edit post
+      // if the logged in user is not post author, he can't edit post
       if (post.user.id !== ownerId) {
         return (
           <PostWrapper key={post.id}>
@@ -38,7 +61,7 @@ const PostList = ({
       if (editingPost === post.id) {
         return (
           <PostWrapper key={post.id}>
-            {renderPostHeader(post)}
+            {renderPostHeader(post, renderDropdown(post.id))}
             <FinalForm
               onSubmit={handleUpdatePost}
               initialValues={{ content: post.content }}
@@ -48,16 +71,29 @@ const PostList = ({
                   <>
                     <Field name="content" validate={required}>
                       {({ input }) => (
-                        <StyledTextArea {...input} rows="3" maxLength="2000" />
+                        <TextArea
+                          {...input}
+                          maxLength="2000"
+                          ref={textareaRef}
+                        />
                       )}
                     </Field>
                     <Footer>
-                      <button type="button" onClick={handleHideUpdateForm}>
+                      <Button
+                        type="button"
+                        onClick={handleHideUpdateForm}
+                        size="S"
+                      >
                         Cancel
-                      </button>
-                      <button type="submit" disabled={hasValidationErrors}>
-                        Update
-                      </button>
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={hasValidationErrors}
+                        color="blue"
+                        size="S"
+                      >
+                        Save
+                      </Button>
                     </Footer>
                   </>
                 </form>
@@ -67,19 +103,10 @@ const PostList = ({
         );
       }
 
-      // renders post by default
       return (
         <PostWrapper key={post.id}>
-          {renderPostHeader(post)}
+          {renderPostHeader(post, renderDropdown(post.id))}
           <Content>{post.content}</Content>
-          <Footer>
-            <button type="button" onClick={() => handleShowUpdateForm(post.id)}>
-              Update
-            </button>
-            <button type="button" onClick={() => handleDeletePost(post.id)}>
-              Delete
-            </button>
-          </Footer>
         </PostWrapper>
       );
     });
