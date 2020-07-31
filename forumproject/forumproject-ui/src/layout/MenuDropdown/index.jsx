@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
+import SVGIcon from '../icons/SVGIcon';
 import { Wrapper, MoreBtn } from './style';
-import { SVGIcon } from 'layout';
 import DropdownList from './DropdownList';
 
 function MenuDropdown({ dropdownOptions }) {
@@ -27,5 +28,14 @@ function MenuDropdown({ dropdownOptions }) {
     </Wrapper>
   );
 }
+
+MenuDropdown.propTypes = {
+  dropdownOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      icon: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 
 export default MenuDropdown;
