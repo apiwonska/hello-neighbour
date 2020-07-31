@@ -10,6 +10,14 @@ export default styled.input`
   font-size: 1.6rem;
   color: ${theme.colors.black};
 
+  &[value=''] {
+    border-bottom: 0.2rem solid ${theme.colors.neutralMidLight};
+  }
+
+  &::placeholder {
+    color: ${theme.colors.neutralDark};
+  }
+
   &,
   &:hover,
   &:focus,
