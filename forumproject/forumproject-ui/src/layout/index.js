@@ -1,3 +1,7 @@
+import Breadcrumb from './breadcrumb/Breadcrumb';
+import Anchor from './breadcrumb/Anchor';
+import BreadcrumbIcon from './breadcrumb/BreadcrumbIcon';
+
 import BasicButton from './buttons/BasicButton';
 import Button from './buttons/Button';
 
@@ -25,13 +29,19 @@ import ModalLabel from './modals/ModalLabel';
 import ModalLink from './modals/ModalLink';
 import ModalParagraph from './modals/ModalParagraph';
 
-import Pagination from './Pagination';
+import MenuDropdown from './MenuDropdown';
+
+import Pagination from './pagination/Pagination';
+import PaginationWrapper from './pagination/PaginationWrapper';
 import Spinner from './Spinner';
 import PageTitle from './text/PageTitle';
 import theme from './theme';
 
 export {
+  Anchor,
   BasicButton,
+  Breadcrumb,
+  BreadcrumbIcon,
   Button,
   ContentWrapper,
   GroupWrapper,
@@ -45,8 +55,10 @@ export {
   ModalLabel,
   ModalLink,
   ModalParagraph,
+  MenuDropdown,
   PageTitle,
   Pagination,
+  PaginationWrapper,
   Spinner,
   Input,
   Label,
