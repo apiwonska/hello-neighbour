@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import { theme, SVGIcon } from 'layout';
+import { ReactComponent as Picture } from 'img/start_thread.svg';
 
 export const LinkButton = styled(Link)`
   display: flex;
@@ -18,14 +19,14 @@ export const LinkButton = styled(Link)`
   border-style: solid;
   border-width: 0.2rem;
   transition: 0.3s;
-  box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.2);
   text-decoration: none;
   cursor: pointer;
 
   &:hover {
     color: #000;
     border-color: ${theme.colors.black};
-    box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.35);
   }
 
   ${theme.media.minLandscapePhone} {
@@ -124,7 +125,7 @@ export const PaginationWrapper = styled.div`
   margin: 1rem 0 1rem;
 `;
 
-export const NoResultsInfo = styled.div`
-  font-size: 2rem;
-  text-align: center;
+export const StartThreadPicture = styled(Picture)`
+  width: 25rem;
+  height: 100%;
 `;

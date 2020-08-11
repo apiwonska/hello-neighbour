@@ -13,6 +13,7 @@ import {
   Anchor,
   Breadcrumb,
   BreadcrumbIcon,
+  NoResults,
 } from 'layout';
 import {
   fetchCategories as fetchCategories_,
@@ -34,7 +35,7 @@ import {
   PaginationWrapper,
   SpeachBubbleIcon,
   ThreadIcon,
-  NoResultsInfo,
+  StartThreadPicture,
 } from './style';
 
 class ThreadList extends React.Component {
@@ -100,9 +101,9 @@ class ThreadList extends React.Component {
     if (threads.fetched) {
       if (threads.data.results.length === 0) {
         return (
-          <NoResultsInfo>
+          <NoResults picture={<StartThreadPicture />}>
             There are no threads yet in this category. Create the first one!
-          </NoResultsInfo>
+          </NoResults>
         );
       }
       const threadsList = threads.data.results.map((thread) => (
