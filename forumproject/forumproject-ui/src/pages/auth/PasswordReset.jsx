@@ -59,7 +59,9 @@ class PasswordReset extends React.Component {
                         Email:
                       </Label>
                       <Input {...input} id={`email-${formId}`} type="email" />
-                      <FormError>{touched && (error || submitError)}</FormError>
+                      {touched && (error || submitError) && (
+                        <FormError>{error || submitError}</FormError>
+                      )}
                     </InputGroup>
                   )}
                 </Field>

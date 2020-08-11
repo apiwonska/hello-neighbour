@@ -51,7 +51,9 @@ class Registration extends React.Component {
                         Username:
                       </Label>
                       <Input {...input} id={`username-${formId}`} type="text" />
-                      <FormError>{touched && (error || submitError)}</FormError>
+                      {touched && (error || submitError) && (
+                        <FormError>{error || submitError}</FormError>
+                      )}
                     </InputGroup>
                   )}
                 </Field>
@@ -65,7 +67,9 @@ class Registration extends React.Component {
                         Email:
                       </Label>
                       <Input {...input} id={`email-${formId}`} type="email" />
-                      <FormError>{touched && (error || submitError)}</FormError>
+                      {touched && (error || submitError) && (
+                        <FormError>{error || submitError}</FormError>
+                      )}
                     </InputGroup>
                   )}
                 </Field>
@@ -83,7 +87,9 @@ class Registration extends React.Component {
                         id={`password-${formId}`}
                         type="password"
                       />
-                      <FormError>{touched && (error || submitError)}</FormError>
+                      {touched && (error || submitError) && (
+                        <FormError>{error || submitError}</FormError>
+                      )}
                     </InputGroup>
                   )}
                 </Field>
@@ -104,7 +110,9 @@ class Registration extends React.Component {
                         id={`password2-${formId}`}
                         type="password"
                       />
-                      <FormError>{touched && (error || submitError)}</FormError>
+                      {touched && (error || submitError) && (
+                        <FormError>{error || submitError}</FormError>
+                      )}
                     </InputGroup>
                   )}
                 </Field>

@@ -95,13 +95,11 @@ class PasswordResetConfirm extends React.Component {
             return (
               <form onSubmit={handleSubmit} id={formId}>
                 <FormWrapper>
-                  <FormGroup>
-                    <FormError>
-                      {submitErrors &&
-                        submitErrors.status &&
-                        'The token is not valid'}
-                    </FormError>
-                  </FormGroup>
+                  {submitErrors && submitErrors.status && (
+                    <FormGroup>
+                      <FormError>The token is not valid</FormError>
+                    </FormGroup>
+                  )}
                   <Field name="token" validate={required}>
                     {({
                       input,
@@ -112,9 +110,9 @@ class PasswordResetConfirm extends React.Component {
                           Token:
                         </Label>
                         <Input {...input} id={`token-${formId}`} type="text" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
                       </InputGroup>
                     )}
                   </Field>
@@ -132,9 +130,9 @@ class PasswordResetConfirm extends React.Component {
                           id={`password-${formId}`}
                           type="password"
                         />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
                       </InputGroup>
                     )}
                   </Field>
@@ -152,7 +150,7 @@ class PasswordResetConfirm extends React.Component {
                           id={`password2-${formId}`}
                           type="password"
                         />
-                        <FormError>{touched && error}</FormError>
+                        {touched && error && <FormError>{error}</FormError>}
                       </InputGroup>
                     )}
                   </Field>
