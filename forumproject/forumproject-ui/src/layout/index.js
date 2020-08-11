@@ -16,7 +16,7 @@ import FormGroup from './forms/FormGroup';
 import FormError from './forms/FormError';
 
 import SVGIcon from './icons/SVGIcon';
-
+import NoResults from './NoResults';
 import Layout from './mainLayout/Layout';
 
 import Modal from './modals/Modal';
@@ -46,6 +46,7 @@ export {
   ContentWrapper,
   GroupWrapper,
   Layout,
+  NoResults,
   Modal,
   ModalButton,
   ModalContentGroup,
