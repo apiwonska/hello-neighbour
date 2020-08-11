@@ -3,11 +3,11 @@ import theme from 'layout/theme';
 
 export default styled.button`
   min-width: 15rem;
-  min-height: 3.5rem;
   font-size: 1.6rem;
+  padding: 0.4rem 2rem;
+  min-height: 3.5rem;
   font-family: ${theme.fonts.default};
   line-height: 1.45;
-  padding: 0 2rem;
   background-color: ${theme.colors.white};
   color: #374350;
   border-color: #4d5863;
