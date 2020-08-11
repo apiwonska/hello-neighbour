@@ -7,10 +7,10 @@ import {
   showSideNavbar as showSideNavbar_,
   hideSideNavbar as hideSideNavbar_,
 } from 'redux/actions';
-import LayoutSetup from '../../LayoutSetup';
-import theme from '../../theme';
-import AuthLayout from '../AuthLayout';
-import UnauthLayout from '../UnauthLayout';
+import LayoutSetup from '../LayoutSetup';
+import theme from '../theme';
+import AuthLayout from './AuthLayout';
+import UnauthLayout from './UnauthLayout';
 
 class Layout extends React.Component {
   componentDidMount() {
@@ -68,7 +68,10 @@ class Layout extends React.Component {
 Layout.propTypes = {
   auth: PropTypes.bool.isRequired,
   sideNavIsRendered: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
   closeSideDrawer: PropTypes.func.isRequired,
   showSideNavbar: PropTypes.func.isRequired,
   hideSideNavbar: PropTypes.func.isRequired,

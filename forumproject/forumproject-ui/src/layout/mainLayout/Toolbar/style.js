@@ -16,7 +16,7 @@ const AuthNavSection = styled.section`
 `;
 
 const UnauthNavSection = styled(AuthNavSection)`
-  background-color: transparent;
+  background-color: ${theme.colors.accessPageBackgroundColor};
   box-shadow: none;
 `;
 
@@ -44,44 +44,20 @@ export const BrandDiv = styled.div`
   height: ${navbarHeight};
 `;
 
-const AuthProjectName = styled.span`
+export const ProjectName = styled.span`
   display: flex;
   align-items: center;
   font-family: ${theme.fonts.special};
   font-size: 2.4rem;
   font-weight: 700;
-  color: ${theme.colors.black};
-  transition: 0.4s;
 `;
-
-const UnauthProjectName = styled(AuthProjectName)`
-  color: ${theme.colors.white};
-
-  &:hover {
-    color: ${theme.colors.black};
-  }
-`;
-
-export const ProjectName = ({ auth, ...passThroughProps }) => {
-  return auth ? (
-    <AuthProjectName {...passThroughProps} />
-  ) : (
-    <UnauthProjectName {...passThroughProps} />
-  );
-};
-
-ProjectName.propTypes = {
-  auth: PropTypes.bool,
-};
-
-ProjectName.defaultProps = { auth: false };
 
 export const Nav = styled.nav`
   margin-left: auto;
 `;
 
 const AuthNavToggleButton = styled.button`
-  color: ${theme.colors.black};
+  color: #4d5863;
   background-color: ${theme.colors.white};
   border: 0;
   margin: 0 -0.5rem 0 0;
@@ -94,6 +70,7 @@ const AuthNavToggleButton = styled.button`
   transition: 0.4s;
 
   &:hover {
+    color: ${theme.colors.black};
     background-color: ${theme.colors.secondary};
   }
 
@@ -104,9 +81,11 @@ const AuthNavToggleButton = styled.button`
 
 const UnauthNavToggleButton = styled(AuthNavToggleButton)`
   color: ${theme.colors.white};
+  text-shadow: 0.1rem 0.1rem 0.3rem ${theme.colors.main};
   background-color: transparent;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: ${theme.colors.black};
     background-color: ${theme.colors.white};
   }
@@ -145,11 +124,6 @@ export const NavUl = styled.ul`
 
 export const NavLi = styled.li`
   height: ${navbarHeight};
-
-  :hover {
-    color: ${theme.colors.black};
-    cursor: pointer;
-  }
 `;
 
 const AuthNavLink = styled(Link)`
@@ -157,17 +131,21 @@ const AuthNavLink = styled(Link)`
   align-items: center;
   padding: 0 20px;
   height: 100%;
-  color: ${theme.colors.black};
   text-decoration: none;
   font-size: 1.6rem;
+  color: #4d5863;
   transition: 0.4s;
+
+  &:hover {
+    color: ${theme.colors.black};
+    text-shadow: none;
+    cursor: pointer;
+  }
 `;
 
 const UnauthNavLink = styled(AuthNavLink)`
   color: ${theme.colors.white};
-  &:hover {
-    color: ${theme.colors.black};
-  }
+  text-shadow: 0.1rem 0.1rem 0.3rem ${theme.colors.main};
 `;
 
 export const NavLink = ({ auth, ...passThroughProps }) => {

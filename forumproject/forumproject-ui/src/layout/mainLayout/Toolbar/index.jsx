@@ -27,13 +27,13 @@ const Toolbar = () => {
       return (
         <>
           <NavLi>
-            <NavLink to="/auth">
+            <NavLink to="/auth" auth={auth}>
               <UserIcon name="user" />
               Log In
             </NavLink>
           </NavLi>
           <NavLi>
-            <NavLink to="/register">
+            <NavLink to="/register" auth={auth}>
               <UserIcon name="add_user" />
               Register
             </NavLink>
@@ -51,8 +51,8 @@ const Toolbar = () => {
           <SVGIcon name="menu" />
         </NavToggleButton>
         <BrandDiv>
-          <NavLink to="/">
-            <ProjectName auth={auth}>
+          <NavLink to="/" auth={auth}>
+            <ProjectName>
               <BubbleIcon name="speach_bubble" />
               Forum
             </ProjectName>
