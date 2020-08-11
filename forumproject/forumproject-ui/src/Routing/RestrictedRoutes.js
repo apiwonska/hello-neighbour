@@ -5,12 +5,12 @@ import Login from 'pages/auth/Login';
 import Registration from 'pages/auth/Registration';
 import PasswordReset from 'pages/auth/PasswordReset';
 import PasswordResetConfirm from 'pages/auth/PasswordResetConfirm';
-import Home from 'pages/Home';
+import AccessPage from 'pages/AccessPage';
 
 const RestrictedRoutes = () => {
   return (
     <Route path="/">
-      <Route path="/" component={Home} />
+      <Route path="/" component={AccessPage} />
       <Switch>
         <Route path="/register" exact component={Registration} />
         <Route path="/auth" exact component={Login} />

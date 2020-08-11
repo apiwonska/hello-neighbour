@@ -3,29 +3,30 @@ import styled from 'styled-components';
 import theme from 'layout/theme';
 
 export const ModalBackground = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100%;
   min-width: ${theme.pageMinWidth};
   left: 0;
   top: 0;
+  bottom: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(5px);
+  overflow: scroll;
 `;
 
 export const ModalBody = styled.div`
-  max-width: 50rem;
-  width: 95%;
+  max-width: 40rem;
+  width: 100%;
   background-color: ${theme.colors.white};
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  margin: auto;
 `;
 
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 
   &:after {
     width: 80%;
@@ -70,5 +71,5 @@ export const Title = styled.h2`
 
 export const Content = styled.div`
   width: 85%;
-  margin: 0 auto;
+  margin: 0 auto 4rem;
 `;

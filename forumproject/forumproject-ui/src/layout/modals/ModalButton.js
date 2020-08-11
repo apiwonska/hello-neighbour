@@ -13,7 +13,7 @@ export default styled.button`
   border: none;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
   text-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.25);
-  margin: 4rem auto 0;
+  margin: 4.5rem auto 1rem;
   transform: scale(1, 1);
   transition: 0.4s;
   cursor: pointer;

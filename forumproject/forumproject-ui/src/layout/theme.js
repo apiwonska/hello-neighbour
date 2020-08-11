@@ -16,6 +16,7 @@ const theme = {
     black: '#212F3D',
     alertText: '#dc3545',
     successText: '#28a745',
+    accessPageBackgroundColor: '#7CA7DF',
   },
   fonts: {
     default: '"Open Sans", sans-serif;',
