@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { Spinner as StyledSpinner, WrapperDiv, InnerWrapperDiv } from './style';
+import { Spinner as StyledSpinner, WrapperDiv } from './style';
 
 const Spinner = () => {
   return (
     <WrapperDiv>
-      <InnerWrapperDiv>
-        <StyledSpinner />
-      </InnerWrapperDiv>
+      <StyledSpinner />
     </WrapperDiv>
   );
 };
