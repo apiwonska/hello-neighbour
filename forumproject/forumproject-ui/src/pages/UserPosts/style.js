@@ -5,7 +5,7 @@ import { theme } from '../../layout';
 
 export const PostHeader = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1rem;
 `;
 
