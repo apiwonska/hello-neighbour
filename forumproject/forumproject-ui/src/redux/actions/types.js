@@ -75,3 +75,9 @@ export const UPDATE_USER_ERRORS = 'update_user_errors';
 export const UPLOAD_AVATAR_PENDING = 'upload_avatar_pending';
 export const UPLOAD_AVATAR_FULFILLED = 'upload_avatar_fulfilled';
 export const UPLOAD_AVATAR_ERRORS = 'upload_avatar_errors';
+
+// Layout
+export const CLOSE_SIDE_DRAWER = 'close_side_drawer';
+export const OPEN_SIDE_DRAWER = 'open_side_drawer';
+export const SHOW_SIDE_NAVBAR = 'show_side_navbar';
+export const HIDE_SIDE_NAVBAR = 'hide_side_navbar';

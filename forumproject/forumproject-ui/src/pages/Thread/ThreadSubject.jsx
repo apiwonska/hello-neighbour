@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { formatTime } from 'utils';
-import { AvatarThumbnail } from 'components/styledImages';
 import {
   ThreadWrapper,
   PostHeader,
@@ -11,6 +10,7 @@ import {
   UserLink,
   ThreadTitle,
   Content,
+  AvatarThumbnail,
 } from './style';
 
 const ThreadSubject = () => {

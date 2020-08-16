@@ -4,24 +4,38 @@ import { Form as FinalForm, Field } from 'react-final-form';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContainerDiv } from 'components/styledDivs';
-import {
-  Input,
-  TextArea,
-  FormGroup,
-  Label,
-  FormError,
-  FormWrapper,
-} from 'components/styledForms';
 import { emailValidator } from 'utils/validators';
-import { SubmitButtonSmall } from 'components/styledButtons';
 import {
   fetchUser as fetchUser_,
   updateUser as updateUser_,
   uploadAvatar as uploadAvatar_,
 } from 'redux/actions';
-import { Spinner } from 'layout';
-import { ImageWrapper, Avatar } from './style';
+import {
+  ContentWrapper,
+  FormError,
+  FormGroup,
+  GroupWrapper,
+  Spinner,
+  TopBeam,
+  PageTitle,
+  TextArea,
+  Input,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
+import {
+  Button,
+  UploadButton,
+  FileInput,
+  FileInputLabel,
+  ButtonGroupWrapper,
+  Avatar,
+  Label,
+  FormWrapper,
+  FormButtonsWrapper,
+  InnerContentWrapper,
+} from './style';
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -48,6 +62,7 @@ class EditProfile extends React.Component {
     const { user } = this.props;
     const errors = user.updateErrors;
     if (!_.isEmpty(errors)) return errors;
+
     return null;
   };
 
@@ -66,7 +81,7 @@ class EditProfile extends React.Component {
   render() {
     // a value to ensure form input id uniqueness
     const id = 'ep';
-    const { user } = this.props;
+    const { user, ownerId, history } = this.props;
 
     if (user.fetching) {
       return <Spinner />;
@@ -76,78 +91,129 @@ class EditProfile extends React.Component {
       const { username, email, description } = user.data;
       const userData = { username, email, description };
       return (
-        <ContainerDiv>
-          <div>
-            <ImageWrapper>
-              <Avatar src={user.data.avatar} alt="User avatar" />
-            </ImageWrapper>
-            <input type="file" onChange={this.handleFileSelect} />
-            <button type="button" onClick={this.handleFileUpload}>
-              Upload
-            </button>
-            {user.updateErrors && user.uploadErrors.avatar && (
-              <FormError>{user.uploadErrors.avatar}</FormError>
-            )}
-          </div>
+        <>
+          <TopBeam>
+            <PageTitle>Edit Your Profile</PageTitle>
+          </TopBeam>
+          <ContentWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <Anchor href={`/profile/${ownerId}`}>Your Profile</Anchor>
+              <span>Edit Profile</span>
+            </Breadcrumb>
+            <InnerContentWrapper>
+              <GroupWrapper>
+                <Avatar src={user.data.avatar} alt="User avatar" />
+              </GroupWrapper>
+              <ButtonGroupWrapper>
+                <FileInputLabel for="file-upload">
+                  Choose Image...
+                </FileInputLabel>
+                <FileInput
+                  type="file"
+                  id="file-upload"
+                  onChange={this.handleFileSelect}
+                />
+                <UploadButton
+                  type="button"
+                  onClick={this.handleFileUpload}
+                  color="blue"
+                >
+                  Upload
+                </UploadButton>
+              </ButtonGroupWrapper>
 
-          <FinalForm onSubmit={this.handleUpdateInfo} initialValues={userData}>
-            {({
-              handleSubmit,
-              pristine,
-              hasValidationErrors,
-              initialValues,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <FormWrapper>
-                  <FormGroup>
-                    <Label htmlFor={`username-${id}`}>Username:</Label>
-                    <Input
-                      id={`username-${id}`}
-                      value={initialValues.username}
-                      disabled="disabled"
-                      type="text"
-                    />
-                  </FormGroup>
-                  <Field name="email" validate={emailValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`email-${id}`}>Email:</Label>
-                        <Input {...input} id={`email-${id}`} type="email" />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </FormGroup>
-                    )}
-                  </Field>
-                  <Field name="description">
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`description-${id}`}>
-                          Description:
-                        </Label>
-                        <TextArea
-                          {...input}
-                          id={`description-${id}`}
-                          rows="6"
-                          maxLength="1000"
-                          placeholder="Tell us about yourself"
-                        />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </FormGroup>
-                    )}
-                  </Field>
-                  <SubmitButtonSmall
-                    type="submit"
-                    value="Update Profile"
-                    disabled={pristine || hasValidationErrors}
-                  />
-                </FormWrapper>
-              </form>
-            )}
-          </FinalForm>
-        </ContainerDiv>
+              {user.updateErrors && user.uploadErrors.avatar && (
+                <FormError>{user.uploadErrors.avatar}</FormError>
+              )}
+
+              <GroupWrapper>
+                <FinalForm
+                  onSubmit={this.handleUpdateInfo}
+                  initialValues={userData}
+                >
+                  {({
+                    handleSubmit,
+                    pristine,
+                    hasValidationErrors,
+                    initialValues,
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <FormWrapper>
+                        <FormGroup>
+                          <Label htmlFor={`username-${id}`}>Username:</Label>
+                          <Input
+                            id={`username-${id}`}
+                            value={initialValues.username}
+                            disabled
+                            type="text"
+                          />
+                        </FormGroup>
+                        <Field name="email" validate={emailValidator}>
+                          {({
+                            input,
+                            meta: { touched, error, submitError },
+                          }) => (
+                            <FormGroup>
+                              <Label htmlFor={`email-${id}`}>Email:</Label>
+                              <Input
+                                {...input}
+                                id={`email-${id}`}
+                                type="email"
+                              />
+                              {touched && (error || submitError) && (
+                                <FormError>{error || submitError}</FormError>
+                              )}
+                            </FormGroup>
+                          )}
+                        </Field>
+                        <Field name="description">
+                          {({
+                            input,
+                            meta: { touched, error, submitError },
+                          }) => (
+                            <FormGroup>
+                              <Label htmlFor={`description-${id}`}>
+                                Description:
+                              </Label>
+                              <TextArea
+                                {...input}
+                                id={`description-${id}`}
+                                rows="1"
+                                maxLength="500"
+                                placeholder="Tell us about yourself"
+                              />
+                              {touched && (error || submitError) && (
+                                <FormError>{error || submitError}</FormError>
+                              )}
+                            </FormGroup>
+                          )}
+                        </Field>
+                        <FormButtonsWrapper>
+                          <Button
+                            type="submit"
+                            disabled={pristine || hasValidationErrors}
+                            color="blue"
+                          >
+                            Update Profile Information
+                          </Button>
+                          <Button
+                            onClick={() => history.push(`/profile/${ownerId}`)}
+                          >
+                            Go To Your Profile
+                          </Button>
+                        </FormButtonsWrapper>
+                      </FormWrapper>
+                    </form>
+                  )}
+                </FinalForm>
+              </GroupWrapper>
+            </InnerContentWrapper>
+          </ContentWrapper>
+        </>
       );
     }
     return null;
@@ -155,6 +221,7 @@ class EditProfile extends React.Component {
 }
 
 EditProfile.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   ownerId: PropTypes.number.isRequired,
   user: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
@@ -166,8 +233,8 @@ EditProfile.propTypes = {
       avatar: PropTypes.string,
       description: PropTypes.string,
     }).isRequired,
-    updateErrors: PropTypes.object,
-    uploadErrors: PropTypes.object,
+    updateErrors: PropTypes.shape({}),
+    uploadErrors: PropTypes.shape({ avatar: PropTypes.string }),
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
   updateUser: PropTypes.func.isRequired,

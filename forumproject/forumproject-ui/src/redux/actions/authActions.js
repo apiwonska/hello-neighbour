@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 import forum from 'apis/forum';
+import history from 'Routing/history';
 import {
   REGISTER_USER_PENDING,
   REGISTER_USER_FULFILLED,
@@ -49,6 +50,7 @@ export const register = (formProps) => async (dispatch) => {
   try {
     const response = await axios.post(`/api/registration/`, formProps);
     await setAuthCookies(response.data);
+    history.push('/');
     dispatch({
       type: REGISTER_USER_FULFILLED,
       payload: response.data,
@@ -68,6 +70,7 @@ export const logIn = (formProps) => async (dispatch) => {
   try {
     const response = await axios.post(`/api/token-auth/`, formProps);
     await setAuthCookies(response.data);
+    history.push('/');
     dispatch({
       type: LOGIN_USER_FULFILLED,
       payload: response.data,

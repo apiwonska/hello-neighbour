@@ -3,18 +3,25 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { ContainerDiv } from 'components/styledDivs';
-import { LinkButtonSmall as Button } from 'components/styledButtons';
-import { renderPageError } from 'components/errors';
-import { Spinner } from 'layout';
+import {
+  ContentWrapper,
+  Spinner,
+  TopBeam,
+  PageTitle,
+  Anchor,
+  Breadcrumb,
+  BreadcrumbIcon,
+} from 'layout';
+import { renderPageError } from 'shared/errors';
 import { fetchUser as fetchUser_ } from 'redux/actions';
 import {
-  ImageWrapper,
+  Button,
   Avatar,
   DataGroup,
   Label,
   Data,
   DataWrapper,
+  InnerContentWrapper,
 } from './style';
 
 class Profile extends React.Component {
@@ -67,7 +74,7 @@ class Profile extends React.Component {
       <DataWrapper>
         <DataGroup>
           <Label> Username: </Label>
-          <Data> {user.data.username} </Data>
+          <Data>{user.data.username}</Data>
         </DataGroup>
         {isOwner && (
           <DataGroup>
@@ -84,7 +91,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, history } = this.props;
     const { isOwner } = this.state;
 
     if (this.checkNeedFetchUser()) {
@@ -101,25 +108,39 @@ class Profile extends React.Component {
 
     if (user.fetched) {
       return (
-        <ContainerDiv>
-          <ImageWrapper>
-            <Avatar src={user.data.avatar} alt="User avatar" />
-          </ImageWrapper>
-          {this.renderUserData()}
-          {isOwner && (
-            <>
-              <Button to="/profile/edit" color="greenOutline">
-                Edit Profile
-              </Button>
-              <Button to="/profile/password-change" color="greenOutline">
-                Change Password
-              </Button>
-              <Button to="/profile/posts" color="greenOutline">
-                Your posts
-              </Button>
-            </>
-          )}
-        </ContainerDiv>
+        <>
+          <TopBeam>
+            <PageTitle>User Profile</PageTitle>
+          </TopBeam>
+          <ContentWrapper>
+            <Breadcrumb>
+              <Anchor href="/">
+                <BreadcrumbIcon name="home" />
+                Home Page
+              </Anchor>
+              <span>User Profile</span>
+            </Breadcrumb>
+            <InnerContentWrapper>
+              <Avatar src={user.data.avatar} alt="User avatar" />
+              {this.renderUserData()}
+              {isOwner && (
+                <>
+                  <Button
+                    onClick={() => history.push('/profile/edit')}
+                    color="blue"
+                  >
+                    Edit Profile
+                  </Button>
+                  <Button
+                    onClick={() => history.push('/profile/password-change')}
+                  >
+                    Change Password
+                  </Button>
+                </>
+              )}
+            </InnerContentWrapper>
+          </ContentWrapper>
+        </>
       );
     }
     return null;
@@ -127,8 +148,9 @@ class Profile extends React.Component {
 }
 
 Profile.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   match: PropTypes.shape({
-    params: PropTypes.object.isRequired,
+    params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   }).isRequired,
   owner: PropTypes.shape({
     id: PropTypes.number,
@@ -143,7 +165,7 @@ Profile.propTypes = {
       email: PropTypes.string,
       avatar: PropTypes.string,
     }).isRequired,
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
 };
