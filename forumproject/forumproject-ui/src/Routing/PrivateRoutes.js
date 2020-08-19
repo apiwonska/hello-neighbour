@@ -4,10 +4,10 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import ThreadListPage from 'pages/ThreadListPage';
 import CreateThread from 'pages/CreateThread';
-import Thread from 'pages/Thread';
+import ThreadPage from 'pages/ThreadPage';
 import Profile from 'pages/Profile';
 import EditProfile from 'pages/EditProfile';
-import UserPosts from 'pages/UserPosts';
+import UserPostsPage from 'pages/UserPostsPage';
 import PasswordChange from 'pages/PasswordChange';
 import NotFound from 'pages/NotFound';
 
@@ -25,10 +25,10 @@ const PrivateRoutes = () => {
       <Route
         path="/categories/:categoryId/threads/:threadId"
         exact
-        component={Thread}
+        component={ThreadPage}
       />
       <Route path="/profile/password-change" exact component={PasswordChange} />
-      <Route path="/profile/posts" exact component={UserPosts} />
+      <Route path="/profile/posts" exact component={UserPostsPage} />
       <Route path="/profile/edit" exact component={EditProfile} />
       <Route path="/profile/:userId" exact component={Profile} />
       <Route path="*" component={NotFound} />

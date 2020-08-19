@@ -3,31 +3,12 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import PostList from 'shared/EditablePostList';
-import { renderPageError } from 'shared/errors';
-import {
-  Spinner,
-  ContentWrapper,
-  TopBeam,
-  PageTitle,
-  Pagination,
-  Anchor,
-  Breadcrumb,
-  BreadcrumbIcon,
-  PaginationWrapper,
-} from 'layout';
-import formatTime from 'utils/timeFormat';
 import {
   fetchPostsByUser as fetchPostsByUser_,
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import {
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
-  ThreadLink,
-} from './style';
+import PageContent from './PageContent';
 
 class UserPosts extends React.Component {
   constructor(props) {
@@ -102,78 +83,26 @@ class UserPosts extends React.Component {
     return Math.ceil(itemsTotal / this.postsPerPage) || 1;
   }
 
-  renderPostHeader = (post, dropdown) => (
-    <PostHeader>
-      <PostHeaderInnerWrapper>
-        <ThreadLink
-          to={`/categories/${post.thread.category}/threads/${post.thread.id}`}
-        >
-          {post.thread.title}
-        </ThreadLink>
-        <DateSpan>{formatTime.main(post.created)}</DateSpan>
-      </PostHeaderInnerWrapper>
-      {dropdown}
-    </PostHeader>
-  );
-
-  renderPagination = () => {
-    const { currentPage, totalPages } = this.state;
-    return (
-      <PaginationWrapper>
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onChange={this.handleChangePage}
-        />
-      </PaginationWrapper>
-    );
-  };
-
   render() {
     const { posts } = this.props;
-    const { editingPost } = this.state;
+    const { currentPage, totalPages, editingPost } = this.state;
 
-    if (posts.fetching) {
-      return <Spinner />;
-    }
-
-    if (!_.isEmpty(posts.errors)) {
-      return renderPageError(posts.errors);
-    }
-
-    if (posts.fetched) {
-      return (
-        <>
-          <TopBeam>
-            <PageTitle>Your Posts</PageTitle>
-          </TopBeam>
-          <ContentWrapper>
-            <Breadcrumb>
-              <Anchor href="/">
-                <BreadcrumbIcon name="home" />
-                Home Page
-              </Anchor>
-              <span>Your Posts</span>
-            </Breadcrumb>
-
-            {this.renderPagination()}
-
-            <PostList
-              renderPostHeader={this.renderPostHeader}
-              editingPost={editingPost}
-              handleUpdatePost={this.handleUpdatePost}
-              handleDeletePost={this.handleDeletePost}
-              handleShowUpdateForm={this.handleShowUpdateForm}
-              handleHideUpdateForm={this.handleHideUpdateForm}
-            />
-
-            {this.renderPagination()}
-          </ContentWrapper>
-        </>
-      );
-    }
-
-    return null;
+    return (
+      <PageContent
+        fetching={posts.fetching}
+        fetched={posts.fetched}
+        errors={!_.isEmpty(posts.errors)}
+        posts={posts.data.results}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handleChangePage={this.handleChangePage}
+        editingPost={editingPost}
+        handleUpdatePost={this.handleUpdatePost}
+        handleDeletePost={this.handleDeletePost}
+        handleShowUpdateForm={this.handleShowUpdateForm}
+        handleHideUpdateForm={this.handleHideUpdateForm}
+      />
+    );
   }
 }
 

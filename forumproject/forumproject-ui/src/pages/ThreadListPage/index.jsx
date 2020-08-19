@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import {
   fetchCategories as fetchCategories_,
@@ -27,7 +28,7 @@ class ThreadList extends React.Component {
     } = this.props;
     const { categoryId } = match.params;
 
-    if (!categories.fetched) {
+    if (!categories.fetched && !categories.fetching) {
       await fetchCategories();
     }
     await fetchThreadsByCategory(categoryId, this.itemsPerPage);
@@ -71,9 +72,9 @@ class ThreadList extends React.Component {
     return (
       <PageContent
         fetching={categories.fetching}
-        fetched={categories.fetched && category}
+        fetched={categories.fetched && !!category}
         notFound={categories.fetched && !category}
-        errors={categories.errors || threads.errors}
+        errors={!_.isEmpty(categories.errors) || !_.isEmpty(threads.errors)}
         categoryName={category && category.name}
         currentPage={currentPage}
         totalPages={totalPages}

@@ -1,41 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
-// import { renderPageError, DefaultError } from 'components/errors';
-import {
-  Spinner,
-  ContentWrapper,
-  TopBeam,
-  Pagination,
-  PaginationWrapper,
-  Anchor,
-  Breadcrumb,
-  BreadcrumbIcon,
-} from 'layout';
 import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
+  fetchCategories as fetchCategories_,
   createPost as createPost_,
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
-import PostList from 'shared/EditablePostList';
-import { formatTime } from 'utils';
-import CreatePostForm from './CreatePostForm';
-import ThreadSubject from './ThreadSubject';
-import {
-  Button,
-  PostHeader,
-  PostHeaderInnerWrapper,
-  DateSpan,
-  UserLink,
-  AvatarThumbnail,
-  PageTitle,
-  ButtonWrapper,
-} from './style';
+import PageContent from './PageContent';
 
-class Thread extends React.Component {
+class ThreadPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +26,14 @@ class Thread extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { thread, fetchThread, fetchPostsByThread, match } = this.props;
+    const {
+      categories,
+      thread,
+      fetchCategories,
+      fetchThread,
+      fetchPostsByThread,
+      match,
+    } = this.props;
     const { threadId } = match.params;
 
     if (!thread.fetched || String(thread.data.id) !== threadId) {
@@ -56,6 +41,10 @@ class Thread extends React.Component {
     }
     await fetchPostsByThread(threadId, this.postsPerPage);
     this.setStateTotalPages();
+
+    if (!categories.fetched && !categories.fetching) {
+      await fetchCategories();
+    }
   };
 
   handleCreatePost = async (values) => {
@@ -138,102 +127,39 @@ class Thread extends React.Component {
     };
   };
 
-  renderPostHeader = (post, dropdown) => (
-    <PostHeader>
-      <AvatarThumbnail
-        src={post.user.avatar_thumbnail}
-        alt="Avatar thumbnail"
-      />
-      <PostHeaderInnerWrapper>
-        <UserLink to={`/profile/${post.user.id}`}>
-          {post.user.username}
-        </UserLink>
-        <DateSpan>{formatTime.main(post.created)}</DateSpan>
-      </PostHeaderInnerWrapper>
-      {dropdown}
-    </PostHeader>
-  );
-
-  renderPagination = () => {
-    const { currentPage, totalPages } = this.state;
-    return (
-      <PaginationWrapper>
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onChange={this.handleChangePage}
-        />
-      </PaginationWrapper>
-    );
-  };
-
   render() {
-    const { thread, posts, categories, match } = this.props;
+    const { thread, posts, categories } = this.props;
     const { currentPage, totalPages, editingPost } = this.state;
-    const { categoryId } = match.params;
 
-    if (thread.fetching || posts.fetching) {
-      return <Spinner />;
-    }
-
-    // if (!_.isEmpty(thread.errors) || !.isEmpty(posts.errors)) {
-    // return renderPageError(thread.errors) || renderPageError(posts.errors);
-    // }
-
-    if (categories.fetched && thread.fetched && posts.fetched) {
-      const category = categories.data.find(
-        (el) => String(el.id) === categoryId
-      );
-      return (
-        <>
-          <TopBeam>
-            <PageTitle>{thread.data.title}</PageTitle>
-          </TopBeam>
-          <ContentWrapper>
-            <Breadcrumb>
-              <Anchor href="/">
-                <BreadcrumbIcon name="home" />
-                Home Page
-              </Anchor>
-              <Anchor href={`/categories/${categoryId}`}>
-                {category.name}
-              </Anchor>
-              <span>{thread.data.title}</span>
-            </Breadcrumb>
-            <ButtonWrapper>
-              <Button type="button" onClick={this.handleMoveUserToEnd}>
-                Add Post
-              </Button>
-            </ButtonWrapper>
-            {this.renderPagination()}
-            {currentPage === 1 && <ThreadSubject />}
-
-            <PostList
-              renderPostHeader={this.renderPostHeader}
-              editingPost={editingPost}
-              handleUpdatePost={this.handleUpdatePost}
-              handleDeletePost={this.handleDeletePost}
-              handleShowUpdateForm={this.handleShowUpdateForm}
-              handleHideUpdateForm={this.handleHideUpdateForm}
-            />
-
-            {currentPage === totalPages && (
-              <CreatePostForm
-                ref={this.createPostInputRef}
-                onSubmit={this.handleCreatePost}
-              />
-            )}
-
-            {this.renderPagination()}
-          </ContentWrapper>
-        </>
-      );
-    }
-    return null;
+    return (
+      <PageContent
+        fetching={categories.fetching || thread.fetching || posts.fetching}
+        fetched={categories.fetched && thread.fetched && posts.fetched}
+        errors={
+          !_.isEmpty(thread.errors) ||
+          !_.isEmpty(thread.errors) ||
+          !_.isEmpty(posts.errors)
+        }
+        thread={thread.data}
+        posts={posts.data.results}
+        handleMoveUserToEnd={this.handleMoveUserToEnd}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handleChangePage={this.handleChangePage}
+        renderPostHeader={this.renderPostHeader}
+        editingPost={editingPost}
+        handleUpdatePost={this.handleUpdatePost}
+        handleDeletePost={this.handleDeletePost}
+        handleShowUpdateForm={this.handleShowUpdateForm}
+        handleHideUpdateForm={this.handleHideUpdateForm}
+        createPostInputRef={this.createPostInputRef}
+        handleCreatePost={this.handleCreatePost}
+      />
+    );
   }
 }
 
-Thread.propTypes = {
+ThreadPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       threadId: PropTypes.string.isRequired,
@@ -259,7 +185,9 @@ Thread.propTypes = {
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       count: PropTypes.number,
+      results: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   categories: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
@@ -268,6 +196,7 @@ Thread.propTypes = {
   }).isRequired,
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
@@ -283,7 +212,8 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchThread: fetchThread_,
   fetchPostsByThread: fetchPostsByThread_,
+  fetchCategories: fetchCategories_,
   createPost: createPost_,
   updatePost: updatePost_,
   deletePost: deletePost_,
-})(Thread);
+})(ThreadPage);
