@@ -20,8 +20,3 @@ export const ButtonGroupWrapper = styled.div`
 export const FormWrapper = styled.div`
   margin-bottom: 4rem;
 `;
-
-export const InnerContentWrapper = styled.div`
-  max-width: 60rem;
-  margin: 4rem auto;
-`;

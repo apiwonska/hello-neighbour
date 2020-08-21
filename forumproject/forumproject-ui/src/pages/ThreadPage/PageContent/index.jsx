@@ -5,20 +5,18 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import PostList from 'shared/EditablePostList';
+import { withHandleErrors, withLoading } from 'shared/hoc';
 import {
   ContentWrapper,
-  TopBeam,
+  PageTitleWrapper,
   Pagination,
   PaginationWrapper,
-  Anchor,
-  Breadcrumb,
-  BreadcrumbIcon,
 } from 'layout';
-import { withHandleErrors, withLoading } from 'shared/hoc';
+import { Button, PageTitleText, ButtonWrapper } from './style';
 import CreatePostForm from '../CreatePostForm';
 import ThreadSubject from '../ThreadSubject';
 import PostHeader from '../PostHeader';
-import { Button, PageTitle, ButtonWrapper } from './style';
+import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({
   thread,
@@ -53,19 +51,16 @@ const PageContent = ({
 
   return (
     <>
-      <TopBeam>
-        <PageTitle>{thread.title}</PageTitle>
-      </TopBeam>
+      <PageTitleWrapper>
+        <PageTitleText>{thread.title}</PageTitleText>
+      </PageTitleWrapper>
 
       <ContentWrapper>
-        <Breadcrumb>
-          <Anchor href="/">
-            <BreadcrumbIcon name="home" />
-            Home Page
-          </Anchor>
-          <Anchor href={`/categories/${category.id}`}>{category.name}</Anchor>
-          <span>{thread.title}</span>
-        </Breadcrumb>
+        <PageBreadcrumb
+          categoryId={category.id}
+          categoryName={category.name}
+          threadTitle={thread.title}
+        />
 
         <ButtonWrapper>
           <Button type="button" onClick={handleMoveUserToEnd}>

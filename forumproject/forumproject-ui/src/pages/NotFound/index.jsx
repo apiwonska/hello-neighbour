@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TopBeam, PageTitle } from 'layout';
+import { PageTitleBlock } from 'layout';
 import {
   ContentWrapper,
   ErrorMessage,
@@ -12,9 +12,8 @@ import PageNotFoundPicture from './PageNotFoundPicture';
 const NotFound = () => {
   return (
     <>
-      <TopBeam>
-        <PageTitle>Error</PageTitle>
-      </TopBeam>
+      <PageTitleBlock title="Error" />
+
       <ContentWrapper>
         <ErrorMessage>This page isn&apos;t available</ErrorMessage>
         <ErrorExplanation>

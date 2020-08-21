@@ -16,8 +16,7 @@ import {
   FormGroup,
   GroupWrapper,
   Spinner,
-  TopBeam,
-  PageTitle,
+  PageTitleBlock,
   TextArea,
   Input,
   Anchor,
@@ -92,9 +91,8 @@ class EditProfile extends React.Component {
       const userData = { username, email, description };
       return (
         <>
-          <TopBeam>
-            <PageTitle>Edit Your Profile</PageTitle>
-          </TopBeam>
+          <PageTitleBlock title="Edit Your Profile" />
+
           <ContentWrapper>
             <Breadcrumb>
               <Anchor href="/">

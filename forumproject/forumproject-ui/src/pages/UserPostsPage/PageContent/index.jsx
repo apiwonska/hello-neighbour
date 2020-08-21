@@ -5,16 +5,15 @@ import { compose } from 'redux';
 import PostList from 'shared/EditablePostList';
 import {
   ContentWrapper,
-  TopBeam,
-  PageTitle,
+  PageTitleBlock,
   Pagination,
-  Anchor,
-  Breadcrumb,
-  BreadcrumbIcon,
   PaginationWrapper,
+  NoResults,
 } from 'layout';
 import { withHandleErrors, withLoading } from 'shared/hoc';
+import { NoPostsPicture } from './style';
 import PostHeader from '../PostHeader';
+import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({
   posts,
@@ -41,19 +40,19 @@ const PageContent = ({
 
   return (
     <>
-      <TopBeam>
-        <PageTitle>Your Posts</PageTitle>
-      </TopBeam>
+      <PageTitleBlock title="Your Posts" />
+
       <ContentWrapper>
-        <Breadcrumb>
-          <Anchor href="/">
-            <BreadcrumbIcon name="home" />
-            Home Page
-          </Anchor>
-          <span>Your Posts</span>
-        </Breadcrumb>
+        <PageBreadcrumb />
 
         {renderPagination()}
+
+        {posts.length === 0 && (
+          <NoResults picture={<NoPostsPicture />}>
+            You haven&apos;t written any posts yet. Choose a topic and join the
+            discussion!
+          </NoResults>
+        )}
 
         <PostList
           posts={posts}
@@ -76,11 +75,15 @@ PageContent.propTypes = {
   totalPages: PropTypes.number.isRequired,
   handleChangePage: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  editingPost: PropTypes.number.isRequired,
+  editingPost: PropTypes.number,
   handleUpdatePost: PropTypes.func.isRequired,
   handleDeletePost: PropTypes.func.isRequired,
   handleShowUpdateForm: PropTypes.func.isRequired,
   handleHideUpdateForm: PropTypes.func.isRequired,
+};
+
+PageContent.defaultProps = {
+  editingPost: null,
 };
 
 export default compose(withHandleErrors, withLoading)(PageContent);

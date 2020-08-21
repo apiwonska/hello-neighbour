@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { theme, Button as Button_ } from 'layout';
 
-export const PageTitle = styled.h2`
+export const PageTitleText = styled.h2`
   flex-grow: 1;
   margin: 1.5rem;
   text-transform: capitalize;

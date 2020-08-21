@@ -2,32 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import {
-  ContentWrapper,
-  PageTitle,
-  TopBeam,
-  Breadcrumb,
-  BreadcrumbIcon,
-} from 'layout';
+import { ContentWrapper, PageTitleBlock } from 'layout';
 import { withLoading, withHandleErrors } from 'shared/hoc';
 import { ForumInfoWrapper, ForumInfoText, PictureWrapper } from './style';
 import WelcomePicture from '../WelcomePicture';
 import CategoryList from '../CategoryList';
+import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({ data }) => {
   return (
     <>
-      <TopBeam>
-        <PageTitle>Welcome to our Forum!</PageTitle>
-      </TopBeam>
+      <PageTitleBlock title="Welcome to our Forum!" />
 
       <ContentWrapper>
-        <Breadcrumb>
-          <span>
-            <BreadcrumbIcon name="home" />
-            Home Page
-          </span>
-        </Breadcrumb>
+        <PageBreadcrumb />
 
         <ForumInfoWrapper>
           <PictureWrapper>

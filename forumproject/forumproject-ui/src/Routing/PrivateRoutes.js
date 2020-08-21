@@ -5,10 +5,10 @@ import HomePage from 'pages/HomePage';
 import ThreadListPage from 'pages/ThreadListPage';
 import CreateThread from 'pages/CreateThread';
 import ThreadPage from 'pages/ThreadPage';
-import Profile from 'pages/Profile';
+import ProfilePage from 'pages/ProfilePage';
 import EditProfile from 'pages/EditProfile';
 import UserPostsPage from 'pages/UserPostsPage';
-import PasswordChange from 'pages/PasswordChange';
+import PasswordChangePage from 'pages/PasswordChangePage';
 import NotFound from 'pages/NotFound';
 
 const PrivateRoutes = () => {
@@ -27,10 +27,14 @@ const PrivateRoutes = () => {
         exact
         component={ThreadPage}
       />
-      <Route path="/profile/password-change" exact component={PasswordChange} />
+      <Route
+        path="/profile/password-change"
+        exact
+        component={PasswordChangePage}
+      />
       <Route path="/profile/posts" exact component={UserPostsPage} />
       <Route path="/profile/edit" exact component={EditProfile} />
-      <Route path="/profile/:userId" exact component={Profile} />
+      <Route path="/profile/:userId" exact component={ProfilePage} />
       <Route path="*" component={NotFound} />
     </Switch>
   );

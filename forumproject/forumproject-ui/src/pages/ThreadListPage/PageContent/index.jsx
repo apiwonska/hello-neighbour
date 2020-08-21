@@ -3,15 +3,7 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import {
-  ContentWrapper,
-  PageTitle,
-  TopBeam,
-  Pagination,
-  Anchor,
-  Breadcrumb,
-  BreadcrumbIcon,
-} from 'layout';
+import { ContentWrapper, PageTitleBlock, Pagination } from 'layout';
 import { withHandleErrors, withLoading, withHandleNotFound } from 'shared/hoc';
 import {
   LinkButton,
@@ -20,6 +12,7 @@ import {
   PaginationWrapper,
 } from './style';
 import ThreadList from '../ThreadList';
+import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({
   categoryName,
@@ -45,18 +38,10 @@ const PageContent = ({
 
   return (
     <>
-      <TopBeam>
-        <PageTitle>{categoryName}</PageTitle>
-      </TopBeam>
+      <PageTitleBlock title={categoryName} />
 
       <ContentWrapper>
-        <Breadcrumb>
-          <Anchor href="/">
-            <BreadcrumbIcon name="home" />
-            Home Page
-          </Anchor>
-          <span>{categoryName}</span>
-        </Breadcrumb>
+        <PageBreadcrumb categoryName={categoryName} />
 
         <LinkWrapper>
           <LinkButton to={`/categories/${categoryId}/threads/new/`}>

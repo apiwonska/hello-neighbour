@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 `;
 
 export const PictureWrapper = styled.div`
-  max-width: 30rem;
+  max-width: 25rem;
   margin-bottom: 3rem;
   display: flex;
   justify-content: center;
@@ -15,6 +15,6 @@ export const PictureWrapper = styled.div`
 `;
 
 export const NoResultsText = styled.div`
-  font-size: 2rem;
+  font-size: 1.8rem;
   text-align: center;
 `;

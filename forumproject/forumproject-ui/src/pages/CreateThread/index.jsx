@@ -4,8 +4,7 @@ import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
 
 import {
-  PageTitle,
-  TopBeam,
+  PageTitleBlock,
   Input,
   FormGroup,
   Label,
@@ -55,9 +54,8 @@ class CreateThread extends React.Component {
     const id = 'ct';
     return (
       <>
-        <TopBeam>
-          <PageTitle>CreateThread</PageTitle>
-        </TopBeam>
+        <PageTitleBlock title="CreateThread" />
+
         <ContentWrapper>
           <FinalForm onSubmit={this.handleCreateThread}>
             {({ handleSubmit, pristine, hasValidationErrors }) => (
