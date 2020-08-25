@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Button as Button_, Label as Label_, theme } from 'layout';
+import { Button as Button_, theme } from 'layout';
 
 export const UploadButton = styled(Button_)`
   margin: 1rem 0.8rem;
@@ -11,22 +11,10 @@ export const UploadButton = styled(Button_)`
   }
 `;
 
-export const Button = styled(Button_)`
-  width: 100%;
-  margin: 1rem 0;
-`;
-
 export const ButtonGroupWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-`;
-
-export const InnerContentWrapper = styled.div`
-  ${theme.media.minTablet} {
-    max-width: 60rem;
-    margin: 4rem auto 5rem;
-  }
 `;
 
 export const Avatar = styled.img`
@@ -69,20 +57,4 @@ export const FileInputLabel = styled.label`
   ${theme.media.minLandscapePhone} {
     flex-grow: 0;
   }
-`;
-
-export const Label = styled(Label_)`
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  color: ${theme.colors.neutralMidLight};
-  font-weight: 600;
-  margin: 0.5rem 0;
-`;
-
-export const FormWrapper = styled.div`
-  margin-bottom: 4rem;
-`;
-
-export const FormButtonsWrapper = styled.div`
-  margin-top: 3rem;
 `;

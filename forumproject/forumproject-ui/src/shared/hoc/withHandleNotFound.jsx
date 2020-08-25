@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import NotFound from 'pages/NotFound';
+import PageNotFound from 'pages/PageNotFound';
 
 const withHandleNotFound = (Cmp) => {
   const Wrapped = ({ notFound, ...passThroughProps }) => {
     if (notFound) {
-      return <NotFound />;
+      return <PageNotFound />;
     }
     return <Cmp {...passThroughProps} />;
   };

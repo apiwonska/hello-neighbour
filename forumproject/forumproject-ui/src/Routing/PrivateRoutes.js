@@ -3,13 +3,13 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import HomePage from 'pages/HomePage';
 import ThreadListPage from 'pages/ThreadListPage';
-import CreateThread from 'pages/CreateThread';
+import CreateThreadPage from 'pages/CreateThreadPage';
 import ThreadPage from 'pages/ThreadPage';
 import ProfilePage from 'pages/ProfilePage';
-import EditProfile from 'pages/EditProfile';
+import EditProfilePage from 'pages/EditProfilePage';
 import UserPostsPage from 'pages/UserPostsPage';
 import PasswordChangePage from 'pages/PasswordChangePage';
-import NotFound from 'pages/NotFound';
+import PageNotFound from 'pages/PageNotFound';
 
 const PrivateRoutes = () => {
   return (
@@ -20,7 +20,7 @@ const PrivateRoutes = () => {
       <Route
         path="/categories/:categoryId/threads/new"
         exact
-        component={CreateThread}
+        component={CreateThreadPage}
       />
       <Route
         path="/categories/:categoryId/threads/:threadId"
@@ -33,9 +33,9 @@ const PrivateRoutes = () => {
         component={PasswordChangePage}
       />
       <Route path="/profile/posts" exact component={UserPostsPage} />
-      <Route path="/profile/edit" exact component={EditProfile} />
+      <Route path="/profile/edit" exact component={EditProfilePage} />
       <Route path="/profile/:userId" exact component={ProfilePage} />
-      <Route path="*" component={NotFound} />
+      <Route path="*" component={PageNotFound} />
     </Switch>
   );
 };

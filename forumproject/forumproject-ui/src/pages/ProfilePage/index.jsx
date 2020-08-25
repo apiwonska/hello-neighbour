@@ -29,7 +29,7 @@ const Profile = (props) => {
     <PageContent
       fetching={user.fetching}
       fetched={correctUserFetched(user, userId)}
-      errors={!_.isEmpty(user.errors)}
+      errors={!_.isEmpty(user.fetchingErrors)}
       user={user.data}
       authUserIsProfileOwner={authUserIsProfileOwner}
     />
@@ -44,7 +44,7 @@ Profile.propTypes = {
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({}).isRequired,
-    errors: PropTypes.shape({}).isRequired,
+    fetchingErrors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
 };

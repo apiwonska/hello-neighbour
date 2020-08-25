@@ -21,6 +21,6 @@ export const ErrorExplanation = styled.div`
 `;
 
 export const PictureWrapper = styled.div`
-  max-width: 50rem;
+  max-width: 40rem;
   margin: 3rem auto;
 `;

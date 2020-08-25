@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   fetching: false,
   fetched: false,
   data: {},
-  errors: {},
+  fetchingErrors: {},
   updating: false,
   updateErrors: {},
   uploading: {},
@@ -28,7 +28,7 @@ const reducer = (state = INITIAL_STATE, action) => {
     case FETCH_USER_FULFILLED:
       return { ...state, fetching: false, fetched: true, data: action.payload };
     case FETCH_USER_ERRORS:
-      return { ...state, fetching: false, errors: action.payload };
+      return { ...state, fetching: false, fetchingErrors: action.payload };
     case UPDATE_USER_PENDING:
       return { ...state, updating: true };
     case UPDATE_USER_FULFILLED:
