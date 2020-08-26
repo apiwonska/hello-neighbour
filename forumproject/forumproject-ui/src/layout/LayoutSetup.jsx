@@ -1,8 +1,13 @@
 import React from 'react';
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import styled, {
+  createGlobalStyle,
+  ThemeProvider,
+  css,
+} from 'styled-components';
 import { ThemeProvider as ZenDeskGardenThemeProvider } from '@zendeskgarden/react-theming';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
 
 import theme from './theme';
 
@@ -43,28 +48,42 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const cssWithOpenModal = css`
+  height: 100vh;
+  overflow: hidden;
+`;
+
 const StyledWrapper = styled.div`
   min-height: 100vh;
   min-width: ${theme.pageMinWidth};
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${({ modalIsOpen }) => {
+    if (modalIsOpen) return cssWithOpenModal;
+    return null;
+  }}
 `;
 
-const LayoutSetup = ({ children }) => (
-  <ThemeProvider theme={theme}>
-    <ZenDeskGardenThemeProvider>
-      <GlobalStyle />
-      <Helmet>
-        <link
-          href="https://fonts.googleapis.com/css?family=Open+Sans:400,600, 700|Raleway&display=swap"
-          rel="stylesheet"
-        />
-      </Helmet>
-      <StyledWrapper>{children}</StyledWrapper>
-    </ZenDeskGardenThemeProvider>
-  </ThemeProvider>
-);
+const LayoutSetup = ({ children }) => {
+  const modalIsOpen = useSelector((state) => state.modal.isOpen);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <ZenDeskGardenThemeProvider>
+        <GlobalStyle />
+        <Helmet>
+          <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:400,600, 700|Raleway&display=swap"
+            rel="stylesheet"
+          />
+        </Helmet>
+        <StyledWrapper modalIsOpen={modalIsOpen}>{children}</StyledWrapper>
+      </ZenDeskGardenThemeProvider>
+    </ThemeProvider>
+  );
+};
 
 LayoutSetup.propTypes = {
   children: PropTypes.element.isRequired,

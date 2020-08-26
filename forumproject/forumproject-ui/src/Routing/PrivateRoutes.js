@@ -1,37 +1,41 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import Home from 'pages/Home';
-import ThreadList from 'pages/ThreadList';
-import CreateThread from 'pages/CreateThread';
-import Thread from 'pages/Thread';
-import Profile from 'pages/Profile';
-import EditProfile from 'pages/EditProfile';
-import UserPosts from 'pages/UserPosts';
-import PasswordChange from 'pages/PasswordChange';
-import NotFound from 'pages/NotFound';
+import HomePage from 'pages/HomePage';
+import ThreadListPage from 'pages/ThreadListPage';
+import CreateThreadPage from 'pages/CreateThreadPage';
+import ThreadPage from 'pages/ThreadPage';
+import ProfilePage from 'pages/ProfilePage';
+import EditProfilePage from 'pages/EditProfilePage';
+import UserPostsPage from 'pages/UserPostsPage';
+import PasswordChangePage from 'pages/PasswordChangePage';
+import PageNotFound from 'pages/PageNotFound';
 
 const PrivateRoutes = () => {
   return (
     <Switch>
-      <Route path="/" exact component={Home} />
+      <Route path="/" exact component={HomePage} />
       <Route path="/categories" exact render={() => <Redirect to="/" />} />
-      <Route path="/categories/:categoryId" exact component={ThreadList} />
+      <Route path="/categories/:categoryId" exact component={ThreadListPage} />
       <Route
         path="/categories/:categoryId/threads/new"
         exact
-        component={CreateThread}
+        component={CreateThreadPage}
       />
       <Route
         path="/categories/:categoryId/threads/:threadId"
         exact
-        component={Thread}
+        component={ThreadPage}
       />
-      <Route path="/profile/password-change" exact component={PasswordChange} />
-      <Route path="/profile/posts" exact component={UserPosts} />
-      <Route path="/profile/edit" exact component={EditProfile} />
-      <Route path="/profile/:userId" exact component={Profile} />
-      <Route path="*" component={NotFound} />
+      <Route
+        path="/profile/password-change"
+        exact
+        component={PasswordChangePage}
+      />
+      <Route path="/profile/posts" exact component={UserPostsPage} />
+      <Route path="/profile/edit" exact component={EditProfilePage} />
+      <Route path="/profile/:userId" exact component={ProfilePage} />
+      <Route path="*" component={PageNotFound} />
     </Switch>
   );
 };

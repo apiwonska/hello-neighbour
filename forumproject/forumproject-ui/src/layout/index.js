@@ -6,7 +6,6 @@ import BasicButton from './buttons/BasicButton';
 import Button from './buttons/Button';
 
 import ContentWrapper from './wrappers/ContentWraper';
-import TopBeam from './wrappers/TopBeamWrapper';
 import GroupWrapper from './wrappers/GroupWrapper';
 
 import Input from './forms/Input';
@@ -31,10 +30,16 @@ import ModalParagraph from './modals/ModalParagraph';
 
 import MenuDropdown from './MenuDropdown';
 
+import PageTitleBlock from './PageTitleBlock';
+import PageTitleWrapper from './PageTitleBlock/PageTitleWrapper';
+import PageTitleText from './PageTitleBlock/PageTitleText';
+
 import Pagination from './pagination/Pagination';
 import PaginationWrapper from './pagination/PaginationWrapper';
+
 import Spinner from './Spinner';
-import PageTitle from './text/PageTitle';
+import InfoText from './text/InfoText';
+import TextLink from './text/TextLink';
 import theme from './theme';
 
 export {
@@ -45,6 +50,7 @@ export {
   Button,
   ContentWrapper,
   GroupWrapper,
+  InfoText,
   Layout,
   NoResults,
   Modal,
@@ -57,16 +63,18 @@ export {
   ModalLink,
   ModalParagraph,
   MenuDropdown,
-  PageTitle,
+  PageTitleBlock,
+  PageTitleText,
+  PageTitleWrapper,
   Pagination,
   PaginationWrapper,
   Spinner,
   Input,
   Label,
   TextArea,
+  TextLink,
   FormGroup,
   FormError,
   SVGIcon,
   theme,
-  TopBeam,
 };

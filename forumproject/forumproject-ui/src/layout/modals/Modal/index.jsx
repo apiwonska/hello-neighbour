@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import { MODAL_IS_OPEN, MODAL_IS_CLOSED } from 'redux/actions/types';
 import SVGIcon from '../../icons/SVGIcon';
 import {
   ModalBackground,
@@ -11,7 +14,14 @@ import {
   Content,
 } from './style';
 
-export default ({ title, children, handleDismiss }) => {
+const Modal = ({ title, children, handleDismiss }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: MODAL_IS_OPEN });
+    return () => dispatch({ type: MODAL_IS_CLOSED });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return ReactDOM.createPortal(
     <ModalBackground onClick={handleDismiss}>
       <ModalBody onClick={(e) => e.stopPropagation()}>
@@ -27,3 +37,11 @@ export default ({ title, children, handleDismiss }) => {
     document.querySelector('#modal')
   );
 };
+
+Modal.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  handleDismiss: PropTypes.func.isRequired,
+};
+
+export default Modal;

@@ -81,3 +81,7 @@ export const CLOSE_SIDE_DRAWER = 'close_side_drawer';
 export const OPEN_SIDE_DRAWER = 'open_side_drawer';
 export const SHOW_SIDE_NAVBAR = 'show_side_navbar';
 export const HIDE_SIDE_NAVBAR = 'hide_side_navbar';
+
+// Modal
+export const MODAL_IS_OPEN = 'modal_is_open';
+export const MODAL_IS_CLOSED = 'modal_is_closed';
