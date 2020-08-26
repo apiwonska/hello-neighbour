@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
-import Login from 'pages/auth/Login';
-import Registration from 'pages/auth/Registration';
-import PasswordReset from 'pages/auth/PasswordReset';
-import PasswordResetConfirm from 'pages/auth/PasswordResetConfirm';
+import LoginModal from 'pages/auth/LoginModal';
+import RegistrationModal from 'pages/auth/RegistrationModal';
+import PasswordResetModal from 'pages/auth/PasswordResetModal';
+import PasswordResetConfirmModal from 'pages/auth/PasswordResetConfirmModal';
 import AccessPage from 'pages/AccessPage';
 
 const RestrictedRoutes = () => {
@@ -12,13 +12,13 @@ const RestrictedRoutes = () => {
     <Route path="/">
       <Route path="/" component={AccessPage} />
       <Switch>
-        <Route path="/register" exact component={Registration} />
-        <Route path="/auth" exact component={Login} />
-        <Route path="/password-reset" exact component={PasswordReset} />
+        <Route path="/register" exact component={RegistrationModal} />
+        <Route path="/auth" exact component={LoginModal} />
+        <Route path="/password-reset" exact component={PasswordResetModal} />
         <Route
           path="/password-reset/confirm"
           exact
-          component={PasswordResetConfirm}
+          component={PasswordResetConfirmModal}
         />
         <Route path="*" render={() => <Redirect to="/" />} />
       </Switch>

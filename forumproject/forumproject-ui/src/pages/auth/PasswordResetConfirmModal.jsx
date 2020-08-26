@@ -24,7 +24,7 @@ import {
   password2Validator,
 } from 'utils/validators';
 
-class PasswordResetConfirm extends React.Component {
+class PasswordResetConfirmModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -165,7 +165,7 @@ class PasswordResetConfirm extends React.Component {
   }
 }
 
-PasswordResetConfirm.propTypes = {
+PasswordResetConfirmModal.propTypes = {
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
@@ -186,4 +186,4 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   confirmPasswordReset: confirmPasswordReset_,
-})(PasswordResetConfirm);
+})(PasswordResetConfirmModal);

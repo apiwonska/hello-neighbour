@@ -19,7 +19,7 @@ import {
 import { resetPassword as resetPassword_ } from 'redux/actions';
 import { emailValidator } from 'utils/validators';
 
-class PasswordReset extends React.Component {
+class PasswordResetModal extends React.Component {
   onSubmit = async (formProps) => {
     const { resetPassword, history } = this.props;
     await resetPassword(formProps);
@@ -81,7 +81,7 @@ class PasswordReset extends React.Component {
   }
 }
 
-PasswordReset.propTypes = {
+PasswordResetModal.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   resetPassword: PropTypes.func.isRequired,
   passwordReset: PropTypes.shape({
@@ -95,5 +95,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { resetPassword: resetPassword_ })(
-  PasswordReset
+  PasswordResetModal
 );

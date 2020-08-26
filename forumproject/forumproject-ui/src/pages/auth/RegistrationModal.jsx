@@ -20,7 +20,7 @@ import {
   password2Validator,
 } from 'utils/validators';
 
-class Registration extends React.Component {
+class RegistrationModal extends React.Component {
   onSubmit = async (values) => {
     const { register } = this.props;
     await register(values);
@@ -126,7 +126,7 @@ class Registration extends React.Component {
   }
 }
 
-Registration.propTypes = {
+RegistrationModal.propTypes = {
   register: PropTypes.func.isRequired,
   auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
@@ -136,4 +136,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { register: register_ })(Registration);
+export default connect(mapStateToProps, { register: register_ })(
+  RegistrationModal
+);

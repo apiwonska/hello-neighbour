@@ -19,7 +19,7 @@ import {
 import { logIn as logIn_ } from 'redux/actions';
 import { required } from 'utils/validators';
 
-class LogIn extends React.Component {
+class LogInModal extends React.Component {
   onSubmit = async (formProps) => {
     const { logIn } = this.props;
     await logIn(formProps);
@@ -101,7 +101,7 @@ class LogIn extends React.Component {
   }
 }
 
-LogIn.propTypes = {
+LogInModal.propTypes = {
   logIn: PropTypes.func.isRequired,
   auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
@@ -111,4 +111,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logIn: logIn_ })(LogIn);
+export default connect(mapStateToProps, { logIn: logIn_ })(LogInModal);
