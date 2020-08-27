@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DefaultError } from 'shared/errors';
+import { DefaultError } from 'layout';
 
 const withHandleErrors = (Cmp) => {
   const Wrapped = ({ errors, ...passThroughProps }) => {

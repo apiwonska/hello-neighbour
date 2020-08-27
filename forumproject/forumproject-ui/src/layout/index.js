@@ -5,8 +5,9 @@ import BreadcrumbIcon from './breadcrumb/BreadcrumbIcon';
 import BasicButton from './buttons/BasicButton';
 import Button from './buttons/Button';
 
-import ContentWrapper from './wrappers/ContentWraper';
-import GroupWrapper from './wrappers/GroupWrapper';
+import Error404 from './errors/Error404';
+import Error500 from './errors/Error500';
+import DefaultError from './errors/DefaultError';
 
 import Input from './forms/Input';
 import Label from './forms/Label';
@@ -42,6 +43,9 @@ import InfoText from './text/InfoText';
 import TextLink from './text/TextLink';
 import theme from './theme';
 
+import ContentWrapper from './wrappers/ContentWraper';
+import GroupWrapper from './wrappers/GroupWrapper';
+
 export {
   Anchor,
   BasicButton,
@@ -49,6 +53,9 @@ export {
   BreadcrumbIcon,
   Button,
   ContentWrapper,
+  Error404,
+  Error500,
+  DefaultError,
   GroupWrapper,
   InfoText,
   Layout,

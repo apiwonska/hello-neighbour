@@ -9,7 +9,7 @@ import ProfilePage from 'pages/ProfilePage';
 import EditProfilePage from 'pages/EditProfilePage';
 import UserPostsPage from 'pages/UserPostsPage';
 import PasswordChangePage from 'pages/PasswordChangePage';
-import PageNotFound from 'pages/PageNotFound';
+import { Error404 } from 'layout';
 
 const PrivateRoutes = () => {
   return (
@@ -35,7 +35,7 @@ const PrivateRoutes = () => {
       <Route path="/profile/posts" exact component={UserPostsPage} />
       <Route path="/profile/edit" exact component={EditProfilePage} />
       <Route path="/profile/:userId" exact component={ProfilePage} />
-      <Route path="*" component={PageNotFound} />
+      <Route path="*" component={Error404} />
     </Switch>
   );
 };
