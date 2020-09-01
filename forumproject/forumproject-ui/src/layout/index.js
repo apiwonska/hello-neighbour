@@ -6,7 +6,7 @@ import BasicButton from './buttons/BasicButton';
 import Button from './buttons/Button';
 
 import Error404 from './errors/Error404';
-import Error500 from './errors/Error500';
+import ServerError from './errors/ServerError';
 import DefaultError from './errors/DefaultError';
 
 import Input from './forms/Input';
@@ -17,7 +17,7 @@ import FormError from './forms/FormError';
 
 import SVGIcon from './icons/SVGIcon';
 import NoResults from './NoResults';
-import Layout from './mainLayout/Layout';
+import Layout from './Layout';
 
 import Modal from './modals/Modal';
 import ModalButton from './modals/ModalButton';
@@ -54,7 +54,7 @@ export {
   Button,
   ContentWrapper,
   Error404,
-  Error500,
+  ServerError,
   DefaultError,
   GroupWrapper,
   InfoText,
