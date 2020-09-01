@@ -30,7 +30,7 @@ export const fetchThreadsByCategory = (
   } catch (err) {
     dispatch({
       type: FETCH_THREADS_BY_CATEGORY_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -48,7 +48,7 @@ export const fetchThread = (threadId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: FETCH_THREAD_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -65,7 +65,7 @@ export const createThread = (data) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: CREATE_THREAD_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };

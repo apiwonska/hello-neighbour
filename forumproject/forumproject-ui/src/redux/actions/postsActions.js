@@ -33,7 +33,7 @@ export const fetchPostsByThread = (
   } catch (err) {
     dispatch({
       type: FETCH_POSTS_BY_THREAD_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -55,7 +55,7 @@ export const fetchPostsByUser = (userId, itemsPerPage, offset = 0) => async (
   } catch (err) {
     dispatch({
       type: FETCH_POSTS_BY_USER_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -70,7 +70,7 @@ export const createPost = (data) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: CREATE_POST_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -85,7 +85,7 @@ export const updatePost = (data, postId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: UPDATE_POST_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -100,7 +100,7 @@ export const deletePost = (postId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: DELETE_POST_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };

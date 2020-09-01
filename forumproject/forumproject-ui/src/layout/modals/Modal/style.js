@@ -12,7 +12,7 @@ export const ModalBackground = styled.div`
   display: flex;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(5px);
-  overflow: scroll;
+  overflow-y: auto;
 `;
 
 export const ModalBody = styled.div`

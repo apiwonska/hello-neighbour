@@ -58,7 +58,7 @@ export const register = (formProps) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: REGISTER_USER_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -78,7 +78,7 @@ export const logIn = (formProps) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGIN_USER_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -107,7 +107,7 @@ export const resetPassword = (formProps) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: RESET_PASSWORD_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -122,7 +122,7 @@ export const confirmPasswordReset = (data) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: RESET_PASSWORD_CONFIRM_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -141,7 +141,7 @@ export const changePassword = (data) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: CHANGE_PASSWORD_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };

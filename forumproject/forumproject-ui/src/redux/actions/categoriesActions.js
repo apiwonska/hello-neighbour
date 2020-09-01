@@ -18,7 +18,7 @@ const fetchCategories = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: FETCH_CATEGORIES_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
