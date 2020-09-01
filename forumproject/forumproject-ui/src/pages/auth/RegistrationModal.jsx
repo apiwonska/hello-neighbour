@@ -129,7 +129,9 @@ class RegistrationModal extends React.Component {
 RegistrationModal.propTypes = {
   register: PropTypes.func.isRequired,
   auth: PropTypes.shape({
-    errors: PropTypes.shape({ data: PropTypes.shape({}) }).isRequired,
+    errors: PropTypes.shape({
+      data: PropTypes.shape({}),
+    }).isRequired,
   }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };

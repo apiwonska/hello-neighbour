@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { fetchUser as fetchUser_ } from 'redux/actions';
@@ -29,7 +28,7 @@ const Profile = (props) => {
     <PageContent
       fetching={user.fetching}
       fetched={correctUserFetched(user, userId)}
-      errors={!_.isEmpty(user.fetchingErrors)}
+      errors={user.fetchingErrors}
       user={user.data}
       authUserIsProfileOwner={authUserIsProfileOwner}
     />

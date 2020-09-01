@@ -68,13 +68,17 @@ class ThreadList extends React.Component {
       (obj) => String(obj.id) === categoryId
     );
     const { currentPage, totalPages } = this.state;
+    const errors =
+      (!_.isEmpty(categories.errors) && categories.errors) ||
+      (!_.isEmpty(threads.errors) && threads.errors) ||
+      {};
 
     return (
       <PageContent
         fetching={categories.fetching}
         fetched={categories.fetched && !!category}
         notFound={categories.fetched && !category}
-        errors={!_.isEmpty(categories.errors) || !_.isEmpty(threads.errors)}
+        errors={errors}
         categoryName={category && category.name}
         currentPage={currentPage}
         totalPages={totalPages}

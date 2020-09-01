@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
@@ -91,7 +90,7 @@ class UserPosts extends React.Component {
       <PageContent
         fetching={posts.fetching}
         fetched={posts.fetched}
-        errors={!_.isEmpty(posts.errors)}
+        errors={posts.errors}
         posts={posts.data.results}
         currentPage={currentPage}
         totalPages={totalPages}

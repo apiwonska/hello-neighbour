@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { ContentWrapper, PageTitleBlock, Pagination } from 'layout';
-import { withHandleErrors, withLoading, withHandleNotFound } from 'shared/hoc';
+import { withHandleErrors, withLoading } from 'shared/hoc';
 import {
   LinkButton,
   LinkWrapper,
@@ -71,8 +71,4 @@ PageContent.propTypes = {
   }).isRequired,
 };
 
-export default compose(
-  withHandleErrors,
-  withHandleNotFound,
-  withLoading
-)(PageContent);
+export default compose(withHandleErrors, withLoading)(PageContent);

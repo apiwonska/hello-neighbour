@@ -7,12 +7,19 @@ import { emailValidator } from 'utils/validators';
 import { FormError, FormGroup, TextArea, Input } from 'layout';
 import { Button, Label, FormWrapper, FormButtonsWrapper } from './style';
 
-const UserDataForm = ({ authUserId, initialFormValues, handleUpdateInfo }) => {
+const UserDataForm = ({
+  authUserId,
+  initialFormValues,
+  handleUpdateUserData,
+}) => {
   const history = useHistory();
   // a value to ensure form input id uniqueness
   const id = 'ep';
   return (
-    <FinalForm onSubmit={handleUpdateInfo} initialValues={initialFormValues}>
+    <FinalForm
+      onSubmit={handleUpdateUserData}
+      initialValues={initialFormValues}
+    >
       {({ handleSubmit, pristine, hasValidationErrors, initialValues }) => (
         <form onSubmit={handleSubmit}>
           <FormWrapper>
@@ -79,7 +86,7 @@ UserDataForm.propTypes = {
     email: PropTypes.string.isRequired,
     description: PropTypes.string,
   }).isRequired,
-  handleUpdateInfo: PropTypes.func.isRequired,
+  handleUpdateUserData: PropTypes.func.isRequired,
 };
 
 export default UserDataForm;

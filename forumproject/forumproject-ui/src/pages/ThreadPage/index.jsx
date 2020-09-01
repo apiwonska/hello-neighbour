@@ -130,16 +130,17 @@ class ThreadPage extends React.Component {
   render() {
     const { thread, posts, categories } = this.props;
     const { currentPage, totalPages, editingPost } = this.state;
+    const errors =
+      (!_.isEmpty(categories.errors) && categories.errors) ||
+      (!_.isEmpty(thread.errors) && thread.errors) ||
+      (!_.isEmpty(posts.errors) && posts.errors) ||
+      {};
 
     return (
       <PageContent
         fetching={categories.fetching || thread.fetching || posts.fetching}
         fetched={categories.fetched && thread.fetched && posts.fetched}
-        errors={
-          !_.isEmpty(thread.errors) ||
-          !_.isEmpty(thread.errors) ||
-          !_.isEmpty(posts.errors)
-        }
+        errors={errors}
         thread={thread.data}
         posts={posts.data.results}
         handleMoveUserToEnd={this.handleMoveUserToEnd}
@@ -193,6 +194,7 @@ ThreadPage.propTypes = {
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,

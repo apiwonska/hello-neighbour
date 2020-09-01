@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
@@ -23,7 +22,7 @@ class EditProfile extends React.Component {
     fetchUser(authUserId);
   };
 
-  handleUpdateInfo = async (values) => {
+  handleUpdateUserData = async (values) => {
     const newValues = { ...values };
     const { authUserId, updateUser } = this.props;
     newValues.description = values.description || '';
@@ -34,7 +33,7 @@ class EditProfile extends React.Component {
 
     const { user } = this.props;
     const errors = user.updateErrors;
-    if (!_.isEmpty(errors)) return errors;
+    if (errors.data) return errors.data;
 
     return null;
   };
@@ -52,18 +51,22 @@ class EditProfile extends React.Component {
   };
 
   render() {
-    const { user, authUserId } = this.props;
+    const {
+      user,
+      user: { fetching, fetched, fetchingErrors },
+      authUserId,
+    } = this.props;
 
     return (
       <PageContent
-        fetching={user.fetching}
-        fetched={user.fetched}
-        errors={!_.isEmpty(user.fetchingErrors)}
+        fetching={fetching}
+        fetched={fetched}
+        errors={fetchingErrors}
         user={user}
         authUserId={authUserId}
         handleFileSelect={this.handleFileSelect}
         handleFileUpload={this.handleFileUpload}
-        handleUpdateInfo={this.handleUpdateInfo}
+        handleUpdateUserData={this.handleUpdateUserData}
       />
     );
   }
@@ -76,8 +79,7 @@ EditProfile.propTypes = {
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     fetchingErrors: PropTypes.shape({}).isRequired,
-    uploadErrors: PropTypes.shape({}).isRequired,
-    updateErrors: PropTypes.shape({}).isRequired,
+    updateErrors: PropTypes.shape({ data: PropTypes.shape({}) }).isRequired,
   }).isRequired,
   fetchUser: PropTypes.func.isRequired,
   updateUser: PropTypes.func.isRequired,
