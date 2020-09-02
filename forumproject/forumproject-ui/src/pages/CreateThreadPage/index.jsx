@@ -10,6 +10,7 @@ import {
   Label,
   TextArea,
   FormError,
+  PageWrapper,
   ContentWrapper,
 } from 'layout';
 import { createThread as createThread_ } from 'redux/actions';
@@ -53,7 +54,7 @@ class CreateThread extends React.Component {
     // a value to ensure form input id uniqueness
     const id = 'ct';
     return (
-      <>
+      <PageWrapper>
         <PageTitleBlock title="CreateThread" />
 
         <ContentWrapper>
@@ -108,7 +109,7 @@ class CreateThread extends React.Component {
             )}
           </FinalForm>
         </ContentWrapper>
-      </>
+      </PageWrapper>
     );
   }
 }

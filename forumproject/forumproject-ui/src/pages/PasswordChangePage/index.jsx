@@ -4,7 +4,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { changePassword as changePassword_ } from 'redux/actions';
-import { ContentWrapper, PageTitleBlock } from 'layout';
+import { PageWrapper, ContentWrapper, PageTitleBlock } from 'layout';
 import { InnerContentWrapper } from './style';
 import PasswordChangeForm from './PasswordChangeForm';
 import PageBreadcrumb from './PageBreadcrumb';
@@ -25,7 +25,7 @@ const PasswordChangePage = ({ auth, changePassword }) => {
   };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Password Change" />
 
       <ContentWrapper>
@@ -37,7 +37,7 @@ const PasswordChangePage = ({ auth, changePassword }) => {
           </InnerContentWrapper>
         )}
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 

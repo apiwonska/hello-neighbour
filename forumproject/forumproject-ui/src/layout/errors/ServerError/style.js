@@ -13,7 +13,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  z-index: 100;
 `;
 
 export const InnerWrapper = styled.div`

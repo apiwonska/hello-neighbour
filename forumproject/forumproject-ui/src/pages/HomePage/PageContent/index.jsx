@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { ContentWrapper, PageTitleBlock } from 'layout';
+import { PageWrapper, ContentWrapper, PageTitleBlock } from 'layout';
 import { withLoading, withHandleErrors } from 'shared/hoc';
 import { ForumInfoWrapper, ForumInfoText, PictureWrapper } from './style';
 import WelcomePicture from '../WelcomePicture';
@@ -11,7 +11,7 @@ import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({ categories }) => {
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Welcome to our Forum!" />
 
       <ContentWrapper>
@@ -33,7 +33,7 @@ const PageContent = ({ categories }) => {
 
         <CategoryList categories={categories} />
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 

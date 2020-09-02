@@ -3,7 +3,12 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withHandleErrors, withLoading } from 'shared/hoc';
-import { ContentWrapper, GroupWrapper, PageTitleBlock } from 'layout';
+import {
+  PageWrapper,
+  ContentWrapper,
+  GroupWrapper,
+  PageTitleBlock,
+} from 'layout';
 import { InnerContentWrapper } from './style';
 import PageBreadcrumb from '../PageBreadcrumb';
 import AvatarUpload from '../AvatarUpload';
@@ -20,7 +25,7 @@ const PageContent = ({
   const initialFormValues = { username, email, description };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Edit Your Profile" />
 
       <ContentWrapper>
@@ -45,7 +50,7 @@ const PageContent = ({
           </GroupWrapper>
         </InnerContentWrapper>
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 

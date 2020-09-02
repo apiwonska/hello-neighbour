@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { withHandleErrors, withLoading } from 'shared/hoc';
-import { ContentWrapper, PageTitleBlock } from 'layout';
+import { PageWrapper, ContentWrapper, PageTitleBlock } from 'layout';
 import {
   Button,
   Avatar,
@@ -21,7 +21,7 @@ const PageContent = ({ user, authUserIsProfileOwner }) => {
   const defaultDescription = "This user doesn't have a description yet";
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="User Profile" />
 
       <ContentWrapper>
@@ -62,7 +62,7 @@ const PageContent = ({ user, authUserIsProfileOwner }) => {
           )}
         </InnerContentWrapper>
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 

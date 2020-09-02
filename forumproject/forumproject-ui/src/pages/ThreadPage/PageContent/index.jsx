@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import PostList from 'shared/EditablePostList';
 import { withHandleErrors, withLoading } from 'shared/hoc';
 import {
+  PageWrapper,
   ContentWrapper,
   PageTitleWrapper,
   Pagination,
@@ -45,7 +46,7 @@ const PageContent = ({
   };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleWrapper>
         <PageTitleText>{thread.title}</PageTitleText>
       </PageTitleWrapper>
@@ -86,7 +87,7 @@ const PageContent = ({
 
         {renderPagination()}
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 

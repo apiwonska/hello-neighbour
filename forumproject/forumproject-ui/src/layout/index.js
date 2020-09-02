@@ -43,6 +43,7 @@ import InfoText from './text/InfoText';
 import TextLink from './text/TextLink';
 import theme from './theme';
 
+import PageWrapper from './wrappers/PageWrapper';
 import ContentWrapper from './wrappers/ContentWraper';
 import GroupWrapper from './wrappers/GroupWrapper';
 
@@ -73,6 +74,7 @@ export {
   PageTitleBlock,
   PageTitleText,
   PageTitleWrapper,
+  PageWrapper,
   Pagination,
   PaginationWrapper,
   Spinner,
