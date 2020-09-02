@@ -6,7 +6,7 @@ import _ from 'lodash';
 import {
   fetchThread as fetchThread_,
   fetchPostsByThread as fetchPostsByThread_,
-  fetchCategories as fetchCategories_,
+  fetchCategory as fetchCategory_,
   createPost as createPost_,
   updatePost as updatePost_,
   deletePost as deletePost_,
@@ -27,24 +27,27 @@ class ThreadPage extends React.Component {
 
   componentDidMount = async () => {
     const {
-      categories,
-      thread,
-      fetchCategories,
+      category,
+      fetchCategory,
       fetchThread,
       fetchPostsByThread,
       match,
     } = this.props;
+    let { thread } = this.props;
     const { threadId } = match.params;
 
     if (!thread.fetched || String(thread.data.id) !== threadId) {
-      fetchThread(threadId);
+      await fetchThread(threadId);
     }
+    ({ thread } = this.props);
+    const categoryId = thread.data.category;
+
+    if (!category.fetched || category.data.id !== categoryId) {
+      fetchCategory(categoryId);
+    }
+
     await fetchPostsByThread(threadId, this.postsPerPage);
     this.setStateTotalPages();
-
-    if (!categories.fetched && !categories.fetching) {
-      await fetchCategories();
-    }
   };
 
   handleCreatePost = async (values) => {
@@ -128,19 +131,20 @@ class ThreadPage extends React.Component {
   };
 
   render() {
-    const { thread, posts, categories } = this.props;
+    const { thread, posts, category } = this.props;
     const { currentPage, totalPages, editingPost } = this.state;
     const errors =
-      (!_.isEmpty(categories.errors) && categories.errors) ||
+      (!_.isEmpty(category.errors) && category.errors) ||
       (!_.isEmpty(thread.errors) && thread.errors) ||
       (!_.isEmpty(posts.errors) && posts.errors) ||
       {};
 
     return (
       <PageContent
-        fetching={categories.fetching || thread.fetching || posts.fetching}
-        fetched={categories.fetched && thread.fetched && posts.fetched}
+        fetching={category.fetching || thread.fetching || posts.fetching}
+        fetched={category.fetched && thread.fetched && posts.fetched}
         errors={errors}
+        category={category.data}
         thread={thread.data}
         posts={posts.data.results}
         handleMoveUserToEnd={this.handleMoveUserToEnd}
@@ -164,7 +168,6 @@ ThreadPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       threadId: PropTypes.string.isRequired,
-      categoryId: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   auth: PropTypes.shape({
@@ -178,6 +181,7 @@ ThreadPage.propTypes = {
     data: PropTypes.shape({
       id: PropTypes.number,
       title: PropTypes.string,
+      category: PropTypes.number,
     }).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
@@ -190,15 +194,15 @@ ThreadPage.propTypes = {
     }).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
-  categories: PropTypes.shape({
+  category: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    data: PropTypes.shape({ id: PropTypes.number }).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   fetchThread: PropTypes.func.isRequired,
   fetchPostsByThread: PropTypes.func.isRequired,
-  fetchCategories: PropTypes.func.isRequired,
+  fetchCategory: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   updatePost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
@@ -208,13 +212,13 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   thread: state.thread,
   posts: state.posts,
-  categories: state.categories,
+  category: state.category,
 });
 
 export default connect(mapStateToProps, {
   fetchThread: fetchThread_,
   fetchPostsByThread: fetchPostsByThread_,
-  fetchCategories: fetchCategories_,
+  fetchCategory: fetchCategory_,
   createPost: createPost_,
   updatePost: updatePost_,
   deletePost: deletePost_,

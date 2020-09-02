@@ -22,11 +22,7 @@ const PrivateRoutes = () => {
         exact
         component={CreateThreadPage}
       />
-      <Route
-        path="/categories/:categoryId/threads/:threadId"
-        exact
-        component={ThreadPage}
-      />
+      <Route path="/threads/:threadId" exact component={ThreadPage} />
       <Route
         path="/profile/password-change"
         exact

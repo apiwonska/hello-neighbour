@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import passwordResetReducer from './passwordResetReducer';
 import categoriesReducer from './categoriesReducer';
+import categoryReducer from './categoryReducer';
 import threadListReducer from './threadListReducer';
 import threadReducer from './threadReducer';
 import postsReducer from './postsReducer';
@@ -13,6 +14,7 @@ import modalReducer from './modalReducer';
 const reducers = combineReducers({
   auth: authReducer,
   passwordReset: passwordResetReducer,
+  category: categoryReducer,
   categories: categoriesReducer,
   threadList: threadListReducer,
   thread: threadReducer,

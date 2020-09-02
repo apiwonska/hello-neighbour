@@ -56,8 +56,8 @@ export const fetchThread = (threadId) => async (dispatch) => {
 export const createThread = (data) => async (dispatch) => {
   try {
     const response = await forum().post('/api/threads/', data);
-    const { id, category } = response.data;
-    history.push(`/categories/${category}/threads/${id}`);
+    const { id } = response.data;
+    history.push(`/threads/${id}`);
     dispatch({
       type: CREATE_THREAD_FULFILLED,
       payload: response.data,
