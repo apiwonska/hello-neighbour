@@ -3,8 +3,13 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { ContentWrapper, PageTitleBlock, Pagination } from 'layout';
-import { withHandleErrors, withLoading, withHandleNotFound } from 'shared/hoc';
+import {
+  PageWrapper,
+  ContentWrapper,
+  PageTitleBlock,
+  Pagination,
+} from 'layout';
+import { withHandleErrors, withLoading } from 'shared/hoc';
 import {
   LinkButton,
   LinkWrapper,
@@ -37,7 +42,7 @@ const PageContent = ({
   const { fetching, fetched, data } = threads;
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title={categoryName} />
 
       <ContentWrapper>
@@ -55,7 +60,7 @@ const PageContent = ({
           {renderPagination()}
         </ThreadListWrapper>
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
@@ -71,8 +76,4 @@ PageContent.propTypes = {
   }).isRequired,
 };
 
-export default compose(
-  withHandleErrors,
-  withHandleNotFound,
-  withLoading
-)(PageContent);
+export default compose(withHandleErrors, withLoading)(PageContent);

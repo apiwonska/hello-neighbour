@@ -1,5 +1,5 @@
 import withHandleErrors from 'shared/hoc/withHandleErrors';
+import withHandleServerErrors from 'shared/hoc/withHandleServerErrors';
 import withLoading from 'shared/hoc/withLoading';
-import withHandleNotFound from 'shared/hoc/withHandleNotFound';
 
-export { withHandleErrors, withLoading, withHandleNotFound };
+export { withHandleErrors, withLoading, withHandleServerErrors };

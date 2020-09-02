@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
@@ -53,7 +52,7 @@ class PasswordResetConfirmModal extends React.Component {
 
     const { passwordReset } = this.props;
     const errors = passwordReset.resetErrors;
-    if (!_.isEmpty(errors)) return errors;
+    if (errors.data) return errors.data;
     if (passwordReset.resetPasswordConfirmed) {
       this.setState({ passwordChanged: true });
     }
@@ -175,7 +174,7 @@ PasswordResetConfirmModal.propTypes = {
   }).isRequired,
   confirmPasswordReset: PropTypes.func.isRequired,
   passwordReset: PropTypes.shape({
-    resetErrors: PropTypes.shape({}).isRequired,
+    resetErrors: PropTypes.shape({ data: PropTypes.shape({}) }).isRequired,
     resetPasswordConfirmed: PropTypes.bool.isRequired,
   }).isRequired,
 };

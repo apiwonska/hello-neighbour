@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { ContentWrapper, PageTitleBlock } from 'layout';
+import { PageWrapper, ContentWrapper, PageTitleBlock } from 'layout';
 import { withLoading, withHandleErrors } from 'shared/hoc';
 import { ForumInfoWrapper, ForumInfoText, PictureWrapper } from './style';
 import WelcomePicture from '../WelcomePicture';
 import CategoryList from '../CategoryList';
 import PageBreadcrumb from '../PageBreadcrumb';
 
-const PageContent = ({ data }) => {
+const PageContent = ({ categories }) => {
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Welcome to our Forum!" />
 
       <ContentWrapper>
@@ -31,14 +31,14 @@ const PageContent = ({ data }) => {
           </ForumInfoText>
         </ForumInfoWrapper>
 
-        <CategoryList categories={data} />
+        <CategoryList categories={categories} />
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
 PageContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default compose(withHandleErrors, withLoading)(PageContent);

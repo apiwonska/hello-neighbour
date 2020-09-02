@@ -24,7 +24,7 @@ export const fetchUser = (userId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: FETCH_USER_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -42,7 +42,7 @@ export const updateUser = (data, userId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: UPDATE_USER_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -62,7 +62,7 @@ export const uploadAvatar = (formData, userId) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: UPLOAD_AVATAR_ERRORS,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };

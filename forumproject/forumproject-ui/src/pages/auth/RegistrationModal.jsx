@@ -27,7 +27,7 @@ class RegistrationModal extends React.Component {
 
     const { auth } = this.props;
     const { errors } = auth;
-    if (errors) return errors;
+    if (errors.data) return errors.data;
     return null;
   };
 
@@ -128,7 +128,11 @@ class RegistrationModal extends React.Component {
 
 RegistrationModal.propTypes = {
   register: PropTypes.func.isRequired,
-  auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
+  auth: PropTypes.shape({
+    errors: PropTypes.shape({
+      data: PropTypes.shape({}),
+    }).isRequired,
+  }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };
 

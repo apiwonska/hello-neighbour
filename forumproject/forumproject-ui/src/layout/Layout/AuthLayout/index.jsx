@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { PageWrapper, MainContentWrapper } from './style';
+import { Wrapper, MainContentWrapper } from './style';
 import Toolbar from '../Toolbar';
 import SideDrawer from '../SideDrawer';
 import SideNav from '../SideNav';
@@ -23,10 +23,10 @@ const AuthLayout = ({ children }) => {
   return (
     <>
       <Toolbar />
-      <PageWrapper>
+      <Wrapper>
         {renderSideNavigation()}
         <MainContentWrapper>{children}</MainContentWrapper>
-      </PageWrapper>
+      </Wrapper>
       <Footer />
     </>
   );

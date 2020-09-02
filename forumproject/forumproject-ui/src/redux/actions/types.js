@@ -25,6 +25,9 @@ export const CHANGE_PASSWORD_ERRORS = 'change_password_errors';
 // FORUM
 
 // Categories
+export const FETCH_CATEGORY_PENDING = 'fetch_category_pending';
+export const FETCH_CATEGORY_FULFILLED = 'fetch_category_fulfilled';
+export const FETCH_CATEGORY_ERRORS = 'fetch_category_errors';
 export const FETCH_CATEGORIES_PENDING = 'fetch_categories_pending';
 export const FETCH_CATEGORIES_FULFILLED = 'fetch_categories_fulfilled';
 export const FETCH_CATEGORIES_ERRORS = 'fetch_categories_errors';

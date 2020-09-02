@@ -1,5 +1,3 @@
-import fetchCategories from './categoriesActions';
-
 export {
   register,
   logIn,
@@ -8,7 +6,7 @@ export {
   confirmPasswordReset,
   changePassword,
 } from './authActions';
-export { fetchCategories };
+export { fetchCategory, fetchCategories } from './categoriesActions';
 export {
   fetchThreadsByCategory,
   fetchThread,

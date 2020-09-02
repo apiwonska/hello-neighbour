@@ -10,6 +10,7 @@ import {
   Label,
   TextArea,
   FormError,
+  PageWrapper,
   ContentWrapper,
 } from 'layout';
 import { createThread as createThread_ } from 'redux/actions';
@@ -39,7 +40,7 @@ class CreateThread extends React.Component {
 
     const { threadList } = this.props;
     const { errors } = threadList;
-    if (errors) return errors;
+    if (errors) return errors.data;
     return null;
   };
 
@@ -53,7 +54,7 @@ class CreateThread extends React.Component {
     // a value to ensure form input id uniqueness
     const id = 'ct';
     return (
-      <>
+      <PageWrapper>
         <PageTitleBlock title="CreateThread" />
 
         <ContentWrapper>
@@ -108,7 +109,7 @@ class CreateThread extends React.Component {
             )}
           </FinalForm>
         </ContentWrapper>
-      </>
+      </PageWrapper>
     );
   }
 }
@@ -123,7 +124,9 @@ CreateThread.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
   threadList: PropTypes.shape({
-    errors: PropTypes.shape({}),
+    errors: PropTypes.shape({
+      data: PropTypes.shape({}),
+    }),
   }).isRequired,
   createThread: PropTypes.func.isRequired,
 };

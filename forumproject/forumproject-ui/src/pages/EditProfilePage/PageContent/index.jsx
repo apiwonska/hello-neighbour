@@ -3,7 +3,12 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withHandleErrors, withLoading } from 'shared/hoc';
-import { ContentWrapper, GroupWrapper, PageTitleBlock } from 'layout';
+import {
+  PageWrapper,
+  ContentWrapper,
+  GroupWrapper,
+  PageTitleBlock,
+} from 'layout';
 import { InnerContentWrapper } from './style';
 import PageBreadcrumb from '../PageBreadcrumb';
 import AvatarUpload from '../AvatarUpload';
@@ -14,13 +19,13 @@ const PageContent = ({
   user,
   handleFileSelect,
   handleFileUpload,
-  handleUpdateInfo,
+  handleUpdateUserData,
 }) => {
   const { username, email, description } = user.data;
   const initialFormValues = { username, email, description };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Edit Your Profile" />
 
       <ContentWrapper>
@@ -31,19 +36,21 @@ const PageContent = ({
             avatarSrc={user.data.avatar}
             handleFileSelect={handleFileSelect}
             handleFileUpload={handleFileUpload}
-            uploadErrors={user.uploadErrors.avatar}
+            uploadErrors={
+              user.uploadErrors.data && user.uploadErrors.data.avatar
+            }
           />
 
           <GroupWrapper>
             <UserDataForm
               authUserId={authUserId}
               initialFormValues={initialFormValues}
-              handleUpdateInfo={handleUpdateInfo}
+              handleUpdateUserData={handleUpdateUserData}
             />
           </GroupWrapper>
         </InnerContentWrapper>
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
@@ -51,7 +58,9 @@ PageContent.propTypes = {
   authUserId: PropTypes.number.isRequired,
   user: PropTypes.shape({
     uploadErrors: PropTypes.shape({
-      avatar: PropTypes.arrayOf(PropTypes.string),
+      data: PropTypes.shape({
+        avatar: PropTypes.arrayOf(PropTypes.string),
+      }),
     }).isRequired,
     data: PropTypes.shape({
       id: PropTypes.number,
@@ -63,7 +72,7 @@ PageContent.propTypes = {
   }).isRequired,
   handleFileSelect: PropTypes.func.isRequired,
   handleFileUpload: PropTypes.func.isRequired,
-  handleUpdateInfo: PropTypes.func.isRequired,
+  handleUpdateUserData: PropTypes.func.isRequired,
 };
 
 export default compose(withHandleErrors, withLoading)(PageContent);

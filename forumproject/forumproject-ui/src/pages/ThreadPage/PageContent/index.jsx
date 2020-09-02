@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
 import PostList from 'shared/EditablePostList';
 import { withHandleErrors, withLoading } from 'shared/hoc';
 import {
+  PageWrapper,
   ContentWrapper,
   PageTitleWrapper,
   Pagination,
@@ -19,6 +18,7 @@ import PostHeader from '../PostHeader';
 import PageBreadcrumb from '../PageBreadcrumb';
 
 const PageContent = ({
+  category,
   thread,
   posts,
   handleMoveUserToEnd,
@@ -33,10 +33,6 @@ const PageContent = ({
   createPostInputRef,
   handleCreatePost,
 }) => {
-  const categories = useSelector((state) => state.categories.data);
-  const { categoryId } = useParams();
-  const category = categories.find((el) => String(el.id) === categoryId);
-
   const renderPagination = () => {
     return (
       <PaginationWrapper>
@@ -50,7 +46,7 @@ const PageContent = ({
   };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleWrapper>
         <PageTitleText>{thread.title}</PageTitleText>
       </PageTitleWrapper>
@@ -91,7 +87,7 @@ const PageContent = ({
 
         {renderPagination()}
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
@@ -100,6 +96,10 @@ PageContent.propTypes = {
     title: PropTypes.string.isRequired,
   }).isRequired,
   posts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  category: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   handleMoveUserToEnd: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,

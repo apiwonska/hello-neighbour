@@ -5,8 +5,9 @@ import BreadcrumbIcon from './breadcrumb/BreadcrumbIcon';
 import BasicButton from './buttons/BasicButton';
 import Button from './buttons/Button';
 
-import ContentWrapper from './wrappers/ContentWraper';
-import GroupWrapper from './wrappers/GroupWrapper';
+import Error404 from './errors/Error404';
+import ServerError from './errors/ServerError';
+import DefaultError from './errors/DefaultError';
 
 import Input from './forms/Input';
 import Label from './forms/Label';
@@ -16,7 +17,7 @@ import FormError from './forms/FormError';
 
 import SVGIcon from './icons/SVGIcon';
 import NoResults from './NoResults';
-import Layout from './mainLayout/Layout';
+import Layout from './Layout';
 
 import Modal from './modals/Modal';
 import ModalButton from './modals/ModalButton';
@@ -42,6 +43,10 @@ import InfoText from './text/InfoText';
 import TextLink from './text/TextLink';
 import theme from './theme';
 
+import PageWrapper from './wrappers/PageWrapper';
+import ContentWrapper from './wrappers/ContentWraper';
+import GroupWrapper from './wrappers/GroupWrapper';
+
 export {
   Anchor,
   BasicButton,
@@ -49,6 +54,9 @@ export {
   BreadcrumbIcon,
   Button,
   ContentWrapper,
+  Error404,
+  ServerError,
+  DefaultError,
   GroupWrapper,
   InfoText,
   Layout,
@@ -66,6 +74,7 @@ export {
   PageTitleBlock,
   PageTitleText,
   PageTitleWrapper,
+  PageWrapper,
   Pagination,
   PaginationWrapper,
   Spinner,

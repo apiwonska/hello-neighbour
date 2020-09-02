@@ -1,31 +1,33 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-import { Container, ContentWrapper, Button } from './style';
-import GroupChatPicture from './GroupChatPicture';
+import PageContent from './PageContent';
 
-const AccessPage = (props) => {
-  const { history } = props;
-  return (
-    <Container>
-      <ContentWrapper>
-        <GroupChatPicture width="100%" height="100%" />
-        <Button
-          color="yellow"
-          size="XL"
-          onClick={() => history.push('/register')}
-        >
-          Join us!
-        </Button>
-      </ContentWrapper>
-    </Container>
-  );
+const AccessPage = ({ auth, passwordReset }) => {
+  const errors = [
+    auth.errors,
+    passwordReset.emailErrors,
+    passwordReset.resetErrors,
+  ].find((el) => !_.isEmpty(el));
+
+  return <PageContent errors={errors || {}} />;
 };
 
 AccessPage.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  auth: PropTypes.shape({ errors: PropTypes.shape({}).isRequired }).isRequired,
+  passwordReset: PropTypes.shape({
+    emailErrors: PropTypes.shape({}).isRequired,
+    resetErrors: PropTypes.shape({}).isRequired,
   }).isRequired,
 };
 
-export default AccessPage;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+    passwordReset: state.passwordReset,
+  };
+};
+
+export default connect(mapStateToProps)(AccessPage);

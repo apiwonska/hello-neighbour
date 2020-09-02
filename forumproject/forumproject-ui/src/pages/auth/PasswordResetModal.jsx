@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import {
@@ -26,7 +25,7 @@ class PasswordResetModal extends React.Component {
 
     const { passwordReset } = this.props;
     const errors = passwordReset.emailErrors;
-    if (!_.isEmpty(errors)) return errors;
+    if (errors.data) return errors.data;
     if (passwordReset.emailSent) {
       history.push('/password-reset/confirm', {
         emailSent: true,
@@ -85,7 +84,7 @@ PasswordResetModal.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   resetPassword: PropTypes.func.isRequired,
   passwordReset: PropTypes.shape({
-    emailErrors: PropTypes.shape({}).isRequired,
+    emailErrors: PropTypes.shape({ data: PropTypes.shape({}) }).isRequired,
     emailSent: PropTypes.bool.isRequired,
   }).isRequired,
 };

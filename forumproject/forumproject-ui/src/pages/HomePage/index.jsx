@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
 import PageContent from './PageContent';
@@ -24,8 +23,8 @@ class Home extends React.Component {
       <PageContent
         fetching={fetching}
         fetched={fetched}
-        errors={!_.isEmpty(errors)}
-        data={data}
+        errors={errors}
+        categories={data}
       />
     );
   }

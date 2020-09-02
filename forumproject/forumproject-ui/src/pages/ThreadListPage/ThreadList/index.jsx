@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 
 import { NoResults } from 'layout';
 import withLoading from 'shared/hoc/withLoading';
@@ -20,7 +19,6 @@ import {
 } from './style';
 
 const ThreadList = ({ threads }) => {
-  const { categoryId } = useParams();
   if (threads.results.length === 0) {
     return (
       <NoResults picture={<StartThreadPicture />}>
@@ -33,7 +31,7 @@ const ThreadList = ({ threads }) => {
       {threads.results.map((thread) => (
         <ThreadWrapper key={thread.id}>
           <ThreadHeader>
-            <ThreadLink to={`/categories/${categoryId}/threads/${thread.id}`}>
+            <ThreadLink to={`/threads/${thread.id}`}>
               <ThreadIcon name="double_speach_bubble" />
               <ThreadTitle>{thread.title} </ThreadTitle>
             </ThreadLink>

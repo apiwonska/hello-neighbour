@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import {
-  fetchCategories as fetchCategories_,
+  fetchCategory as fetchCategory_,
   fetchThreadsByCategory as fetchThreadsByCategory_,
 } from 'redux/actions';
 import PageContent from './PageContent';
 
-class ThreadList extends React.Component {
+class ThreadListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,26 +21,28 @@ class ThreadList extends React.Component {
 
   componentDidMount = async () => {
     const {
-      categories,
-      fetchCategories,
+      category,
+      fetchCategory,
       fetchThreadsByCategory,
       match,
     } = this.props;
     const { categoryId } = match.params;
 
-    if (!categories.fetched && !categories.fetching) {
-      await fetchCategories();
+    if (!category.fetched || String(category.data.id) !== categoryId) {
+      fetchCategory(categoryId);
     }
+
     await fetchThreadsByCategory(categoryId, this.itemsPerPage);
     this.setState({ totalPages: this.countPageNumber() });
   };
 
   componentDidUpdate = async (prevProps) => {
-    const { fetchThreadsByCategory, match } = this.props;
+    const { fetchThreadsByCategory, fetchCategory, match } = this.props;
     const { categoryId: prevCategoryId } = prevProps.match.params;
     const { categoryId: currentCategoryId } = match.params;
 
     if (prevCategoryId !== currentCategoryId) {
+      fetchCategory(currentCategoryId);
       await fetchThreadsByCategory(currentCategoryId, this.itemsPerPage);
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ totalPages: this.countPageNumber() });
@@ -62,20 +64,19 @@ class ThreadList extends React.Component {
   }
 
   render() {
-    const { categories, threads, match } = this.props;
-    const { categoryId } = match.params;
-    const category = categories.data.find(
-      (obj) => String(obj.id) === categoryId
-    );
+    const { category, threads } = this.props;
     const { currentPage, totalPages } = this.state;
+    const errors =
+      (!_.isEmpty(category.errors) && category.errors) ||
+      (!_.isEmpty(threads.errors) && threads.errors) ||
+      {};
 
     return (
       <PageContent
-        fetching={categories.fetching}
-        fetched={categories.fetched && !!category}
-        notFound={categories.fetched && !category}
-        errors={!_.isEmpty(categories.errors) || !_.isEmpty(threads.errors)}
-        categoryName={category && category.name}
+        fetching={category.fetching || threads.fetching}
+        fetched={category.fetched || threads.fetched}
+        errors={errors}
+        categoryName={category.data && category.data.name}
         currentPage={currentPage}
         totalPages={totalPages}
         handleChangePage={this.handleChangePage}
@@ -85,33 +86,36 @@ class ThreadList extends React.Component {
   }
 }
 
-ThreadList.propTypes = {
+ThreadListPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({ categoryId: PropTypes.string.isRequired })
       .isRequired,
   }).isRequired,
-  categories: PropTypes.shape({
+  category: PropTypes.shape({
     fetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    data: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
+      .isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
   threads: PropTypes.shape({
+    fetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       count: PropTypes.number,
     }).isRequired,
     errors: PropTypes.shape({}).isRequired,
   }).isRequired,
-  fetchCategories: PropTypes.func.isRequired,
+  fetchCategory: PropTypes.func.isRequired,
   fetchThreadsByCategory: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  categories: state.categories,
+  category: state.category,
   threads: state.threadList,
 });
 
 export default connect(mapStateToProps, {
-  fetchCategories: fetchCategories_,
+  fetchCategory: fetchCategory_,
   fetchThreadsByCategory: fetchThreadsByCategory_,
-})(ThreadList);
+})(ThreadListPage);

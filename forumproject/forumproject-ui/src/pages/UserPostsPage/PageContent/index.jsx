@@ -4,6 +4,7 @@ import { compose } from 'redux';
 
 import PostList from 'shared/EditablePostList';
 import {
+  PageWrapper,
   ContentWrapper,
   PageTitleBlock,
   Pagination,
@@ -39,7 +40,7 @@ const PageContent = ({
   };
 
   return (
-    <>
+    <PageWrapper>
       <PageTitleBlock title="Your Posts" />
 
       <ContentWrapper>
@@ -66,7 +67,7 @@ const PageContent = ({
 
         {renderPagination()}
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
