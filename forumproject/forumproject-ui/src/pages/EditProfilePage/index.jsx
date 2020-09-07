@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import {
   fetchUser as fetchUser_,
   updateUser as updateUser_,
   uploadAvatar as uploadAvatar_,
 } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 class EditProfile extends React.Component {
@@ -58,16 +60,22 @@ class EditProfile extends React.Component {
     } = this.props;
 
     return (
-      <PageContent
-        fetching={fetching}
-        fetched={fetched}
-        errors={fetchingErrors}
-        user={user}
-        authUserId={authUserId}
-        handleFileSelect={this.handleFileSelect}
-        handleFileUpload={this.handleFileUpload}
-        handleUpdateUserData={this.handleUpdateUserData}
-      />
+      <>
+        <Helmet>
+          <title>Edit Profile - {CONSTANTS.appName}</title>
+        </Helmet>
+
+        <PageContent
+          fetching={fetching}
+          fetched={fetched}
+          errors={fetchingErrors}
+          user={user}
+          authUserId={authUserId}
+          handleFileSelect={this.handleFileSelect}
+          handleFileUpload={this.handleFileUpload}
+          handleUpdateUserData={this.handleUpdateUserData}
+        />
+      </>
     );
   }
 }

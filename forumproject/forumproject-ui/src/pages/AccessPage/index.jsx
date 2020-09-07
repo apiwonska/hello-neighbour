@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 const AccessPage = ({ auth, passwordReset }) => {
@@ -12,7 +14,14 @@ const AccessPage = ({ auth, passwordReset }) => {
     passwordReset.resetErrors,
   ].find((el) => !_.isEmpty(el));
 
-  return <PageContent errors={errors || {}} />;
+  return (
+    <>
+      <Helmet>
+        <title>{CONSTANTS.appName}</title>
+      </Helmet>
+      <PageContent errors={errors || {}} />
+    </>
+  );
 };
 
 AccessPage.propTypes = {

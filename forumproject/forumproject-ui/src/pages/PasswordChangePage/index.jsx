@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import { changePassword as changePassword_ } from 'redux/actions';
 import { PageWrapper, ContentWrapper, PageTitleBlock } from 'layout';
+import { CONSTANTS } from 'utils';
 import { InnerContentWrapper } from './style';
 import PasswordChangeForm from './PasswordChangeForm';
 import PageBreadcrumb from './PageBreadcrumb';
@@ -25,19 +27,25 @@ const PasswordChangePage = ({ auth, changePassword }) => {
   };
 
   return (
-    <PageWrapper>
-      <PageTitleBlock title="Password Change" />
+    <>
+      <Helmet>
+        <title>Change Password - {CONSTANTS.appName}</title>
+      </Helmet>
 
-      <ContentWrapper>
-        <PageBreadcrumb authUserId={authUserId} />
-        {passwordChanged && <SuccessMessage authUserId={authUserId} />}
-        {!passwordChanged && (
-          <InnerContentWrapper>
-            <PasswordChangeForm onSubmit={onSubmit} authUserId={authUserId} />
-          </InnerContentWrapper>
-        )}
-      </ContentWrapper>
-    </PageWrapper>
+      <PageWrapper>
+        <PageTitleBlock title="Password Change" />
+
+        <ContentWrapper>
+          <PageBreadcrumb authUserId={authUserId} />
+          {passwordChanged && <SuccessMessage authUserId={authUserId} />}
+          {!passwordChanged && (
+            <InnerContentWrapper>
+              <PasswordChangeForm onSubmit={onSubmit} authUserId={authUserId} />
+            </InnerContentWrapper>
+          )}
+        </ContentWrapper>
+      </PageWrapper>
+    </>
   );
 };
 

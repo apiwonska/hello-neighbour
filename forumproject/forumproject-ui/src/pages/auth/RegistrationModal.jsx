@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import {
   Modal,
@@ -19,6 +20,7 @@ import {
   passwordValidator,
   password2Validator,
 } from 'utils/validators';
+import { CONSTANTS } from 'utils';
 
 class RegistrationModal extends React.Component {
   onSubmit = async (values) => {
@@ -36,92 +38,101 @@ class RegistrationModal extends React.Component {
     const formId = 'reg';
 
     return (
-      <Modal title="Register" handleDismiss={() => history.push('/')}>
-        <FinalForm onSubmit={this.onSubmit}>
-          {({ handleSubmit, values }) => (
-            <form onSubmit={handleSubmit}>
-              <FormWrapper>
-                <Field name="username" validate={usernameValidator}>
-                  {({
-                    input,
-                    meta: { touched, error, submitError, dirty },
-                  }) => (
-                    <InputGroup>
-                      <Label htmlFor={`username-${formId}`} dirty={dirty}>
-                        Username:
-                      </Label>
-                      <Input {...input} id={`username-${formId}`} type="text" />
-                      {touched && (error || submitError) && (
-                        <FormError>{error || submitError}</FormError>
-                      )}
-                    </InputGroup>
-                  )}
-                </Field>
-                <Field name="email" validate={emailValidator}>
-                  {({
-                    input,
-                    meta: { touched, error, submitError, dirty },
-                  }) => (
-                    <InputGroup>
-                      <Label htmlFor={`email-${formId}`} dirty={dirty}>
-                        Email:
-                      </Label>
-                      <Input {...input} id={`email-${formId}`} type="email" />
-                      {touched && (error || submitError) && (
-                        <FormError>{error || submitError}</FormError>
-                      )}
-                    </InputGroup>
-                  )}
-                </Field>
-                <Field name="password" validate={passwordValidator}>
-                  {({
-                    input,
-                    meta: { touched, error, submitError, dirty },
-                  }) => (
-                    <InputGroup>
-                      <Label htmlFor={`password-${formId}`} dirty={dirty}>
-                        Password:
-                      </Label>
-                      <Input
-                        {...input}
-                        id={`password-${formId}`}
-                        type="password"
-                      />
-                      {touched && (error || submitError) && (
-                        <FormError>{error || submitError}</FormError>
-                      )}
-                    </InputGroup>
-                  )}
-                </Field>
-                <Field
-                  name="password2"
-                  validate={password2Validator(values.password)}
-                >
-                  {({
-                    input,
-                    meta: { touched, error, submitError, dirty },
-                  }) => (
-                    <InputGroup>
-                      <Label htmlFor={`password2-${formId}`} dirty={dirty}>
-                        Confirm Password:
-                      </Label>
-                      <Input
-                        {...input}
-                        id={`password2-${formId}`}
-                        type="password"
-                      />
-                      {touched && (error || submitError) && (
-                        <FormError>{error || submitError}</FormError>
-                      )}
-                    </InputGroup>
-                  )}
-                </Field>
-                <Button type="submit">Register</Button>
-              </FormWrapper>
-            </form>
-          )}
-        </FinalForm>
-      </Modal>
+      <>
+        <Helmet>
+          <title>Register - {CONSTANTS.appName}</title>
+        </Helmet>
+        <Modal title="Register" handleDismiss={() => history.push('/')}>
+          <FinalForm onSubmit={this.onSubmit}>
+            {({ handleSubmit, values }) => (
+              <form onSubmit={handleSubmit}>
+                <FormWrapper>
+                  <Field name="username" validate={usernameValidator}>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`username-${formId}`} dirty={dirty}>
+                          Username:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`username-${formId}`}
+                          type="text"
+                        />
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
+                      </InputGroup>
+                    )}
+                  </Field>
+                  <Field name="email" validate={emailValidator}>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`email-${formId}`} dirty={dirty}>
+                          Email:
+                        </Label>
+                        <Input {...input} id={`email-${formId}`} type="email" />
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
+                      </InputGroup>
+                    )}
+                  </Field>
+                  <Field name="password" validate={passwordValidator}>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`password-${formId}`} dirty={dirty}>
+                          Password:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`password-${formId}`}
+                          type="password"
+                        />
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
+                      </InputGroup>
+                    )}
+                  </Field>
+                  <Field
+                    name="password2"
+                    validate={password2Validator(values.password)}
+                  >
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`password2-${formId}`} dirty={dirty}>
+                          Confirm Password:
+                        </Label>
+                        <Input
+                          {...input}
+                          id={`password2-${formId}`}
+                          type="password"
+                        />
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
+                      </InputGroup>
+                    )}
+                  </Field>
+                  <Button type="submit">Register</Button>
+                </FormWrapper>
+              </form>
+            )}
+          </FinalForm>
+        </Modal>
+      </>
     );
   }
 }

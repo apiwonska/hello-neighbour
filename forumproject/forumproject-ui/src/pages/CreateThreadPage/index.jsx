@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import {
   PageTitleBlock,
@@ -15,6 +16,7 @@ import {
 } from 'layout';
 import { createThread as createThread_ } from 'redux/actions';
 import { titleValidator, subjectValidator } from 'utils/validators';
+import { CONSTANTS } from 'utils';
 import { Button, FormGroupButtons } from './style';
 
 class CreateThread extends React.Component {
@@ -54,62 +56,68 @@ class CreateThread extends React.Component {
     // a value to ensure form input id uniqueness
     const id = 'ct';
     return (
-      <PageWrapper>
-        <PageTitleBlock title="CreateThread" />
+      <>
+        <Helmet>
+          <title>Create Thread - {CONSTANTS.appName}</title>
+        </Helmet>
 
-        <ContentWrapper>
-          <FinalForm onSubmit={this.handleCreateThread}>
-            {({ handleSubmit, pristine, hasValidationErrors }) => (
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <Field name="title" validate={titleValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`title-${id}`}>Title:</Label>
-                        <Input
-                          {...input}
-                          id={`title-${id}`}
-                          maxLength="100"
-                          ref={this.refFocusInput}
-                        />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </FormGroup>
-                    )}
-                  </Field>
-                  <Field name="subject" validate={subjectValidator}>
-                    {({ input, meta: { touched, error, submitError } }) => (
-                      <FormGroup>
-                        <Label htmlFor={`subject-${id}`}>Subject:</Label>
-                        <TextArea
-                          {...input}
-                          id={`subject-${id}`}
-                          rows="3"
-                          maxLength="2000"
-                        />
-                        <FormError>
-                          {touched && (error || submitError)}
-                        </FormError>
-                      </FormGroup>
-                    )}
-                  </Field>
-                  <FormGroupButtons>
-                    <Button onClick={this.handleCancel}>Cancel</Button>
-                    <Button
-                      type="submit"
-                      disabled={pristine || hasValidationErrors}
-                      color="blue"
-                    >
-                      Create Thread
-                    </Button>
-                  </FormGroupButtons>
-                </div>
-              </form>
-            )}
-          </FinalForm>
-        </ContentWrapper>
-      </PageWrapper>
+        <PageWrapper>
+          <PageTitleBlock title="CreateThread" />
+
+          <ContentWrapper>
+            <FinalForm onSubmit={this.handleCreateThread}>
+              {({ handleSubmit, pristine, hasValidationErrors }) => (
+                <form onSubmit={handleSubmit}>
+                  <div>
+                    <Field name="title" validate={titleValidator}>
+                      {({ input, meta: { touched, error, submitError } }) => (
+                        <FormGroup>
+                          <Label htmlFor={`title-${id}`}>Title:</Label>
+                          <Input
+                            {...input}
+                            id={`title-${id}`}
+                            maxLength="100"
+                            ref={this.refFocusInput}
+                          />
+                          <FormError>
+                            {touched && (error || submitError)}
+                          </FormError>
+                        </FormGroup>
+                      )}
+                    </Field>
+                    <Field name="subject" validate={subjectValidator}>
+                      {({ input, meta: { touched, error, submitError } }) => (
+                        <FormGroup>
+                          <Label htmlFor={`subject-${id}`}>Subject:</Label>
+                          <TextArea
+                            {...input}
+                            id={`subject-${id}`}
+                            rows="3"
+                            maxLength="2000"
+                          />
+                          <FormError>
+                            {touched && (error || submitError)}
+                          </FormError>
+                        </FormGroup>
+                      )}
+                    </Field>
+                    <FormGroupButtons>
+                      <Button onClick={this.handleCancel}>Cancel</Button>
+                      <Button
+                        type="submit"
+                        disabled={pristine || hasValidationErrors}
+                        color="blue"
+                      >
+                        Create Thread
+                      </Button>
+                    </FormGroupButtons>
+                  </div>
+                </form>
+              )}
+            </FinalForm>
+          </ContentWrapper>
+        </PageWrapper>
+      </>
     );
   }
 }
