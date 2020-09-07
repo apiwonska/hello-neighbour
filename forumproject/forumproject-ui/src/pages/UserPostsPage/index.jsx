@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import {
   fetchPostsByUser as fetchPostsByUser_,
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 class UserPosts extends React.Component {
@@ -87,20 +89,26 @@ class UserPosts extends React.Component {
     const { currentPage, totalPages, editingPost } = this.state;
 
     return (
-      <PageContent
-        fetching={posts.fetching}
-        fetched={posts.fetched}
-        errors={posts.errors}
-        posts={posts.data.results}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handleChangePage={this.handleChangePage}
-        editingPost={editingPost}
-        handleUpdatePost={this.handleUpdatePost}
-        handleDeletePost={this.handleDeletePost}
-        handleShowUpdateForm={this.handleShowUpdateForm}
-        handleHideUpdateForm={this.handleHideUpdateForm}
-      />
+      <>
+        <Helmet>
+          <title>Your Posts - {CONSTANTS.appName}</title>
+        </Helmet>
+
+        <PageContent
+          fetching={posts.fetching}
+          fetched={posts.fetched}
+          errors={posts.errors}
+          posts={posts.data.results}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handleChangePage={this.handleChangePage}
+          editingPost={editingPost}
+          handleUpdatePost={this.handleUpdatePost}
+          handleDeletePost={this.handleDeletePost}
+          handleShowUpdateForm={this.handleShowUpdateForm}
+          handleHideUpdateForm={this.handleHideUpdateForm}
+        />
+      </>
     );
   }
 }

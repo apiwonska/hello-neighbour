@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import { fetchUser as fetchUser_ } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 const correctUserFetched = (user, userId) => {
@@ -25,13 +27,19 @@ const Profile = (props) => {
   }, [userId]);
 
   return (
-    <PageContent
-      fetching={user.fetching}
-      fetched={correctUserFetched(user, userId)}
-      errors={user.fetchingErrors}
-      user={user.data}
-      authUserIsProfileOwner={authUserIsProfileOwner}
-    />
+    <>
+      <Helmet>
+        <title>User Profile - {CONSTANTS.appName}</title>
+      </Helmet>
+
+      <PageContent
+        fetching={user.fetching}
+        fetched={correctUserFetched(user, userId)}
+        errors={user.fetchingErrors}
+        user={user.data}
+        authUserIsProfileOwner={authUserIsProfileOwner}
+      />
+    </>
   );
 };
 

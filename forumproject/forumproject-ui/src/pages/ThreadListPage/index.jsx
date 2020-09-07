@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { Helmet } from 'react-helmet';
 
 import {
   fetchCategory as fetchCategory_,
   fetchThreadsByCategory as fetchThreadsByCategory_,
 } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 class ThreadListPage extends React.Component {
@@ -70,18 +72,38 @@ class ThreadListPage extends React.Component {
       (!_.isEmpty(category.errors) && category.errors) ||
       (!_.isEmpty(threads.errors) && threads.errors) ||
       {};
+    const categoryName =
+      (category.data && category.data.name) || 'Unknown category';
+
+    const limitCategoryNameLength = (str) => {
+      const maxDocumentTitleLength = 64;
+      const maxCategoryNameLength =
+        maxDocumentTitleLength - CONSTANTS.appName.length - 6;
+      if (str.length > maxCategoryNameLength) {
+        return `${str.substring(0, maxCategoryNameLength)}...`;
+      }
+      return str;
+    };
 
     return (
-      <PageContent
-        fetching={category.fetching || threads.fetching}
-        fetched={category.fetched || threads.fetched}
-        errors={errors}
-        categoryName={category.data && category.data.name}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handleChangePage={this.handleChangePage}
-        threads={threads}
-      />
+      <>
+        <Helmet>
+          <title>
+            {limitCategoryNameLength(categoryName)} - {CONSTANTS.appName}
+          </title>
+        </Helmet>
+
+        <PageContent
+          fetching={category.fetching || threads.fetching}
+          fetched={category.fetched || threads.fetched}
+          errors={errors}
+          categoryName={categoryName}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handleChangePage={this.handleChangePage}
+          threads={threads}
+        />
+      </>
     );
   }
 }

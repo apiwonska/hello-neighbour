@@ -2,8 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import { fetchCategories as fetchCategories_ } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 class Home extends React.Component {
@@ -20,12 +22,18 @@ class Home extends React.Component {
       categories: { fetching, fetched, errors, data },
     } = this.props;
     return (
-      <PageContent
-        fetching={fetching}
-        fetched={fetched}
-        errors={errors}
-        categories={data}
-      />
+      <>
+        <Helmet>
+          <title>Home - {CONSTANTS.appName}</title>
+        </Helmet>
+
+        <PageContent
+          fetching={fetching}
+          fetched={fetched}
+          errors={errors}
+          categories={data}
+        />
+      </>
     );
   }
 }

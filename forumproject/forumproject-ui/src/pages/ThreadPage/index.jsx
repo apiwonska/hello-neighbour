@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { Helmet } from 'react-helmet';
 
 import {
   fetchThread as fetchThread_,
@@ -11,6 +12,7 @@ import {
   updatePost as updatePost_,
   deletePost as deletePost_,
 } from 'redux/actions';
+import { CONSTANTS } from 'utils';
 import PageContent from './PageContent';
 
 class ThreadPage extends React.Component {
@@ -138,28 +140,47 @@ class ThreadPage extends React.Component {
       (!_.isEmpty(thread.errors) && thread.errors) ||
       (!_.isEmpty(posts.errors) && posts.errors) ||
       {};
+    const threadTitle = (thread.data && thread.data.title) || 'Unknown thread';
+
+    const limitThreadTitleLength = (str) => {
+      const maxDocumentTitleLength = 64;
+      const maxThreadTitleLength =
+        maxDocumentTitleLength - CONSTANTS.appName.length - 6;
+      if (str.length > maxThreadTitleLength) {
+        return `${str.substring(0, maxThreadTitleLength)}...`;
+      }
+      return str;
+    };
 
     return (
-      <PageContent
-        fetching={category.fetching || thread.fetching || posts.fetching}
-        fetched={category.fetched && thread.fetched && posts.fetched}
-        errors={errors}
-        category={category.data}
-        thread={thread.data}
-        posts={posts.data.results}
-        handleMoveUserToEnd={this.handleMoveUserToEnd}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handleChangePage={this.handleChangePage}
-        renderPostHeader={this.renderPostHeader}
-        editingPost={editingPost}
-        handleUpdatePost={this.handleUpdatePost}
-        handleDeletePost={this.handleDeletePost}
-        handleShowUpdateForm={this.handleShowUpdateForm}
-        handleHideUpdateForm={this.handleHideUpdateForm}
-        createPostInputRef={this.createPostInputRef}
-        handleCreatePost={this.handleCreatePost}
-      />
+      <>
+        <Helmet>
+          <title>
+            {limitThreadTitleLength(threadTitle)} - {CONSTANTS.appName}
+          </title>
+        </Helmet>
+
+        <PageContent
+          fetching={category.fetching || thread.fetching || posts.fetching}
+          fetched={category.fetched && thread.fetched && posts.fetched}
+          errors={errors}
+          category={category.data}
+          thread={thread.data}
+          posts={posts.data.results}
+          handleMoveUserToEnd={this.handleMoveUserToEnd}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handleChangePage={this.handleChangePage}
+          renderPostHeader={this.renderPostHeader}
+          editingPost={editingPost}
+          handleUpdatePost={this.handleUpdatePost}
+          handleDeletePost={this.handleDeletePost}
+          handleShowUpdateForm={this.handleShowUpdateForm}
+          handleHideUpdateForm={this.handleHideUpdateForm}
+          createPostInputRef={this.createPostInputRef}
+          handleCreatePost={this.handleCreatePost}
+        />
+      </>
     );
   }
 }

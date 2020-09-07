@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, Form as FinalForm } from 'react-final-form';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import {
   Modal,
@@ -17,6 +18,7 @@ import {
 } from 'layout';
 import { resetPassword as resetPassword_ } from 'redux/actions';
 import { emailValidator } from 'utils/validators';
+import { CONSTANTS } from 'utils';
 
 class PasswordResetModal extends React.Component {
   onSubmit = async (formProps) => {
@@ -38,44 +40,49 @@ class PasswordResetModal extends React.Component {
     const { history } = this.props;
     const formId = 'pr';
     return (
-      <Modal title="Password Reset" handleDismiss={() => history.push('/')}>
-        <ContentGroup>
-          <Paragraph>
-            We will send you an authentication token to your email.
-          </Paragraph>
-        </ContentGroup>
-        <FinalForm onSubmit={this.onSubmit}>
-          {({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <FormWrapper>
-                <Field name="email" validate={emailValidator}>
-                  {({
-                    input,
-                    meta: { touched, error, submitError, dirty },
-                  }) => (
-                    <InputGroup>
-                      <Label htmlFor={`email-${formId}`} dirty={dirty}>
-                        Email:
-                      </Label>
-                      <Input {...input} id={`email-${formId}`} type="email" />
-                      {touched && (error || submitError) && (
-                        <FormError>{error || submitError}</FormError>
-                      )}
-                    </InputGroup>
-                  )}
-                </Field>
-                <Button type="submit">Reset Password</Button>
-              </FormWrapper>
-            </form>
-          )}
-        </FinalForm>
-        <ContentGroup>
-          <Paragraph>
-            If you already have a token click this{' '}
-            <Link to="/password-reset/confirm">link</Link>.
-          </Paragraph>
-        </ContentGroup>
-      </Modal>
+      <>
+        <Helmet>
+          <title>Password Reset - {CONSTANTS.appName}</title>
+        </Helmet>
+        <Modal title="Password Reset" handleDismiss={() => history.push('/')}>
+          <ContentGroup>
+            <Paragraph>
+              We will send you an authentication token to your email.
+            </Paragraph>
+          </ContentGroup>
+          <FinalForm onSubmit={this.onSubmit}>
+            {({ handleSubmit }) => (
+              <form onSubmit={handleSubmit}>
+                <FormWrapper>
+                  <Field name="email" validate={emailValidator}>
+                    {({
+                      input,
+                      meta: { touched, error, submitError, dirty },
+                    }) => (
+                      <InputGroup>
+                        <Label htmlFor={`email-${formId}`} dirty={dirty}>
+                          Email:
+                        </Label>
+                        <Input {...input} id={`email-${formId}`} type="email" />
+                        {touched && (error || submitError) && (
+                          <FormError>{error || submitError}</FormError>
+                        )}
+                      </InputGroup>
+                    )}
+                  </Field>
+                  <Button type="submit">Reset Password</Button>
+                </FormWrapper>
+              </form>
+            )}
+          </FinalForm>
+          <ContentGroup>
+            <Paragraph>
+              If you already have a token click this{' '}
+              <Link to="/password-reset/confirm">link</Link>.
+            </Paragraph>
+          </ContentGroup>
+        </Modal>
+      </>
     );
   }
 }

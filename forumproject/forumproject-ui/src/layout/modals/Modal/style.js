@@ -10,7 +10,7 @@ export const ModalBackground = styled.div`
   top: 0;
   bottom: 0;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   overflow-y: auto;
 `;
@@ -18,6 +18,7 @@ export const ModalBackground = styled.div`
 export const ModalBody = styled.div`
   max-width: 40rem;
   width: 100%;
+  min-height: 25rem;
   background-color: ${theme.colors.white};
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   margin: auto;
