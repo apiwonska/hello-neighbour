@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@zendeskgarden/react-pagination": "^8.21.0",
     "@zendeskgarden/react-theming": "^8.21.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "final-form": "^4.20.1",
     "history": "^4.10.1",
     "http-proxy-middleware": "^1.0.5",
